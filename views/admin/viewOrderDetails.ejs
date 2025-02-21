@@ -1,0 +1,507 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Evara Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="adminassets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="adminassets/css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <img src="adminassets/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item active">
+                    <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="users"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Users</span>
+                    </a>
+                    <div class="submenu"> 
+                        <a href="/admin/userlist">Users list</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="products"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/productList">Product List</a>
+                        <a href="/admin/addProduct">Add product</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="categories"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Categories</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/categories/">Categories</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="orders"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/orderlist" class="active">Order List</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                    </div>
+                    <datalist id="search_terms">
+                        <option value="Products">
+                        <option value="New orders">
+                        <option value="Apple iphone">
+                        <option value="Ahmed Hassan">
+                    </datalist>
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon" href="#">
+                            <i class="material-icons md-notifications animation-shake"></i>
+                            <span class="badge rounded-pill">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
+                      
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="adminassets/imgs/people/avatar2.jpg" alt="User"></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="#"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Order detail</h2>
+                    <p>Details for Order ID: 3453012</p>
+                </div>
+            </div>
+            <div class="card">
+                <header class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                            <span>
+                                <i class="material-icons md-calendar_today"></i> <b>Wed, Aug 13, 2022, 4:34PM</b>
+                            </span> <br>
+                            <small class="text-muted">Order ID: 3453012</small>
+                        </div>
+                        <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                            <select id="order-status" class="form-select d-inline-block mb-lg-0 mb-15 mw-200">
+                              <option value="">Change status</option>
+                              <option value="Pending" <%= order.orderStatus === 'Pending' ? 'selected': '' %>>Pending</option>
+                              <option value="Confirmed" <%= order.orderStatus === 'Confirmed' ? 'selected': '' %>>Confirmed</option>
+                              <option value="Shipped" <%= order.orderStatus === 'Shipped' ? 'selected': '' %>>Shipped</option>
+                              <option value="Cancelled" <%= order.orderStatus === 'Cancelled' ? 'selected': '' %>>Cancelled</option>
+                              <option value="Delivered" <%= order.orderStatus === 'Delivered' ? 'selected': '' %>>Delivered</option>
+                              <option value="Deleted" <%= order.orderStatus === 'Deleted' ? 'selected': '' %>>Deleted</option>
+                            </select>
+                            <a id="save-status" class="btn btn-primary" href="#">Save</a>
+                            <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print"></i></a>
+                          </div>
+                          
+                    </div>
+                </header> <!-- card-header end// -->
+                <div class="card-body">
+                    <div class="row mb-50 mt-20 order-info-wrap">
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-person"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Customer</h6>
+                                    <p class="mb-1">
+                                        <%= user.username %><br><%= user.email %> <br><%= user.mobile_number %>
+                                    </p>
+                                    <a href="#">View profile</a>
+                                </div>
+                            </article>
+                        </div> <!-- col// -->
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-local_shipping"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Order info</h6>
+                                    <p class="mb-1">
+                                        Shipping: Fargo express <br> Pay method: <%=order.paymentMethod %> <br> Status:<%= order.orderStatus %>
+                                    </p>
+                                    <a href="#">Download info</a>
+                                </div>
+                            </article>
+                        </div> <!-- col// -->
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-place"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Deliver to</h6>
+                                    <p class="mb-1">
+                                        <% if (address) { %>
+                                            address:<%= address.address %>,<br>
+                                            city:<%= address.city %>,<br>
+                                            State:<%= address.state %>,<br>
+                                            Postal Code:<%= address.pincode %>,<br>
+                                            Country:India<br>
+                                        <% } else { %>
+                                            Address information not available.<br>
+                                        <% } %>
+                                    </p>
+                                    <a href="#">View profile</a>
+                                </div>
+                            </article>
+                        </div>
+                       <!-- col// -->
+                    <!-- row // -->
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th width="40%">Product</th>
+                                            <th width="20%">Unit Price</th>
+                                            <th width="20%">Quantity</th>
+                                            <th width="20%" class="text-end">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% order.items.forEach(item =>{ %>
+                                        <tr>
+                                            <td>
+                                                <a class="itemside" href="#">
+                                                    <div class="left">
+                                                        <img src="/adminImages/<%= item.product.images[0]%>" width="40" height="40" class="img-xs" alt="<%= item.product.name %>">
+                                                    </div>
+                                                    <div class="info"><%= item.product.name %> </div>
+                                                </a>
+                                            </td>
+                                            <td> <%= item.product.price %></td>
+                                            <td> <%= item.quantity%></td>
+                                            <td class="text-end"><%= item.subtotal %></td>
+                                        </tr>
+                                        <%})%>
+                                        <tr>
+                                            <td colspan="4">
+                                                <article class="float-end">
+                                                    <dl class="dlist">
+                                                        <dt>Subtotal:</dt>
+                                                        <dd><%= order.subtotal %></dd>
+                                                    </dl>
+                                                  
+                                                    <dl class="dlist">
+                                                        <dt>Grand total:</dt>
+                                                        <dd> <b class="h5"><%= order.billTotal %></b> </dd>
+                                                    </dl>
+                                                    <dl class="dlist">
+                                                        <dt class="text-muted">Payment Status:</dt>
+                                                        <dd>
+                                                            <span class="badge rounded-pill alert-success text-success">Payment done</span>
+                                                        </dd>
+                                                    </dl>
+                                                </article>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div> <!-- table-responsive// -->
+                            <!-- <a class="btn btn-primary" href="page-orders-tracking.html">View Order Tracking</a> -->
+                        </div> <!-- col// -->
+                        <div class="col-lg-1"></div>
+                        <div class="col-lg-4">
+                            <div class="box shadow-sm bg-light">
+                                <h6 class="mb-15">Payment info</h6>
+                                <p>
+                                    <img src="adminassets/imgs/card-brands/2.png" class="border" height="20"> Master Card **** **** 4768 <br>
+                                    Business name: Grand Market LLC <br>
+                                    Phone: +1 (800) 555-154-52
+                                </p>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="notes">returnReason:</label>
+                                <textarea class="form-control" name="notes" id="notes" placeholder="Type some note"><%= returnReason %></textarea>
+                              </div>
+                              
+                              <div class="col-md-12 text-md-end mt-3">
+                                <!-- Approve Button -->
+                                <form action="/admin/approveReturn" method="POST" style="display: inline;">
+                                  <input type="hidden" name="orderId" value="<%= order._id %>">
+                                  <button type="submit" id="approve-return-btn" class="btn btn-success">Approve</button>
+                                </form>
+                              
+                                <!-- Reject Button -->
+                                <form action="/admin/rejectReturn" method="POST" style="display: inline;">
+                                  <input type="hidden" name="orderId" value="<%= order._id %>">
+                                  <button type="submit" id = "reject-return-btn" class="btn btn-danger ms-2">Reject</button>
+                                </form>
+                              </div>
+                              
+                        </div> <!-- col// -->
+                    </div>
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    <script src="adminassets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="adminassets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="adminassets/js/vendors/select2.min.js"></script>
+    <script src="adminassets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="adminassets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="adminassets/js/main.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('save-status').addEventListener('click', function(e) {
+            e.preventDefault();
+            const orderId = '<%= order._id %>';
+            const orderStatus = document.getElementById('order-status').value;
+    
+            if (orderStatus === '') {
+                swal.fire({
+                    title: 'Warning',
+                    text: 'Please select an order status before saving.',
+                    icon: 'warning',
+                });
+                return;
+            }
+    
+            fetch('/admin/orderStatus', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ orderId: orderId, orderStatus: orderStatus })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    swal.fire({
+                        title: 'Success',
+                        text: 'Order status updated successfully.',
+                        icon: 'success',
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    swal.fire({
+                        title: 'Error',
+                        text: 'Failed to update order status.',
+                        icon: 'error',
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                swal.fire({
+                    title: 'Error',
+                    text: 'An error occurred while updating the order status.',
+                    icon: 'error',
+                });
+            });
+        });
+    
+        document.getElementById('cancel-order-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            const orderId = '<%= order._id %>';
+            swal.fire({
+                title: 'Cancel Order',
+                text: 'Are you sure you want to cancel this order?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, cancel it!',
+                cancelButtonText: 'No, keep it'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('/admin/cancelOrder', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ orderId: orderId })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            swal.fire({
+                                title: 'Cancelled',
+                                text: 'Your order has been cancelled.',
+                                icon: 'success',
+                            });
+                        } else {
+                            swal.fire({
+                                title: 'Error',
+                                text: 'Failed to cancel the order.',
+                                icon: 'error',
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        swal.fire({
+                            title: 'Error',
+                            text: 'An error occurred while cancelling the order.',
+                            icon: 'error',
+                        });
+                    });
+                }
+            });
+        });
+
+
+   document.getElementById('approve-return-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    const orderId = '<%= order._id %>';
+     // Set to true if the admin approves the return
+
+    fetch('/admin/approveReturn', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ orderId: orderId})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            swal.fire({
+                title: 'Success',
+                text: 'Return request approved successfully.',
+                icon: 'success',
+            }).then(() => {
+                location.reload(); // Reload the page to reflect changes
+            });
+        } else {
+            swal.fire({
+                title: 'Error',
+                text: 'Failed to approve return request.',
+                icon: 'error',
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        swal.fire({
+            title: 'Error',
+            text: 'An error occurred while approving the return request.',
+            icon: 'error',
+        });
+    });
+});
+
+
+document.getElementById('reject-return-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    const orderId = '<%= order._id %>';
+    // Set to false if the admin rejects the return
+
+    fetch('/admin/rejectReturn', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ orderId: orderId})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            swal.fire({
+                title: 'Rejected',
+                text: 'Return request rejected successfully.',
+                icon: 'error',
+            }).then(() => {
+                location.reload(); // Reload the page to reflect changes
+            });
+        } else {
+            swal.fire({
+                title: 'Error',
+                text: 'Failed to reject return request.',
+                icon: 'error',
+            });
+        }
+    })
+
+    .catch(error => {
+        console.error('Error:', error);
+        swal.fire({
+            title: 'Error',
+            text: 'An error occurred while rejecting the return request.',
+            icon: 'error',
+        });
+    });
+});
+
+
+
+</script>
+
+</body>
+
+</html>

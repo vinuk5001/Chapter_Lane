@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Category Offers</title>
+    <script src="/js/categoryOffer.js" defer></script>
+</head>
+<body>
+    <h2>Add Category Offer</h2>
+    <form onsubmit="addCategoryOffer(event)">
+        <label>Category:</label>
+        <select id="category" required></select>
+
+        <label>Discount:</label>
+        <input type="number" id="discount" required>
+
+        <button type="submit">Add Offer</button>
+    </form>
+
+    <h2>Existing Offers</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Discount</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="offersTableBody"></tbody>
+    </table>
+</body>
+</html>
+<!-- <script>
+document.addEventListener("DOMContentLoaded", function () {
+    loadCategories();
+    loadCategoryOffers();
+});
+
+async function loadCategories() {
+    try {
+        const response = await fetch('/admin/categories');
+        const categories = await response.json();
+
+        const categorySelect = document.getElementById('category');
+        categorySelect.innerHTML = '<option value="">Select Category</option>';
+        categories.forEach(cat => {
+            categorySelect.innerHTML += `<option value="${cat._id}">${cat.name}</option>`;
+        });
+
+    } catch (error) {
+        console.error("Error fetching categories:", error);
+    }
+}
+
+async function loadCategoryOffers() {
+    try {
+        const response = await fetch('/admin/category-offers');
+        const offers = await response.json();
+
+        const tableBody = document.getElementById('offersTableBody');
+        tableBody.innerHTML = '';
+
+        offers.forEach(offer => {
+            tableBody.innerHTML += `
+                <tr data-offer-id="${offer._id}">
+                    <td>${offer.category.name}</td>
+                    <td>${offer.discount}%</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="deleteCategoryOffer('${offer._id}')">Delete</button></td>
+                </tr>`;
+        });
+
+    } catch (error) {
+        console.error("Error fetching category offers:", error);
+    }
+}
+
+async function addCategoryOffer(event) {
+    event.preventDefault();
+
+    const category = document.getElementById('category').value;
+    const discount = document.getElementById('discount').value;
+
+    if (!category || !discount) {
+        alert('Please fill all fields.');
+        return;
+    }
+
+    try {
+        const response = await fetch('/admin/category-offers', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ category, discount })
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            alert(result.message);
+            loadCategoryOffers();
+        } else {
+            alert(result.error);
+        }
+    } catch (error) {
+        console.error("Error adding category offer:", error);
+    }
+}
+
+async function deleteCategoryOffer(id) {
+    if (!confirm('Are you sure you want to delete this offer?')) return;
+
+    try {
+        const response = await fetch(`/admin/category-offers/${id}`, {
+            method: 'DELETE'
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            alert(result.message);
+            loadCategoryOffers();
+        } else {
+            alert(result.error);
+        }
+    } catch (error) {
+        console.error("Error deleting category offer:", error);
+    }
+}
+</script> -->

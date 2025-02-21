@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Evara - eCommerce HTML Template</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/main.css?v=3.4">
+    <style>
+        /* Color Variables */
+        :root {
+            --primary-color: #000000; /* Black */
+            --text-color: #ffffff; /* White */
+            --hover-color: #333333; /* Dark Gray for hover effects */
+            --button-color: #00bfae; /* Teal for buttons */
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: var(--primary-color);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-color);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .logo i {
+            font-size: 24px;
+            margin-right: 5px;
+        }
+
+        .navbar .logo span {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar ul li {
+            margin-left: 15px;
+        }
+
+        .navbar ul li a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar ul li a:hover {
+            color: var(--hover-color);
+        }
+
+        .navbar .search-bar {
+            position: relative;
+        }
+
+        .navbar .search-bar input {
+            padding: 6px 10px;
+            border-radius: 20px;
+            border: none;
+            width: 150px;
+            font-size: 14px;
+        }
+
+        .navbar .search-bar button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            border: none;
+            background: transparent;
+            padding: 6px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .navbar .user-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .user-actions a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin-left: 15px;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar .user-actions a:hover {
+            color: var(--hover-color);
+        }
+
+        .navbar .wishlist-icon i,
+        .navbar .cart-icon i {
+            font-size: 18px;
+            margin-right: 3px;
+        }
+
+        .navbar .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .navbar .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--primary-color);
+            min-width: 150px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .navbar .dropdown-content a {
+            color: var(--text-color);
+            padding: 8px 12px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .navbar .dropdown-content a:hover {
+            background-color: var(--hover-color);
+        }
+
+        .navbar .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            text-align: center;
+            padding: 15px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer a {
+            color: var(--button-color);
+            text-decoration: none;
+            margin: 0 8px;
+            transition: text-decoration 0.3s ease;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer .social-links a {
+            margin: 0 8px;
+            font-size: 16px;
+            color: var(--button-color);
+            transition: color 0.3s ease;
+        }
+
+        .footer .social-links a:hover {
+            color: var(--hover-color);
+        }
+
+        /* General Table Styling */
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 0;
+        }
+
+        .table th,
+        .table td {
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            vertical-align: middle;
+        }
+
+        .table thead th {
+            background-color: #343a40;
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        .table tbody tr:nth-of-type(odd) {
+            background-color: #f4f4f4;
+        }
+
+        .table tbody tr:hover {
+            background-color: #e2e2e2;
+        }
+
+        .table img.img-fluid {
+            max-width: 100px;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .product-des .product-name a {
+            color: var(--button-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .product-des .product-name a:hover {
+            text-decoration: underline;
+        }
+
+        /* Price Styling */
+        .price span {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Stock Status Styling */
+        .stock-status .status {
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 5px;
+        }
+
+        .stock-status .status.in-stock {
+            color: #28a745;
+            background-color: #d4edda;
+        }
+
+        .stock-status .status.out-of-stock {
+            color: #dc3545;
+            background-color: #f8d7da;
+        }
+
+        /* Button Styling */
+        .btn-primary {
+            background-color: var(--button-color);
+            color: var(--text-color);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            font-size: 14px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--hover-color);
+        }
+
+        /* Remove Link Styling */
+        .action a {
+            color: #dc3545;
+            font-size: 14px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .action a:hover {
+            text-decoration: underline;
+        }
+
+        .action i {
+            margin-right: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-book"></i>
+            <span>ChapterLane</span>
+        </div>
+        <ul>
+            <li><a href="home">Home</a></li>
+            <li><a href="shop">Shop</a></li>
+        </ul>
+        <div class="search-bar">
+            <form action="/searchInShop" method="POST">
+                <input type="text" name="search" placeholder="Search…">
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+        <div class="user-actions">
+            <a href="/wishlist" class="wishlist-icon">
+                <i class="fas fa-heart"></i> Wishlist
+            </a>
+            <a href="/cart" class="cart-icon">
+                <i class="fas fa-shopping-cart"></i> Cart
+            </a>
+        </div>
+    </nav>
+
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="home">Home</a> / <span>Wishlist</span>
+                </div>
+            </div>
+        </div>
+        <section class="wishlist">
+            <div class="container">
+                <div class="wishlist-content">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Image</th>
+                                    <th scope="col">Product</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Stock Status</th>
+                                    <th scope="col">Action</th>
+                                    <th scope="col">Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (wishlist.length === 0) { %>
+                                    <tr>
+                                        <td colspan="6" class="text-center">Your wishlist is empty.</td>
+                                    </tr>
+                                <% } else { %>
+                                    <% wishlist.forEach(item => { %>
+                                        <tr>
+                                            <td class="image product-thumbnail">
+                                                <img src="/adminImages/<%= item.productImage %>" alt="<%= item.productName %>" class="img-fluid">
+                                            </td>
+                                            <td class="product-des product-name">
+                                                <h5 class="product-name">
+                                                    <a href="/product/<%= item.productId %>"><%= item.productName %></a>
+                                                </h5>
+                                            </td>
+                                            <td class="price" data-title="Price">
+                                                <span>$<%= item.productPrice %></span>
+                                            </td>
+                                            <td class="stock-status" data-title="Stock">
+                                                <span class="status <%= item.productStock > 0 ? 'in-stock' : 'out-of-stock' %>">
+                                                    <%= item.productStock > 0 ? 'In Stock' : 'Out of Stock' %>
+                                                </span>
+                                            </td>
+                            
+                                            <td class="text-right" data-title="Cart">
+                                                <a id="addToCart"
+                                                   href="<%= item.productStock > 0 ? '/addToCart?productId=' + item.productId : '#' %>"
+                                                   class="btn btn-primary"
+                                                   <% if (item.productStock <= 0) { %> disabled <% } %>
+                                                   <% if (wishlist.some(wishItem => wishItem.productId.toString() === item.productId.toString())) { %> disabled <% } %>>
+                                                   <%= item.productStock > 0 && !wishlist.some(wishItem => wishItem.productId.toString() === item.productId.toString()) ? "Add to Cart" : "Added to Cart" %>
+                                                </a>
+                                            </td>
+                            
+                                            <td class="action" data-title="Remove">
+                                                <a href="#" class="removeFromWishlist" data-product-id="<%= item.productId %>">
+                                                    <i class="fas fa-trash"></i> Remove
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                <% } %>
+                            </tbody>
+                            
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 ChapterLane. All rights reserved.</p>
+        <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="#">Contact Us</a></p>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+    </footer>
+
+    <!-- Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="text-center">
+                    <h5 class="mb-5">Now Loading</h5>
+                    <div class="loader">
+                        <div class="bar bar1"></div>
+                        <div class="bar bar2"></div>
+                        <div class="bar bar3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Vendor JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/plugins/slick.js"></script>
+    <script src="assets/js/plugins/jquery.syotimer.min.js"></script>
+    <script src="assets/js/plugins/wow.js"></script>
+    <script src="assets/js/plugins/jquery-ui.js"></script>
+    <script src="assets/js/plugins/perfect-scrollbar.js"></script>
+    <script src="assets/js/plugins/magnific-popup.js"></script>
+    <script src="assets/js/plugins/select2.min.js"></script>
+    <script src="assets/js/plugins/waypoints.js"></script>
+    <script src="assets/js/plugins/counterup.js"></script>
+    <script src="assets/js/plugins/jquery.countdown.min.js"></script>
+    <script src="assets/js/plugins/images-loaded.js"></script>
+    <script src="assets/js/plugins/isotope.js"></script>
+    <script src="assets/js/plugins/scrollup.js"></script>
+    <script src="assets/js/plugins/jquery.vticker-min.js"></script>
+    <!-- Template JS -->
+    <script src="assets/js/main.js?v=3.4"></script>
+    <script src="assets/js/shop.js?v=3.4"></script>
+
+    <script>
+        document.querySelectorAll('.removeFromWishlist').forEach(button => {
+            button.addEventListener('click', async function(e) {
+                e.preventDefault();
+                const productId = this.getAttribute('data-product-id');
+                try {
+                    const response = await fetch('/wishlist/remove', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ productId :productId})
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        alert('Product removed from wishlist successfully');
+                        location.reload();  
+                    } else {
+                        alert(result.message);
+                    }
+                } catch (error) {
+                    console.error('Error removing from wishlist:', error);
+                    alert('Failed to remove product from wishlist');
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

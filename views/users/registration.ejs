@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Registration Page</title>
+    <link rel="stylesheet" href="/assets/css/main.css?v=3.4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: url('/assets/images/bgimage6.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+        }
+        .form-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .heading_s1 {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .form-group {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        .form-group .icon {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: #999;
+            pointer-events: none; /* Prevents the icon from blocking input field clicks */
+        }
+        .form-group input {
+            width: 100%;
+            padding-right: 2.5rem; /* Space for the icon */
+            padding-left: 1rem; /* Optional: add padding to the left for better spacing */
+            box-sizing: border-box; /* Ensures padding is included in the width */
+            height: 40px; /* Set a consistent height for the inputs */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .error {
+            color: red;
+            font-size: 0.75rem; /* Smaller font size for error messages */
+            margin-top: 0.25rem;
+        }
+        .password-container {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="heading_s1">
+            <h3 class="mb-30">Registration</h3>
+        </div>
+        <form id="registerForm" method="post" action="/register">
+            <div class="form-group">
+                <label for="username"><i class="fi-rs-user mr-10"></i>Enter Username:</label>
+                <input type="text" id="username" name="username" placeholder="Username">
+                <div id="usernameError" class="error"></div>
+            </div>
+            <div class="form-group">
+                <label for="email"><i class="fi-rs-mail mr-10"></i>Enter Email:</label>
+                <input type="text" id="email" name="email" placeholder="Email">
+                <div id="emailError" class="error"></div>
+            </div>
+            <div class="form-group">
+                <label for="mobile_number"><i class="fi-rs-call mr-10"></i>Enter Mobile number:</label>
+                <input type="text" id="mobile_number" name="mobile_number" placeholder="Enter Mobile Number">
+                <div id="mobileError" class="error"></div>
+            </div>
+            <div class="form-group password-container">
+                <label for="password"><i class="fi-rs-lock mr-10"></i>Enter Password:</label>
+                <input type="password" id="password" name="password" placeholder="Password">
+                <!-- <span id="togglePassword" class="toggle-password"><i class="fas fa-eye"></i></span> -->
+                <div id="passwordError" class="error"></div>
+            </div>
+            <div class="form-group">
+                <label for="confirmpassword"><i class="fi-rs-lock mr-10"></i>Re-enter Password:</label>
+                <input type="password" id="confirmpassword" name="confirmpassword" placeholder="Confirm password">
+                <div id="confirmpasswordError" class="error"></div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-fill-out btn-block hover-up">Submit & Register</button>
+            </div>
+            <div class="text-muted text-center">Already have an account? <a href="/login">Sign in now</a></div>
+            <% if (typeof message !== "undefined") { %>
+                <p style="color: red;"><%= message %></p>
+            <% } %>
+        </form>
+        
+        
+        
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
+            let valid = true;
+
+            // Username validation
+            const username = document.getElementById('username').value.trim();
+            if (!username) {
+                valid = false;
+                document.getElementById('usernameError').innerText = 'Name is required and must be valid';
+            } else {
+                document.getElementById('usernameError').innerText = '';
+            }
+
+            // Email validation
+            const email = document.getElementById('email').value.trim();
+            const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+            if (!email || !emailPattern.test(email)) {
+                valid = false;
+                document.getElementById('emailError').innerText = 'Email is required and must be valid';
+            } else {
+                document.getElementById('emailError').innerText = '';
+            }
+
+            // Mobile number validation
+            const mobile = document.getElementById('mobile_number').value.trim();
+            const mobilePattern = /^[0-9]{10}$/;
+
+            // Function to check if all characters in a string are the same
+            const isAllSameDigits = (str) => {
+                return str.split('').every(char => char === str[0]);
+            };
+
+            if (!mobile || !mobilePattern.test(mobile) || isAllSameDigits(mobile)) {
+                valid = false;
+                document.getElementById('mobileError').innerText = 'Phone number is required and must be valid';
+            } else {
+                document.getElementById('mobileError').innerText = '';
+            }
+
+            // Password validation
+            const password = document.getElementById('password').value.trim();
+            const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20}$/;
+            if (!password || !passwordPattern.test(password)) {
+                valid = false;
+                document.getElementById('passwordError').innerText = 'Password should contain at least one special character, capital letter, and one small letter';
+            } else {
+                document.getElementById('passwordError').innerText = '';
+            }
+
+            // Confirm password validation
+            const confirmPassword = document.getElementById('confirmpassword').value.trim();
+            if (password !== confirmPassword) {
+                valid = false;
+                document.getElementById('confirmpasswordError').innerText = 'Passwords do not match';
+            } else {
+                document.getElementById('confirmpasswordError').innerText = '';
+            }
+
+            if (!valid) {
+                e.preventDefault();
+            }
+        });
+
+        // document.getElementById('togglePassword').addEventListener('click', function () {
+        //     const passwordField = document.getElementById('password');
+        //     const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        //     passwordField.setAttribute('type', type);
+        //     this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        // });
+    </script>
+    
+    <script src="/assets/js/main.js?v=3.4"></script>
+</body>
+</html>

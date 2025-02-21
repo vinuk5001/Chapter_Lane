@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="/assets/css/main.css?v=3.4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: url('/assets/images/bgimage6.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+        }
+
+        .form-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .heading_s1 {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .form-group .icon {
+            position: absolute;
+            top: 45%;
+            right: 10px;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: #999;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding-right: 2.5rem;
+            /* Space for the icon */
+            padding-left: 0.75rem;
+            /* Padding for the input */
+        }
+
+        .btn-fill-out {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-fill-out:hover {
+            background-color: #0056b3;
+        }
+
+        .divider-text-center {
+            margin: 15px 0;
+        }
+
+        .btn-login {
+            list-style: none;
+            padding: 0;
+        }
+
+        .btn-login li {
+            margin-bottom: 10px;
+        }
+
+        .btn-google {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #db4437;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .btn-google:hover {
+            background-color: #c23321;
+        }
+
+        .password-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-container input[type="password"],
+        .password-container input[type="text"] {
+            padding-right: 30px;
+            /* Space for the eye icon */
+            padding-left: 0.75rem;
+            /* Padding for the input */
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .success {
+            color: green;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+<body>
+    <section class="form-container">
+        <div class="heading_s1">
+            <h3 class="mb-30">Login</h3>
+        </div>
+        <form id="loginForm" action="/login" method="post">
+            <div class="form-group">
+                <input type="text" id="email" name="email" placeholder="Your Email">
+                <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                <div id="emailError" class="error"></div>
+            </div>
+            <div class="form-group password-container">
+                <input type="password" name="password" id="password" placeholder="Password">
+                <span id="togglePassword" class="toggle-password"><i class="fas fa-eye"></i></span>
+            </div>
+            <div id="passwordError" class="error"></div>
+            <div class="login_footer form-group">
+                <a class="text-muted" href="#" id="forgotPasswordLink">Forgot password?</a>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login">Log in</button>
+            </div>
+            <% if(typeof message !=="undefined" ){ %>
+                <p style="color: red;">
+                    <%= message %>
+                </p>
+                <% } %>
+        </form>
+        <p>Don't have an account? <a href="/register">Register here</a></p>
+        <div class="divider-text-center mt-15 mb-15">
+            <span>or</span>
+        </div>
+        <ul class="btn-login list_none text-center mb-15">
+            <li><a href="/auth/google" class="btn btn-google hover-up">Login With Google</a></li>
+        </ul>
+    </section>
+
+    <!-- The Modal -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Forgot Password</h2>
+            <form id="forgotPasswordForm" action="/forgot-password" method="post">
+                <div class="form-group">
+                    <input type="email" name="forgotEmail" placeholder="Enter your email address">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-fill-out">Send Reset Link</button>
+                </div>
+            </form>
+            <div id="forgotPasswordSuccess" class="success"></div>
+        </div>
+    </div>
+  <!-- Modal for displaying error messages -->
+  <div id="errorModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <div class="modal-body" id="modalMessage"></div>
+        <button class="btn-close-modal" id="closeModalBtn">Close</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordField = document.getElementById('password');
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            let valid = true;
+
+            // Email validation
+            const email = document.getElementById('email').value.trim();
+            if (!email) {
+                valid = false;
+                document.getElementById('emailError').innerText = 'Email is required';
+            } else {
+                document.getElementById('emailError').innerText = '';
+            }
+
+            // Password validation
+            const password = document.getElementById('password').value.trim();
+            if (!password) {
+                valid = false;
+                document.getElementById('passwordError').innerText = 'Password is required';
+            } else {
+                document.getElementById('passwordError').innerText = '';
+            }
+
+            if (!valid) {
+                e.preventDefault();
+            }
+        });
+
+        document.getElementById('forgotPasswordForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const email = e.target.forgotEmail.value;
+            const successContainer = document.getElementById('forgotPasswordSuccess');
+
+            try {
+                const response = await fetch('/forgot-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ forgotEmail: email })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    successContainer.innerText = data.message;
+                    e.target.reset(); // Reset the form
+                } else {
+                    successContainer.innerText = data.message || 'An error occurred.';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                successContainer.innerText = 'An error occurred while trying to send the password reset link.';
+            }
+        });
+
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordField = document.getElementById('password');
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            let valid = true;
+
+            // Email validation
+            const email = document.getElementById('email').value.trim();
+            if (!email) {
+                valid = false;
+                document.getElementById('emailError').innerText = 'Email is required';
+            } else {
+                document.getElementById('emailError').innerText = '';
+            }
+
+            // Password validation
+            const password = document.getElementById('password').value.trim();
+            if (!password) {
+                valid = false;
+                document.getElementById('passwordError').innerText = 'Password is required';
+            } else {
+                document.getElementById('passwordError').innerText = '';
+            }
+
+            if (!valid) {
+                e.preventDefault();
+            }
+        });
+
+        var modal = document.getElementById("forgotPasswordModal");
+        var btn = document.getElementById("forgotPasswordLink");
+        var span = document.getElementsByClassName("close")[0];
+
+        btn.onclick = function (event) {
+            event.preventDefault();
+            modal.style.display = "flex";
+        }
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded',function(){
+            const loginForm = document.getElementById('loginForm');
+            const errorModal  = document.getElementById('errorModal');
+            const closeModal = document.getElementById('closeModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const modalMessage = document.getElementById('modalMessage');
+            
+            closeModal.addEventListener('click',()=>{
+                errorModal.style.display = 'none';
+            })
+
+            closeModalBtn.addEventListener('click',()=>{
+                errorModal.style.display = 'none';
+            })
+
+            loginForm.addEventListener('submit',async function(e){
+                e.preventDefault();
+
+                const email = document.querySelector('input[name="email"]').value;
+                const password = document.querySelector('input[name="password"]').value;
+                try{
+                    const response = await axios.post('/login',{email,password});
+                    window.location.href = '/home';
+                }catch(error){
+                    const errorMessage = error.response?.data?.message||'An unknown error occured.Please try again later.';
+                    modalMessage.textContent = errorMessage;
+                    errorModal.style.display = 'block';
+
+                }
+            })
+
+        })
+
+
+    </script>
+</body>
+
+</html>

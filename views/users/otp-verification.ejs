@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>OTP Verification</title>
+    <link rel="stylesheet" href="/assets/css/main.css?v=3.4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+           body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: url('/assets/images/bgimage6.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+        }
+        .form-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .heading_s1 {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .form-group {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        .form-group .icon {
+            position: absolute;
+            top: 65%;
+            right: 10px;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: #999;
+            pointer-events: none; /* Prevents the icon from blocking input field clicks */
+        }
+        .form-group input {
+            width: 100%;
+            padding-right: 2.5rem; /* Space for the icon */
+            padding-left: 1rem; /* Optional: add padding to the left for better spacing */
+            box-sizing: border-box; /* Ensures padding is included in the width */
+            height: 40px; /* Set a consistent height for the inputs */
+        }
+        .error {
+            color: red;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+        .password-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .password-container input[type="password"], 
+        .password-container input[type="text"] {
+            padding-right: 30px; /* Space for the eye icon */
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="heading_s1">
+            <h3 class="mb-30">OTP Verification</h3>
+        </div>
+        <form method="POST" action="/verify-otp">
+            <input type="hidden" name="userId" id="userId" value="<%= userId %>">
+            <div class="form-group">
+                <label for="otp">Enter OTP:</label>
+                <input type="text" name="otp" id="otp" >
+                <span class="icon"><ion-icon name="key"></ion-icon></span>
+                <div id="otpError" class="error"></div>
+            </div>
+            <div class="form-group">
+                <p id="timer" class="text-muted">Timer: <span id="timerValue">30</span>s</p>
+            </div>
+            <div class="login_footer form-group">
+                <a id="resend-otp" class="text-muted" href="#">Resend OTP</a>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-fill-out btn-block hover-up">Verify OTP</button>
+            </div>
+            <% if (message) { %>
+                <p id="errormsm" class="error-message"><%= message %></p>
+            <% } %>
+        </form>
+        <!-- Div to show resend OTP status -->
+        <div id="resend-otp-status" class="mt-2"></div>
+    </div>
+
+    <script>
+        let otpExpiry = Date.now() + 30000; // Set initial OTP expiry to 30 seconds from now
+        const timerElement = document.getElementById('timerValue');
+        const resendOtpLink = document.getElementById('resend-otp');
+        resendOtpLink.style.display = 'none';
+        function updateTimer() {
+            const now = Date.now();
+            const timeRemaining = otpExpiry - now;
+
+            if (timeRemaining > 0) {
+                const seconds = Math.floor(timeRemaining / 1000);
+                timerElement.textContent = seconds;
+            } else {
+                timerElement.textContent = 'Expired';
+                clearInterval(timerInterval);
+                resendOtpLink.style.display = 'block';
+            }
+        }
+
+        let timerInterval = setInterval(updateTimer, 1000);
+
+        document.getElementById('resend-otp').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default link behavior
+
+            const userId = document.getElementById('userId').value;
+
+            fetch('/resend-otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userId: userId }) 
+            })
+            .then(response => response.json())
+            .then(data => {
+                const statusDiv = document.getElementById('resend-otp-status');
+                if (data.success) {
+                    statusDiv.innerHTML = '<p class="success-message">OTP has been resent successfully.</p>';
+                    otpExpiry = Date.now() + 30000; // Reset OTP expiry to 30 seconds from now
+                    clearInterval(timerInterval); // Clear the old timer interval
+                    timerInterval = setInterval(updateTimer, 1000); // Start a new timer interval
+                } else {
+                    statusDiv.innerHTML = '<p class="error-message">Failed to resend OTP. Please try again.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const statusDiv = document.getElementById('resend-otp-status');
+                statusDiv.innerHTML = '<p class="error-message">An error occurred. Please try again.</p>';
+            });
+        });
+
+        // Hide error message after 3 seconds
+        function hideMessage() {
+            const errorMessage = document.getElementById('errormsm');
+            if (errorMessage) {
+                errorMessage.style.display = 'none';
+            }
+        }
+        setTimeout(hideMessage, 3000);
+    </script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

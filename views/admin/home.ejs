@@ -1,0 +1,472 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Evara Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="adminassets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="adminassets/css/main.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/path-to-your-chart-script.js"></script>
+
+    <style>
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 20px 10px;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        img {
+            width: 50px;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <img src="adminassets/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+                </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item active">
+                    <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="users"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Users</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/userlist">Users List</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="products"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/productList">Product List</a>
+                        <a href="/admin/addProduct">Add Product</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="categories"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Categories</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/categories/">Categories</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="orders"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/orderlist" class="active">Order List</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="offers"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text">Offer Management</span>
+                    </a>
+                    <div class="submenu">
+
+                        <a href="/admin/offerManagement">Category Offers</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="coupons"> <i class="icon material-icons md-card_giftcard"></i>
+                        <span class="text">Coupon Management</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/addCoupon">Create Coupon</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="SalesReport"> <i class="icon material-icons md-card_giftcard"></i>
+                        <span class="text">Sales</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/salesReport">sales report</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+
+            </div>
+            <datalist id="search_terms">
+
+            </datalist>
+            </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                        class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i>
+                        </a>
+                    </li>
+                    <button id="logoutButton" class="btn btn-danger">Logout</button>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Dashboard </h2>
+                    <div>
+                        <h4>Total Sales: ₹<%= totalSales %></h4> <!-- totalSales is directly passed -->
+                        <h4>Total Orders: <%= overallStats.totalOrders %></h4> <!-- totalOrders from overallStats -->
+                        <h4>Total Revenue:₹ <%= overallStats.totalRevenue[0]?.totalRevenue %></h4> <!-- totalRevenue from overallStats -->
+                    </div>
+                                    </div>
+                <div>
+                    <a href="#" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Create
+                        report</a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-8 col-lg-12">
+                    <div class="card mb-4">
+                        <article class="card-body">
+                            <h5 class="card-title">Monthly Sales Statistics</h5>
+                            <canvas id="monthlySalesChart" height="120"></canvas>
+                        </article>
+                    </div>
+                    
+                    <div class="card mb-4">
+                        <article class="card-body">
+                            <h5 class="card-title">Yearly Sales Statistics</h5>
+                            <canvas id="yearlySalesChart" height="120"></canvas>
+                        </article>
+                    </div>                    <div class="top-selling">
+                        <h3>Best Selling Insights</h3>
+                        <div class="insight-box">
+                            <h4>Top 10 Products</h4>
+                            <table id="bestProductsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Product Name</th>
+                                        <th>Product Price</th>
+                                        <th>Total Ordered Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (products && products.length) { %>
+                                        <% products.forEach(product=> { %>
+                                            <tr>
+                                                <td>
+                                                    <%= product._id.name %>
+                                                </td>
+                                                <!-- <td>
+                                                    <img src="/adminImages/<%= product._id.image %>"
+                                                        alt="<%= product._id.name %>" width="50">
+                                                </td> -->
+                                                <td>
+                                                    <%= product._id.price %>
+                                                </td>
+                                                <td>
+                                                    <%= product.totalQuantity %>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="4">No products available.</td>
+                                                    </tr>
+                                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box">
+                    <h4>Top 10 Categories</h4>
+                    <table id="bestCategoriesTable">
+                        <thead>
+                            <tr>
+                                <th>Category Name</th>
+                                <th>Total Ordered Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (categories && categories.length) { %>
+                                <% categories.forEach(category=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= category._id %>
+                                        </td>
+                                        <td>
+                                            <%= category.totalQuantity %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="4">No categories available.</td>
+                                            </tr>
+                                        <% } %>
+                                 </tbody>
+                          </table>
+                      </div>
+
+
+                <div class="pagination-area mt-30 mb-50">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-start">
+                            <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                            <li class="page-item"><a class="page-link" href="#">02</a></li>
+                            <li class="page-item"><a class="page-link" href="#">03</a></li>
+                            <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                            <li class="page-item"><a class="page-link" href="#">16</a></li>
+                            <li class="page-item"><a class="page-link" href="#"><i
+                                        class="material-icons md-chevron_right"></i></a></li>
+                        </ul>
+                    </nav>
+                </div>
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                        document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    <script src="adminassets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="adminassets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="adminassets/js/vendors/select2.min.js"></script>
+    <script src="adminassets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="adminassets/js/vendors/jquery.fullscreen.min.js"></script>
+    <script src="adminassets/js/vendors/chart.js"></script>
+    <!-- Main Script -->
+    <script src="adminassets/js/main.js" type="text/javascript"></script>
+    <script src="adminassets/js/custom-chart.js" type="text/javascript"></script>
+
+    <script>
+
+        const logoutButton = document.getElementById('logoutButton')
+
+        logoutButton.addEventListener('click', function () {
+            window.location.href = '/admin/logout';
+        });
+
+  
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+      const salesOrder = <%- JSON.stringify(salesOrder) %>;
+        const totalSales = <%- JSON.stringify(totalSales) %>;
+        const orderDates = <%- JSON.stringify(orderDates) %>;
+        const overallStats = <%- JSON.stringify(overallStats) %>;
+
+        console.log("salesOrder", salesOrder);
+        console.log("totalSales", totalSales);
+        console.log("orderDates", orderDates);
+        console.log("overallStats", overallStats);
+
+
+
+              const salesData = orderDates.map((date, index) => {
+        const revenue = totalSales.length > 0 ? totalSales[0].totalSales / orderDates.length : 0; // Use totalRevenue evenly for each order
+        return {
+            orderDate: new Date(date),
+            billTotal: revenue
+        };
+    });
+
+
+            // Extract data from the table
+            document.querySelectorAll("tbody tr").forEach(row => {
+                const cells = row.querySelectorAll("td");
+
+                if(cells.length >= 6){
+                    const orderDateStr = cells[1].textContent.trim(); // Order Date
+                    const billTotalStr = cells[5].textContent.trim(); // Bill Total
+
+                    if (orderDateStr && billTotalStr) {
+                        const orderDate = new Date(orderDateStr);
+                        const billTotal = parseFloat(billTotalStr) || 0;
+
+                        salesData.push({ orderDate, billTotal });
+                    }
+                }
+            });
+
+            console.log("Extracted Sales Data:", salesData);
+
+            const { monthlySales, yearlySales } = processSalesData(salesData);
+
+            generateCharts(monthlySales, yearlySales);
+        });
+
+
+        function processSalesData(orders) {
+            const monthlySales = {};
+            const yearlySales = {};
+
+            orders.forEach(({ orderDate, billTotal }) => {
+
+                const year = orderDate.getFullYear();
+                const month = `${year}-${(orderDate.getMonth() + 1).toString().padStart(2, '0')}`; // Format: YYYY-MM
+
+                // Update monthly sales
+                if (!monthlySales[month]) {
+                    monthlySales[month] = 0;
+                }
+                monthlySales[month] += billTotal;
+
+                // Update yearly sales
+                if (!yearlySales[year]) {
+                    yearlySales[year] = 0;
+                }
+                yearlySales[year] += billTotal;
+            });
+
+            return { monthlySales, yearlySales };
+        }
+
+
+        function generateCharts(monthlySales, yearlySales) {
+            // Monthly Chart Data (January to December)
+            const monthlyLabels = [
+                'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+            ];
+            const monthlyValues = monthlyLabels.map((label, index) => {
+                const monthKey = `2025-${(index + 1).toString().padStart(2, '0')}`;
+                return monthlySales[monthKey] || 0; // Use 0 if no data for the month
+            });
+
+            // Yearly Chart Data (2021 to 2025)
+            const yearlyLabels = ['2021', '2022', '2023', '2024', '2025'];
+            const yearlyValues = yearlyLabels.map(year => {
+                return yearlySales[year] || 0; // Use 0 if no data for the year
+            });
+
+            // Monthly Sales Chart
+            const monthlyCtx = document.getElementById("monthlySalesChart").getContext("2d");
+            new Chart(monthlyCtx, {
+                type: "bar",
+                data: {
+                    labels: monthlyLabels,
+                    datasets: [{
+                        label: "Total Ordered Sales",
+                        data: monthlyValues,
+                        backgroundColor: "rgba(75, 192, 192, 0.7)",
+                        borderColor: "rgba(75, 192, 192, 1)",
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Total Ordered Sales'
+                            },
+                            min: 500, // Set minimum value for Y-axis
+                            max: 10000, // Set maximum value for Y-axis
+                            stepSize: 1000, // Set step size for the Y-axis
+                            beginAtZero: false // Avoid zero for better visual
+                        }
+                    }
+                }
+            });
+
+            // Yearly Sales Chart
+            const yearlyCtx = document.getElementById("yearlySalesChart").getContext("2d");
+            new Chart(yearlyCtx, {
+                type: "line",
+                data: {
+                    labels: yearlyLabels,
+                    datasets: [{
+                        label: "Total Ordered Sales",
+                        data: yearlyValues,
+                        backgroundColor: "rgba(255, 99, 132, 0.7)",
+                        borderColor: "rgba(255, 99, 132, 1)",
+                        borderWidth: 2,
+                        fill: false // No fill for the line
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Year'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Total Ordered Sales'
+                            },
+                            min: 10000, // Set minimum value for Y-axis
+                            max: 100000, // Set maximum value for Y-axis
+                            stepSize: 10000, // Set step size for the Y-axis
+                            beginAtZero: false // Avoid zero for better visual
+                        }
+                    }
+                }
+            });
+        }
+
+
+    </script>
+
+</body>
+
+</html>

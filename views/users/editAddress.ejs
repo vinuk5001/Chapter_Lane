@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Address</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="assets/css/main.css?v=3.4">
+    <style>
+        .btn-small {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+
+        .btn-small:hover {
+            background-color: #0056b3;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.875em;
+            margin-top: 0.25em;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header-area header-style-5">
+        <!-- Header content here -->
+    </header>
+
+    <div class="mobile-header-active mobile-header-wrapper-style">
+        <!-- Mobile header content here -->
+    </div>
+
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="/userProfile" rel="nofollow">My Profile</a>
+                    <span></span> Edit Address
+                </div>
+            </div>
+        </div>
+        <section class="pt-150 pb-150">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 m-auto">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Edit Address</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="editAddressForm" action="/editAddress" method="post" onsubmit="return validateForm()">
+                                            <input type="hidden" id="addressId" name="addressId" value="<%= address._id %>">
+                                            <div class="row">
+                                                <div class="form-group col-md-12">
+                                                    <label for="address">Address</label>
+                                                    <input type="text" id="address" name="address" class="form-control square" value="<%= address.address %>" required>
+                                                    <div class="error" id="addressError"></div>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label for="city">City</label>
+                                                    <input type="text" id="city" name="city" class="form-control square" value="<%= address.city %>" required>
+                                                    <div class="error" id="cityError"></div>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label for="state">State</label>
+                                                    <input type="text" id="state" name="state" class="form-control square" value="<%= address.state %>" required>
+                                                    <div class="error" id="stateError"></div>
+                                                </div>
+                                                <div class="form-group col-md-12">
+                                                    <label for="pincode">Pincode</label>
+                                                    <input type="number" id="pincode" name="pincode" class="form-control square" value="<%= address.pincode %>" required>
+                                                    <div class="error" id="pincodeError"></div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save Changes</button>
+                                                    <a href="/userProfile" class="btn btn-sm font-sm rounded btn-brand">Back to Profile</a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Vendor JS-->
+    <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
+    <!-- Template  JS -->
+    <script src="./assets/js/main.js?v=3.4"></script>
+
+    <script>
+        function validateForm() {
+            let isValid = true;
+
+            // Clear previous errors
+            document.getElementById('addressError').innerText = '';
+            document.getElementById('cityError').innerText = '';
+            document.getElementById('stateError').innerText = '';
+            document.getElementById('pincodeError').innerText = '';
+
+            // Get form values
+            const address = document.getElementById('address').value;
+            const city = document.getElementById('city').value;
+            const state = document.getElementById('state').value;
+            const pincode = document.getElementById('pincode').value.trim();
+
+            const letterOnlyRegex = /^[a-zA-Z]+$/;
+
+            // Validate address
+            if (address === '') {
+                document.getElementById('addressError').innerText = 'Address is required.';
+                isValid = false;
+            } else if (!letterOnlyRegex.test(address)) {
+                document.getElementById('addressError').innerText = 'Address must contain only letters.';
+                isValid = false;
+            }
+
+            // Validate city
+            if (city === '') {
+                document.getElementById('cityError').innerText = 'City is required.';
+                isValid = false;
+            } else if (!letterOnlyRegex.test(city)) {
+                document.getElementById('cityError').innerText = 'City must contain only letters.';
+                isValid = false;
+            }
+
+            // Validate state
+            if (state === '') {
+                document.getElementById('stateError').innerText = 'State is required.';
+                isValid = false;
+            } else if (!letterOnlyRegex.test(state)) {
+                document.getElementById('stateError').innerText = 'State must contain only letters.';
+                isValid = false;
+            }
+
+            // Validate pincode
+            if (pincode === '') {
+                document.getElementById('pincodeError').innerText = 'Pincode is required.';
+                isValid = false;
+            } else if (!/^\d{6}$/.test(pincode)) {
+                document.getElementById('pincodeError').innerText = 'Pincode must be a 6-digit number.';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+    </script>
+</body>
+
+</html>

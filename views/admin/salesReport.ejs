@@ -1,0 +1,430 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Evara Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="adminassets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="adminassets/css/main.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   
+
+    <style>
+        .text-end {
+            text-align: right;
+        }
+
+        .bold-text {
+            font-weight: bold;
+        }
+
+        .pagination-area {
+            margin-top: 30px;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .pagination-container a {
+            margin: 0 5px;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        .pagination-container a.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .pagination-container a:hover {
+            background-color: #ddd;
+        }
+
+        .pagination-container .disabled {
+            pointer-events: none;
+        }
+
+        .pagination-container .dot {
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <img src="adminassets/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+                </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="users"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Users</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/userlist">Users List</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="products"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/productList">Product List</a>
+                        <a href="/admin/addProduct">Add Product</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="categories"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Categories</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/categories/">Categories</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="orders"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/orderlist" class="active">Order List</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="offers"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text">Offer Management</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/offerManagement">Product Offers</a>
+                        <a href="/admin/offerManagement">Category Offers</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="coupons"> <i class="icon material-icons md-card_giftcard"></i>
+                        <span class="text">Coupon Management</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/addCoupon">Create Coupon</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu active">
+                    <a class="menu-link" href="SalesReport"> <i class="icon material-icons md-card_giftcard"></i>
+                        <span class="text">Sales</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/salesReport">sales report</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                        class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <li class="nav-item">
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="requestfullscreen nav-link btn-icon"><i
+                                class="material-icons md-cast"></i></a>
+                    </li>
+                    <li class="dropdown nav-item">
+
+                    </li>
+                    <li class="dropdown nav-item">
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="content-header d-flex justify-content-between align-items-center">
+                <h2 class="content-title">Sales Report</h2>
+                <div class="d-flex gap-3">
+                    <a class="btn btn-primary" href="/admin/salesReportPDF/pdf">
+                        <i class="material-icons md-cloud_download"></i> Save PDF
+                    </a>
+                    <a class="btn btn-secondary" href="/admin/salesReportExcel">
+                        <i class="material-icons md-file_download"></i> Export to Excel
+                    </a>
+                </div>
+            </div>
+
+            <div class="card p-4">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-12 mb-3">
+                        <label class="form-label">
+                            <i class="material-icons md-calendar_today"></i> <b>Select Date Range</b>
+                        </label>
+                        <form id="salesFilterForm" action="/admin/filtersales" method="POST">
+                            <input type="text" id="dateRangePicker" class="form-control"
+                                placeholder="Select Date Range">
+                            <input type="hidden" name="startDate" id="startDateInput">
+                            <input type="hidden" name="endDate" id="endDateInput">
+                            <button type="submit" id="filterOrders" class="btn btn-primary">Filter Orders</button>
+                        </form>
+                    </div>
+                    <div class="col-lg-6 col-md-12 d-flex gap-2">
+                        <button id="dailyFilter" class="btn btn-outline-primary">Daily</button>
+                        <button id="weeklyFilter" class="btn btn-outline-primary">Weekly</button>
+                        <button id="yearlyFilter" class="btn btn-outline-primary">Yearly</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header d-flex justify-content-between">
+                    <h5 class="mb-0">Your Orders</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Price</th>
+                                    <th>Discount (per item)</th>
+                                    <th>Coupon Discount</th>
+                                    <th>Total Order Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% let overallDiscount=0; let overallSales=0; let overallOrderAmount=0; %>
+                                    <% salesOrder.forEach(saleorder=> { %>
+                                        <% let orderDiscount=0; %>
+                                            <% saleorder.items.forEach((item, index)=> { %>
+                                                <tr>
+                                                    <td>
+                                                        <% if (item.product && item.product.name) { %>
+                                                            <%= item.product.name %>
+                                                                <% } else { %>
+                                                                    Product not available
+                                                                    <% } %>
+                                                    </td>
+                                                    <td>
+                                                        <%= new Date(saleorder.orderDate).toLocaleDateString() %>
+                                                    </td>
+                                                    <td>
+                                                        <%= saleorder.orderStatus || 'Status not available' %>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.product?.price || 'Price not available' %>
+                                                    </td>
+                                                    <td>
+                                                        <% orderDiscount +=(item.product?.discount || 0); %>
+                                                            <%= item.product?.discount || 0 %>
+                                                    </td>
+                                                    <% if (index===saleorder.items.length - 1) { %>
+                                                        <td>
+                                                            <%= saleorder.subtotal - saleorder.billTotal %>
+                                                        </td>
+                                                        <td>
+                                                            <%= saleorder.billTotal %>
+                                                        </td>
+                                                        <% } else { %>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <% } %>
+                                                </tr>
+                                                <% }); %>
+                                                    <% overallDiscount +=orderDiscount; %>
+                                                        <% overallSales +=1; %>
+                                                            <% overallOrderAmount +=saleorder.billTotal; %>
+                                                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" style="text-align: right;"><strong>Overall Sales Count:</strong></td>
+                            <td><strong>
+                                    <%= overallSales %>
+                                </strong></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="text-align: right;"><strong>Overall Discount:</strong></td>
+                            <td><strong>
+                                    <%= overallDiscount.toFixed(2) %>
+                                </strong></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="text-align: right;"><strong>Overall Order Amount:</strong></td>
+                            <td><strong>
+                                    <%= overallOrderAmount.toFixed(2) %>
+                                </strong></td>
+                        </tr>
+                    </tfoot>
+                </div>
+            </div>
+
+            <% let page=typeof currentPage !=='undefined' ? currentPage : 1; %>
+                <% let total=typeof totalPages !=='undefined' ? totalPages : 1; %>
+                    <% let queryString=(startDate && endDate) ? `&startDate=${startDate}&endDate=${endDate}` : '' ; %>
+
+                        <ul class="pagination justify-content-center">
+                            <!-- Previous Button -->
+                            <li class="page-item <%= page === 1 ? 'disabled' : '' %>">
+                                <a class="page-link" href="?page=<%= page - 1 %><%= queryString %>">&laquo;</a>
+                            </li>
+
+                            <!-- Page Numbers -->
+                            <% for (let i=1; i <=total; i++) { %>
+                                <li class="page-item <%= i === page ? 'active' : '' %>">
+                                    <a class="page-link" href="?page=<%= i %><%= queryString %>">
+                                        <%= i %>
+                                    </a>
+                                </li>
+                                <% } %>
+
+                                    <!-- Next Button -->
+                                    <li class="page-item <%= page === total ? 'disabled' : '' %>">
+                                     <a class="page-link" href="?page=<%= page + 1 %><%= queryString %>">&raquo;</a>
+                              </li>
+                         </ul>
+                     </section>
+
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                        document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="adminassets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="adminassets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="adminassets/js/vendors/select2.min.js"></script>
+    <script src="adminassets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="adminassets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="adminassets/js/main.js" type="text/javascript"></script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const picker = new Litepicker({
+                element: document.getElementById('dateRangePicker'),
+                singleMode: false,
+                format: 'YYYY-MM-DD',
+
+                onSelect : function(date1,date2){
+                    applyFilter(date1.format('YYYY-MM-DD'),date2.format('YYYY-MM-DD'))
+                }
+            })
+        
+            
+            function applyFilter(startDate, endDate) {
+                document.getElementById('startDateInput').value = startDate;
+                document.getElementById('endDateInput').value = endDate;
+
+                console.log("startDate:",document.getElementById('startDateInput').value)
+                console.log("endDate:",document.getElementById('endDateInput').value);
+                document.getElementById('salesFilterForm').submit();
+                console.log("Filtering from", startDate, "to", endDate);
+            }
+
+            document.getElementById('dailyFilter').addEventListener('click', function () {
+                const today = new Date();
+                const formattedDate = today.toISOString().split('T')[0]; 
+                applyFilter(formattedDate, formattedDate);
+            });
+
+            document.getElementById('weeklyFilter').addEventListener('click', function () {
+                const today = new Date();
+                const lastWeek = new Date();
+                lastWeek.setDate(today.getDate() - 6); 
+                applyFilter(lastWeek.toISOString().split('T')[0], today.toISOString().split('T')[0]);
+            });
+
+            document.getElementById('yearlyFilter').addEventListener('click', function () {
+                const today = new Date();
+                const lastYear = new Date(today);
+                lastYear.setFullYear(today.getFullYear() - 1); 
+                applyFilter(lastYear.toISOString().split('T')[0], today.toISOString().split('T')[0]);
+            });
+
+
+
+            document.getElementById('filterOrders').addEventListener('click', function (event) {
+                event.preventDefault();
+                const dateRange = document.getElementById('dateRangePicker').value.split(' - ');
+                if (dateRange.length === 2) {
+                    applyFilter(dateRange[0], dateRange[1]);
+                } else {
+                    alert("Please select a valid date range.");
+                }
+            });
+        });
+
+
+
+        function updateOrdersTable(data) {
+            const tableBody = document.getElementById('ordersTableBody');
+            tableBody.innerHTML = '';
+
+            data.salesOrder.forEach(order => {
+                order.items.forEach(item => {
+                    const row = document.createElement('tr');
+
+                    row.innerHTML = `
+                <td>${item.product ? item.product.name : 'Product not available'}</td>
+                <td>${new Date(order.orderDate).toLocaleDateString()}</td>
+                <td>${order.orderStatus}</td>
+                <td>${item.price}</td>
+            `;
+
+                    tableBody.appendChild(row);
+                });
+            });
+
+            document.getElementById('totalAmount').textContent = `Total: ₹${data.totalAmount}`;
+        }
+
+    </script>
+</body>
+
+</html>
