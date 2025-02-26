@@ -19,9 +19,9 @@
         .button {
   display: inline-block;
   padding: 10px 20px;
-  text-decoration: none; /* Remove default underline for links */
+  text-decoration: none; 
   color: #ffffff;
-  background-color: #007bff; /* Button background color */
+  background-color: #007bff; 
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -29,21 +29,20 @@
 }
 
 .button:hover {
-  background-color: #0056b3; /* Button background color on hover */
+  background-color: #0056b3; 
 }
 
 .button-add-to-cart {
-  /* Additional styling specific to the 'Add to cart' button */
 }
 
 :root {
-            --primary-color: #000000; /* Black */
-            --text-color: #ffffff; /* White */
-            --hover-color: #333333; /* Dark Gray for hover effects */
-            --button-color: #00bfae; /* Teal for buttons */
+            --primary-color: #000000; 
+            --text-color: #ffffff; 
+            --hover-color: #333333; 
+            --button-color: #00bfae; 
         }
 
-        /* Navbar Styles */
+        
         .navbar {
             background-color: var(--primary-color);
             padding: 10px 20px;
@@ -171,7 +170,6 @@
             display: block;
         }
 
-        /* Footer Styles */
         .footer {
             background-color: var(--primary-color);
             color: var(--text-color);
@@ -443,7 +441,7 @@
                                         <a class="nav-link active" id="Description-tab" data-bs-toggle="tab" href="#Description">Description</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="Reviews-tab" data-bs-toggle="tab" href="#Reviews">Reviews (<%= products.reviews %>)</a>
+                                        <a class="nav-link" id="Reviews-tab" data-bs-toggle="tab" href="#Reviews">Reviews</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content shop_info_tab entry-main-content">
@@ -455,57 +453,68 @@
                                     </div>
                                 
                                     <div class="tab-pane fade" id="Reviews">
-                                        <!--Comments-->
                                         <div class="comments-area">
                                             <div class="row">
                                                 <div class="col-lg-8">
                                                     <h4 class="mb-30">Customer questions & answers</h4>
-                                                    <div class="comment-list">
+                                                    <div class="comment-list" id="reviews-list">
+                                                        <%if(reviews && reviews.length > 0){%>
+                                                            <%reviews.forEach(review => {%>
                                                         <div class="single-comment justify-content-between d-flex">
                                                             <div class="user justify-content-between d-flex">
-                                                                <!-- <div class="thumb text-center">
-                                                                    <img src="assets/imgs/page/avatar-6.jpg" alt="">
-                                                                    <h6><a href="#">Jacky Chan</a></h6>
-                                                                    <p class="font-xxs">Since 2012</p>
-                                                                </div> -->
                                                                 <div class="desc">
                                                                     <div class="product-rate d-inline-block">
-                                                                        <div class="product-rating" style="width:90%">
+                                                                        <div class="product-rating" style="width:<%= review.rating * 20%>%">
                                                                         </div>
                                                                     </div>
-                                                                    <p><%= products.reviews%></p>
-                                                                    <!-- <div class="d-flex justify-content-between">
-                                                                        <div class="d-flex align-items-center">
-                                                                            <p class="font-xs mr-30">December 4, 2020 at 3:12 pm </p>
-                                                                            <a href="#" class="text-brand btn-reply">Reply <i class="fi-rs-arrow-right"></i> </a>
-                                                                        </div>
-                                                                    </div> -->
+                                                                    <p><%= review.comment%></p>
+                                                                    <small>By <%= review.userId.username %> on <%= new Date(review.createdAt).toLocaleDateString() %></small>
+                                                            
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <!--single-comment -->
-                                                       
-                                                        <!--single-comment -->
-                                                      
-                                                        <!--single-comment -->
+                                                        <%});%>
+                                                     
+                                                          <%}%>  
                                                     </div>
                                                 </div>
                                     
                                             </div>
                                         </div>
+                                        <div class="review-form">
+                                            <h4>Write a review</h4>
+                                            <%if (hasPurchased){%>
+                                            <form id="review-form">
+                                                <label for="rating">Rating:</label>
+                                                <select id="rating" name="rating" required>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                </select>
+                                                <label for="comment">Comment:</label>
+                                                <textarea id="comment" name="comment" required></textarea>
+                                                <button type="submit">Submit Review</button>
+                                            </form>
+                                            <% } else { %>
+                                                <p>You must purchase this product before leaving a review.</p>
+                                                <% } %>
+                                            
+                                         </div>  
                                     
                                     </div>
                                 </div>
                             </div>
                             <div class="row mt-60">
-                                <div class="col-12">
+                                <div class="col-12">                
                                     <h3 class="section-title style-1 mb-30">Related Products</h3>
                                 </div>
                                 <div class="col-12">
                                     <div class="row related-products">
                                         <% relatedProducts.forEach(item => { %>
-                                        <div class="col-lg-3 col-md-4 col-12 col-sm-6 mb-4">
-                                            <div class="product-cart-wrap small hover-up border-radius-12 shadow-sm">
+                                            <div class="col-lg-3 col-md-4 col-12 col-sm-6 mb-4">
+                                               <div class="product-cart-wrap small hover-up border-radius-12 shadow-sm">
                                                 <div class="product-img-action-wrap">
                                                     <div class="product-img product-img-zoom">
                                                         <a href="/singleProduct?id=<%= item._id %>" tabindex="0">
@@ -522,15 +531,17 @@
                                                     <div class="product-price">
                                                         <span><%= item.price %>Rs</span>
                                                         <span class="old-price">Rs245.8</span>
-                                                    </div>
+                                                      </div>
+                                                  </div>
                                                 </div>
-                                            </div>
-                                        </div>
+                                              </div>
                                         <% }) %>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+
                     </div>
                     <!-- Sidebar -->
                     <div class="col-lg-3 primary-sidebar sticky-sidebar">
@@ -579,8 +590,8 @@
 
     <script>
 
-async function addToCart(productId) {
-  try {
+     async function addToCart(productId) {
+    try {
     const response = await fetch(`/addToCart?productId=${productId}`, {
       method: 'GET',
       credentials: 'same-origin'
@@ -598,7 +609,7 @@ async function addToCart(productId) {
         if (result.isConfirmed) {
           window.location.href = '/cart';
         }
-      });
+      })
 
       // Disable the "Add to Cart" button after adding
       const button = document.getElementById(`addToCart-${productId}`);
@@ -638,7 +649,7 @@ async function addToCart(productId) {
 }
 
 
-        function addToWishlist(productId, element) {
+function addToWishlist(productId, element) {
     fetch('/wishlist/add', {
         method: 'POST',
         headers: {
@@ -674,11 +685,85 @@ async function addToCart(productId) {
             text: "Something went wrong. Try again!",
             icon: "error"
         });
-    });
+    })
 }
 
+document.getElementById('review-form').addEventListener('submit', async function (e) {
+    e.preventDefault(); 
 
-      </script>
+    const urlParams = new URLSearchParams(window.location.search);  // Get query parameters
+    const productId = urlParams.get('id');  // Get 'id' from the URL
+    const rating = document.getElementById('rating').value;
+    const comment = document.getElementById('comment').value;
+
+    const reviewData = { rating, comment };
+
+    const token = localStorage.getItem('userToken'); // Get the token from localStorage, sessionStorage, or however you're storing it.
+
+    try {
+        const response = await fetch(`/product/${productId}/review`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`, // Pass the JWT token if you have one
+            },
+            body: JSON.stringify(reviewData),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Review Added',
+                text: 'Your review has been added successfully!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+            addReviewToDOM(result.review);
+            document.getElementById('review-form').reset();
+
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: result.error || 'Something went wrong. Please try again later.',
+                showConfirmButton: true
+            });
+        }
+    } catch (error) {
+        console.error('Error adding review:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'An error occurred while submitting your review.',
+            showConfirmButton: true
+        });
+    }
+})
+
+function addReviewToDOM(review) {
+    const reviewsList = document.getElementById('reviews-list');
+    const reviewElement = document.createElement('div');
+    reviewElement.classList.add('single-comment', 'justify-content-between', 'd-flex');
+    reviewElement.innerHTML = `
+        <div class="user justify-content-between d-flex">
+            <div class="desc">
+                <div class="product-rate d-inline-block">
+                    <div class="product-rating" style="width: ${review.rating * 20}%"></div>
+                </div>
+                <p>${review.comment}</p>
+                <small>By ${review.userId.username} on ${new Date(review.createdAt).toLocaleDateString()}</small>
+            </div>
+        </div>
+    `;
+
+    reviewsList.prepend(reviewElement); 
+
+    reviewsList.scrollIntoView({ behavior: 'smooth' });
+}
+
+</script>
       
   
 </body>

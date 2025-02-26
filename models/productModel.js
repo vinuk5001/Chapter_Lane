@@ -61,9 +61,10 @@ const productSchema = new mongoose.Schema({
     highlights: {
         type: String
     },
-    reviews: {
-        type: String
-    },
+    reviews: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Review'
+    }],
     isListed: {
         type: Boolean,
         default: true
@@ -72,6 +73,7 @@ const productSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    
     deleted_at: {
         type: Date,
         default: null
@@ -90,3 +92,4 @@ function arrayLimit(val) {
 }
 
 module.exports = mongoose.model('Product', productSchema);
+

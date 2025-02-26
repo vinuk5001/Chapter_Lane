@@ -264,10 +264,11 @@
                                                             <% } %>
                                                 </tr>
                                                 <% }); %>
-                                                    <% overallDiscount +=orderDiscount; %>
-                                                        <% overallSales +=1; %>
-                                                            <% overallOrderAmount +=saleorder.billTotal; %>
-                                                                <% }); %>
+                                             <% overallDiscount +=orderDiscount; %>
+                                             <% overallSales +=1; %>
+                                           <% overallOrderAmount +=saleorder.billTotal; %>
+                                                             
+                                  <% }); %>
                             </tbody>
                         </table>
                     </div>
@@ -359,19 +360,22 @@
             
             function applyFilter(startDate, endDate) {
                 document.getElementById('startDateInput').value = startDate;
+                console.log("startDate: " + startDate);
                 document.getElementById('endDateInput').value = endDate;
-
+                console.log("endDate:"+endDate);
                 console.log("startDate:",document.getElementById('startDateInput').value)
                 console.log("endDate:",document.getElementById('endDateInput').value);
                 document.getElementById('salesFilterForm').submit();
                 console.log("Filtering from", startDate, "to", endDate);
             }
-
+           
             document.getElementById('dailyFilter').addEventListener('click', function () {
                 const today = new Date();
+                
                 const formattedDate = today.toISOString().split('T')[0]; 
                 applyFilter(formattedDate, formattedDate);
             });
+            console.log("Filtering from", startDate, "to", endDate)
 
             document.getElementById('weeklyFilter').addEventListener('click', function () {
                 const today = new Date();
@@ -379,6 +383,7 @@
                 lastWeek.setDate(today.getDate() - 6); 
                 applyFilter(lastWeek.toISOString().split('T')[0], today.toISOString().split('T')[0]);
             });
+            console.log("filter applide",today.toISOString());
 
             document.getElementById('yearlyFilter').addEventListener('click', function () {
                 const today = new Date();
@@ -387,7 +392,8 @@
                 applyFilter(lastYear.toISOString().split('T')[0], today.toISOString().split('T')[0]);
             });
 
-
+             console.log("filter is now " + today.getFullYear);
+             console.log("filter is now " + today.toISOString());
 
             document.getElementById('filterOrders').addEventListener('click', function (event) {
                 event.preventDefault();
@@ -398,8 +404,10 @@
                     alert("Please select a valid date range.");
                 }
             });
-        });
+        })
 
+          console.log("date range selected",dateRange);
+          console.log("total amount",data.totalAmount);
 
 
         function updateOrdersTable(data) {
@@ -423,6 +431,7 @@
 
             document.getElementById('totalAmount').textContent = `Total: ₹${data.totalAmount}`;
         }
+    
 
     </script>
 </body>

@@ -145,7 +145,7 @@ const loadHome = async (req, res) => {
 const userList = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1
-        const limit = parseInt(req.query.limit) || 5
+        const limit = parseInt(req.query.limit) || 4
         const skip = (page - 1) * limit;
         const totalUsers = await User.countDocuments({ is_admin: 0 });
         const userData = await User.find({ is_admin: 0 }).skip(skip).limit(limit);
@@ -188,6 +188,7 @@ const toggleUserStatus = async (req, res) => {
     }
 
 }
+
 
 
 const orderlist = async (req, res) => {
@@ -316,50 +317,60 @@ const categoryOffer = async (req, res) => {
     }
 }
 
+
+
 const salesReport = async (req, res) => {
     try {
+        const { startDate, endDate } = req.query;
+        console.log("req.query", req.query);
 
-        const {startDate,endDate} = req.query;
-
-        if(startDate &&isNaN(new Date(startDate))){
-            return res.status(400).json({error:"Invalild start date format"});
+        if (startDate && isNaN(new Date(startDate))) {
+            return res.status(400).json({ error: "Invalid start date format" });
         }
-        if(endDate && isNaN(new Date(endDate))){
-            return res.status(400).json({error:"Invalid end date format"});
+        if (endDate && isNaN(new Date(endDate))) {
+            return res.status(400).json({ error: "Invalid end date format" });
         }
 
-        const filterconditions = {}; 
-        if(startDate) filterconditions.createdAt = {...filterconditions.createdAt,$gte:new Date(startDate)}
-        if(endDate) filterconditions.createdAt = {...filterconditions.createdAt,$lte:new Date(endDate)};
+        const filterConditions = {};
+        console.log("filterConditions: " + JSON.stringify(filterConditions))
+        if (startDate) filterConditions.createdAt = { ...filterConditions.createdAt, $gte: new Date(startDate) };
+        if (endDate) filterConditions.createdAt = { ...filterConditions.createdAt, $lte: new Date(endDate) };
+
         const page = parseInt(req.query.page) || 1;
+        console.log("page", page);
         const limit = 5;
+        console.log("limit", limit);
         const skip = (page - 1) * limit;
-        const totalOrders = await Order.countDocuments(filterconditions);
-        
-        const salesOrder = await Order.find(filterconditions)
-            .sort({createdAt:-1})
+        console.log("skip", skip);
+
+        // Total number of orders (for pagination)
+        const totalOrders = await Order.countDocuments(filterConditions);
+        console.log("totalOrders", totalOrders);
+
+        const salesOrder = await Order.find(filterConditions)
+            .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
-            .populate('items.product');  
-        
-        salesOrder.forEach(order => {
-            order.items.forEach(item => {
-                console.log("Item Product: ", item.product);  
-            });
-        });
+            .populate('items.product');
 
-        const totalAmount = salesOrder.reduce((acc, item) => acc + (item.billTotal, 0),0);
+        console.log("salesOrder", salesOrder);
+
+        // Calculate the total amount
+        const totalAmount = salesOrder.reduce((acc, order) => acc + order.billTotal, 0);
+        console.log("Total Amount: ", totalAmount);
+
         const totalPages = Math.ceil(totalOrders / limit);
+        console.log("Total Pages: ", totalPages);
 
         res.render("salesReport", {
-            salesOrder: salesOrder,
-            totalAmount: totalAmount,
+            salesOrder,
+            totalAmount,
             currentPage: page,
-            totalPages: totalPages,
-            totalOrders: totalOrders,
-            limit: limit,
-            startDate:req.query.startDate || "",
-            endDate :req.query.endDate || ""
+            totalPages,
+            totalOrders,
+            limit,
+            startDate: req.query.startDate || "",
+            endDate: req.query.endDate || ""
         });
 
     } catch (error) {
@@ -369,7 +380,6 @@ const salesReport = async (req, res) => {
 }
 
 
-
 const salesFilter = async (req, res) => {
     try {
         console.log("Filtering sales...");
@@ -377,6 +387,7 @@ const salesFilter = async (req, res) => {
         let { startDate, endDate, page } = req.body;
         console.log("Start Date:", startDate);
         console.log("End Date:", endDate);
+        console.log("Page:", page);
 
         if (!startDate || !endDate) {
             console.log("❌ Missing Date Values");
@@ -389,31 +400,40 @@ const salesFilter = async (req, res) => {
         console.log("Parsed Start Date:", start);
         console.log("Parsed End Date:", end);
 
-        start.setHours(0, 0, 0, 0); 
-        end.setHours(23, 59, 59, 999); 
+        start.setHours(0, 0, 0, 0);
+        end.setHours(23, 59, 59, 999);
 
         console.log(`✅ Querying sales from: ${start} to ${end}`);
 
         const limit = 5;
+        console.log("Limit:", limit);
         const currentPage = parseInt(page) || 1;
+        console.log("Current Page:", currentPage);
+        const skip = (currentPage - 1) * limit;
+        console.log("Skip:", skip);
 
         const totalOrders = await Order.countDocuments({
             createdAt: { $gte: start, $lte: end }
         });
+        console.log("totalOrders:", totalOrders);
 
         const sales = await Order.find({
             createdAt: { $gte: start, $lte: end }
         })
         .sort({ createdAt: 1 })
-        .skip((currentPage - 1) * limit)
+        .skip(skip)
         .limit(limit);
 
         console.log(`🔹 Found ${sales.length} sales`);
 
         const totalPages = Math.max(Math.ceil(totalOrders / limit), 1);
-        const totalAmount = sales.reduce((acc, order) => acc + order.billTotal, 0);
+        console.log("Total Pages:", totalPages);
 
-        res.render('salesReport', { 
+        // Calculate the total amount
+        const totalAmount = sales.reduce((acc, order) => acc + order.billTotal, 0);
+        console.log("Total Amount:", totalAmount);
+
+        res.render('salesReport', {
             salesOrder: sales,
             totalAmount,
             currentPage,
@@ -427,8 +447,7 @@ const salesFilter = async (req, res) => {
         console.error("🔥 Error in sales filter:", error);
         res.status(500).json({ error: "Internal server error" });
     }
-};
-
+}
 
 const salesReportPDF = async (req, res) => {
     try {

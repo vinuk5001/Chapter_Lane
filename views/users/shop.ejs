@@ -343,12 +343,12 @@
             <li><a href="/home">Home</a></li>
             <li><a href="/shop">Shop</a></li>
             <li class="dropdown">
-                <a href="#">Browse Categories</a>
+                <a href="#">Browse Category</a>
                 <div class="dropdown-content">
                     <% if (categories.length > 0) { %>
                         <% categories.forEach(category => { %>
-                            <a href="/shopCategory?category=<%= category._id %>">  <!-- Use category._id -->
-                                <%= category.name %>  <!-- Display category name -->
+                            <a href="/shop?category=<%= category._id %>&sort=<%= category._id%>&sort=nameAsc&page=1&limit=12">
+                            <%= category.name %>  <!-- Display category name -->
                             </a>
                         <% }); %>
                     <% } %>
@@ -395,8 +395,6 @@
                                 </div>                            
                                <div class="sort-by-product-area">
                                 <div class="sort-by-cover mr-10">
-                                  
-                                  
                                 </div>
                                 <div class="sort-by-cover">
                                     <div class="sort-by-product-wrap">
@@ -426,7 +424,7 @@
                             <!-- Products and Promotions Section -->
                             <section class="products-promotions-section">
                     
-                                <h2>Books Collection</h2>
+                             <h2>Books Collection</h2>
                                 <div class="tab-content wow fadeIn animated" id="myTabContent">
                                     <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
                                         <div class="book-grid">
@@ -454,34 +452,33 @@
                                             <% }) %>
                                         </div>
                                     </div>
-                                    <!-- Add more tab content here if needed -->
                                 </div> 
                             </section>
                         </main>
                         <!--pagination-->
 
+
                         <div class="pagination">
+                            <!-- Previous Button -->
                             <% if (currentPage > 1) { %>
-                              <a href="/shop?page=<%= currentPage - 1 %>&limit=<%= limit %>">Previous</a>
+                              <a href="/shop?category=<%= categoryId || '' %>&sort=<%= sortOption %>&page=<%= currentPage - 1 %>&limit=<%= limit %>">Previous</a>
                             <% } %>
-                            
+                          
+                            <!-- Page Numbers -->
                             <% pageNumbers.forEach(function(pageNumber) { %>
-                              <a href="/shop?page=<%= pageNumber %>&limit=<%= limit %>"
+                              <a href="/shop?category=<%= categoryId || '' %>&sort=<%= sortOption %>&page=<%= pageNumber %>&limit=<%= limit %>"
                                  class="<%= pageNumber === currentPage ? 'active' : '' %>">
                                  <%= pageNumber %>
                               </a>
                             <% }); %>
-                            
+                          
+                            <!-- Next Button -->
                             <% if (currentPage < totalPages) { %>
-                              <a href="/shop?page=<%= currentPage + 1 %>&limit=<%= limit %>">Next</a>
+                              <a href="/shop?category=<%= categoryId || '' %>&sort=<%= sortOption %>&page=<%= currentPage + 1 %>&limit=<%= limit %>">Next</a>
                             <% } %>
-                          </div>
+                       </div>
                           
-                          
-                          
-                          
-                    </div>
-                    <div class="col-lg-3 primary-sidebar sticky-sidebar">
+                          <div class="col-lg-3 primary-sidebar sticky-sidebar">
                         <div class="row">
                             <div class="col-lg-12 col-mg-6"></div>
                             <div class="col-lg-12 col-mg-6"></div>
@@ -492,6 +489,7 @@
             </div>
         </section>
     </main>
+
     <footer class="footer">
         <p>&copy; 2024 ChapterLane. All rights reserved.</p>
         <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="#">Contact Us</a></p>
@@ -520,25 +518,21 @@
     <script src="assets/js/plugins/jquery.vticker-min.js"></script>
     <script src="assets/js/plugins/jquery.theia.sticky.js"></script>
     <script src="assets/js/plugins/jquery.elevatezoom.js"></script>
-    <!-- Template  JS -->
     <script src="./assets/js/main.js?v=3.4"></script>
     <script src="./assets/js/shop.js?v=3.4"></script>
 
     
     <script>
-        window.addEventListener('DOMContentLoaded', () => {
+     window.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const sortParam = urlParams.get('sort');
 
-    // Get all sort options
     const sortOptions = document.querySelectorAll('#sort-options a');
 
-    // Remove 'active' class from all options
     sortOptions.forEach(option => {
         option.classList.remove('active');
     });
 
-    // Add 'active' class to the selected option
     if (sortParam) {
         const selectedOption = document.querySelector(`#sort-options a[data-sort="${sortParam}"]`);
         if (selectedOption) {
@@ -546,11 +540,10 @@
             document.getElementById('sort-title').textContent = selectedOption.textContent;
         }
     } else {
-        // Default option if no 'sort' parameter is present
         document.querySelector('#sort-options a[data-sort="featured"]').classList.add('active');
         document.getElementById('sort-title').textContent = 'Featured';
     }
-});
+})
 
     </script>
 </body>

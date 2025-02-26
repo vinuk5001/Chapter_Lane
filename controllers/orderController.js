@@ -5,6 +5,9 @@ const jwt = require('jsonwebtoken');
 const Wallet = require("../models/walletModel");
 const Address = require("../models/addressModel");
 const Coupon = require("../models/couponModel");
+const Review = require("../models/reviewsModel");
+const mongoose = require("mongoose");
+
 
 const placeorder = async (req, res) => {
     try {
@@ -142,7 +145,6 @@ const payonline = async (req, res) => {
             console.error("Error parsing selectedCoupons:", err);
         }
 
-        // If selectedCoupons is an array, apply discounts
         if (Array.isArray(parsedCoupons) && parsedCoupons.length > 0) {
             parsedCoupons.forEach((coupon) => {
                 const { couponId, discount, minAmount:couponMinAmount } = coupon;
@@ -205,10 +207,7 @@ const payonline = async (req, res) => {
                 }
             }));
 
-
             await cart.deleteOne({ userId: userId });
-
-
             res.redirect("/order-Confirmation");
         } else {
             return res.status(500).json({ message: "Failed to create order" });
@@ -466,6 +465,36 @@ const returnOrder = async (req, res) => {
 }
 
 
+const checkIfPurchased = async (userId, productId) => {
+    try {
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            console.log('Invalid userId format');
+            return false;  // Return false if userId is invalid
+          }
+      
+        console.log("Checking purchase for userId:", userId);
+        const order = await Order.findOne({
+            user: userId,
+            orderStatus: { $in: ['Confirmed', 'Shipped', 'Delivered'] },
+        })
+        console.log('Order:', order);
+        if (order) {
+            console.log("Order matched!");
+            return true;
+        } else {
+            console.log("No order found.");
+            return false;
+        }
+    } catch (error) {
+        console.error('Error checking purchase:', error);
+        return false;
+    }
+}
+
+
+
+
+
  module.exports = {
     placeorder,
     cancelOrder,
@@ -473,7 +502,8 @@ const returnOrder = async (req, res) => {
     orderConfirmation,
     payonline,
     orderFailed,
-    payonlineFailed
+    payonlineFailed,
+    checkIfPurchased
 }
 
 

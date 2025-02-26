@@ -37,8 +37,6 @@ const checkOut = async (req, res) => {
       }
 
     }))
-
-  
     const validCartItems = cartItems.filter(item => item !== null);
     const totalAmount = validCartItems.reduce((acc, item) => acc + item.subtotal, 0);
     cart.totalAmount = totalAmount;
@@ -83,11 +81,36 @@ const checkOut = async (req, res) => {
       res.status(500).send("Internal Server Error");
     }
   }
+
+const deleteAddress = async(req,res)=>{
+    try {
+      console.log("deleteAddress");
+
+      const addressId = req.params.id;
+      console.log("addressId: " + addressId);
+      
+      const address = await Address.findByIdAndDelete(addressId);
+      console.log("address: " + address);
+      
+      if (!address) {
+          return res.status(404).send({ message: 'Address not found' });
+      }
+
+      res.status(200).send({ message: 'Address deleted successfully' });
+  } catch (error) {
+      console.error(error);
+      res.status(500).send({ message: 'Server error' });
+  }
+  
+}
+
   
   module.exports = {
     checkOut,
-    addressCheckout
+    addressCheckout,
+    deleteAddress,
   }
+
 
 
   

@@ -4,6 +4,7 @@ const Address = require("../models/addressModel");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const Product = require("../models/productModel");
+const Review = require("../models/reviewsModel");
 const Cart = require("../models/cartModel");
 const Category = require("../models/categoryModel");
 const Order = require('../models/orderModel');
@@ -14,7 +15,7 @@ const ObjectId = mongoose.Types.ObjectId;
 const jwt = require("jsonwebtoken");
 const Passport = require("passport");
 require("dotenv").config();
-
+const {checkIfPurchased} = require('../controllers/orderController');
 //.............create a token.......................//
 const createToken = (user) => {
   const JWT_SECRET = process.env.JWT_SECRET
@@ -102,40 +103,30 @@ const loadHome = async (req, res) => {
     const limit = 12;
     const skip = (page - 1) * limit;
     
-    // Fetch total product count and listed products
     const totalProducts = await Product.countDocuments({ isListed: true });
     const listedProducts = await Product.find({ isListed: true }).skip(skip).limit(limit).exec();
 
-    // Update product status based on stock
     listedProducts.forEach(product => {
       if (product.stock === 0) {
         product.status = "Out-of-stock";
       }
     })
 
-    // Fetch categories
     const categories = await Category.find();
 
-    // Fetch new arrivals (sort by creation date)
     const newArrivals = await Product.find({ isListed: true })
       .sort({ createdAt: -1 })
       .limit(10);
-    console.log("newArrivals", newArrivals);  // Debug log
 
-    // Fetch top selling products (sort by sales count)
     const topSelling = await Product.find({ isListed: true })
-      .sort({ salesCount: -1 }) // Adjusted sorting to get top-selling products
+      .sort({ salesCount: -1 }) 
       .limit(10)
       .lean();
-    console.log("topSelling", topSelling);  // Debug log
 
-    // Calculate total pages
     const totalPages = Math.ceil(totalProducts / limit);
-    console.log("totalPages", totalPages);  // Debug log
-    console.log("listedProducts",listedProducts); 
-    // Pass data to the view
+  
     res.render("home", {
-      products: listedProducts,      // Corrected variable name here
+      products: listedProducts,     
       categories: categories,
       currentPage: page,
       totalPages: totalPages,
@@ -155,7 +146,7 @@ const loadHome = async (req, res) => {
 const categorySelect = async (req, res) => {
   try {
     const categoryId = req.query.id;
-
+    console.log("categoryId: " + categoryId);
     const categories = await Category.find(); 
 
     if (!categoryId || !mongoose.Types.ObjectId.isValid(categoryId)) {
@@ -167,7 +158,6 @@ const categorySelect = async (req, res) => {
     if (!category) {
       return res.render('home', { categories, message: "Category not found", products: [] });
     }
-
     const products = await Product.find({ category: categoryId });
 
     res.render('home', { categories, category, products });
@@ -205,27 +195,30 @@ const loadShop = async (req, res) => {
     }
 
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    console.log("page:",page);
+    const limit = parseInt(req.query.limit) || 12;
+    console.log("limit:",limit);
     const skip = (page - 1) * limit;
-
+    console.log("skip:", skip);
     const categories = await Category.find();
-    const categoryId = req.query.id;
+    const categoryId = req.query.category;
+    console.log("categoryId:", categoryId);
     let filterCriteria = { isListed: true, status: "Active" };
     if (categoryId && mongoose.Types.ObjectId.isValid(categoryId)) {
-      filterCriteria.category = mongoose.Types.ObjectId(categoryId);
+      filterCriteria.category = new mongoose.Types.ObjectId(categoryId);
     }
-    const totalProducts = await Product.countDocuments({ filterCriteria });
+    const totalProducts = await Product.countDocuments( filterCriteria );
+    console.log("Total products",totalProducts);
 
-    const products = await Product.find({ isListed: true, status: "Active" })
+    const products = await Product.find(filterCriteria)
       .sort(sortCriteria)
       .skip(skip)
       .limit(limit)
-      .populate("category")
-
-   const totalPages = Math.ceil(totalProducts / limit);
-
+      .populate("category");
+   const totalPages = totalProducts > 0 ? Math.ceil(totalProducts / limit) : 1;
+   console.log("totalPages",totalPages);
    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
-
+    console.log("pageNumbers", pageNumbers);
     res.render("shop", {
       product: products,
       sortOption: sortOption,
@@ -233,49 +226,55 @@ const loadShop = async (req, res) => {
       totalPages: totalPages,
       limit: limit,
       categories: categories,
-      pageNumbers: pageNumbers // Pass the array to the view
-    });
+      pageNumbers: pageNumbers, 
+      categoryId:categoryId
+    })
   } catch (error) {
     console.log(error.message);
     res.status(500).send("An error occurred while loading the shop page.");
   }
-};
-
-const shopCategory = async (req, res) => {
-  try {
-    const categoryId = req.query.category;  // Use category ID here
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-    const categories = await Category.find();
-    if (!Array.isArray(categories)) {
-      return res.status(500).send({ error: 'Categories data is not in the expected format' });
-    }
-    const totalProducts = await Product.countDocuments({ category: categoryId, isListed: true, status: "Active" });
-    const products = await Product.find({ category: categoryId, isListed: true, status: "Active" })
-      .skip(skip)
-      .limit(limit);
-    const totalPages = Math.ceil(totalProducts / limit);
-    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
-
-    res.render("shop", {
-      product: products,
-      currentPage: page,
-      totalPages: totalPages,
-      limit: limit,
-      categories: categories,  
-      pageNumbers: pageNumbers,
-      categoryId: categoryId 
-    })
-  } catch (error) {
-    console.error("Error occurred while filtering products by category:", error)
-    res.status(500).send({ error: 'An error occurred while filtering products by category' })
-  }
 }
 
 
-
-
+// const shopCategory = async (req, res) => {
+//   try {
+//     const categoryId = req.query.category;  
+//     console.log("loading Category:",+categoryId);
+//     const page = parseInt(req.query.page) || 1;
+//     console.log('page:',page);
+//     const limit = parseInt(req.query.limit) || 10;
+//     console.log("limit:",limit);
+//     const skip = (page - 1) * limit;
+//     console.log("skip",skip);
+//     const categories = await Category.find();
+//     console.log("categories:",categories);
+//     if (!Array.isArray(categories)) {
+//       return res.status(500).send({ error: 'Categories data is not in the expected format' });
+//     }
+//     const totalProducts = await Product.countDocuments({ category: categoryId, isListed: true, status: "Active" });
+//     console.log("Total products", totalProducts);
+//     const products = await Product.find({ category: categoryId, isListed: true, status: "Active" })
+//       .skip(skip)
+//       .limit(limit);
+//       console.log("Total products", products)
+//     const totalPages = Math.ceil(totalProducts / limit);
+//     console.log("Total pages", totalPages)
+//     const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+//     console.log("pageNumbers", pageNumbers);
+//     res.render("shop", {
+//       product: products,
+//       currentPage: page,
+//       totalPages: totalPages,
+//       limit: limit,
+//       categories: categories,  
+//       pageNumbers: pageNumbers,
+//       categoryId: categoryId 
+//     })
+//   } catch (error) {
+//     console.error("Error occurred while filtering products by category:", error)
+//     res.status(500).send({ error: 'An error occurred while filtering products by category' })
+//   }
+// }
 
 const insertUser = async (req, res) => {
   try {
@@ -318,12 +317,12 @@ const verifyOTP = async (req, res) => {
     if (!userId || !otp) {
       return res.render('otp-verification', { userId: null, message: "Invalid OTP or OTP has expired." });
     }
-
     if (!ObjectId.isValid(userId)) {
       return res.render('otp-verification', { userId: null, message: "Invalid user ID." });
     }
-
     const user = await User.findById(userId);
+    console.log("User", user);
+    
     if (!user) {
       return res.render('otp-verification', { userId: null, message: "User not found." });
     }
@@ -376,8 +375,7 @@ const resendOTP = async (req, res) => {
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email: email });
-
+    const user = await User.findOne({email:email});
     if (user) {
       const passwordMatch = await bcrypt.compare(password, user.password);
       if (passwordMatch) {
@@ -388,7 +386,7 @@ const loginUser = async (req, res) => {
         const token = createToken({ id: user._id });
         res.cookie("jwt", token, {
           httpOnly: true,
-          maxAge: 60 * 60 * 1000 * 24,  // 24 hours expiration
+          maxAge: 60 * 60 * 1000 * 24,  
         });
         return res.redirect("/home");
       } else {
@@ -401,7 +399,7 @@ const loginUser = async (req, res) => {
     console.log("Error during login:", error);
     res.status(500).send("An error occurred during login");
   }
-};
+}
 
 
 
@@ -410,18 +408,33 @@ const loginUser = async (req, res) => {
 const singleProduct = async (req, res) => {
   try {
     const { id } = req.query;
-    const product = await Product.findOne({ _id: id });
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).send("Invalid product ID");
+    }
+
+    const product = await Product.findOne({ _id: id }).populate({
+      path:'reviews',
+      populate:{
+        path:'userId',
+        select:'username'
+      }
+    })
     if (!product) {
       return res.status(404).send("Product not found");
     }
-    const relatedProducts = await Product.find({ category: product.category });
+    let userId = null;
+    let hasPurchased = false;
     let isInWishlist = false;
     let isInCart = false;
-    let userId = null;
+
+    const relatedProducts = await Product.find({ category: product.category });
     const token = req.cookies.jwt;
     if (token) {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       userId = decoded.id;
+      hasPurchased =  await checkIfPurchased(userId,id);
+
     const wishlist = await Wishlist.findOne({ user: userId });
       if (wishlist && wishlist.items.some(item => item.productId.toString() === id)) {
         isInWishlist = true;
@@ -437,6 +450,8 @@ const singleProduct = async (req, res) => {
       relatedProducts: relatedProducts,
       isInWishlist: isInWishlist,
       isInCart: isInCart,
+      reviews : product.reviews,
+      hasPurchased:hasPurchased,
     });
 
   } catch (error) {
@@ -456,31 +471,41 @@ const logout = async (req, res) => {
     console.log(error.message);
     res.status(500).send("An error occurred during logout");
   }
-};
+}
 
 //.............................userProfile.................................// 
 
 const userProfile = async (req, res) => {
   try {
     const userId = req.user.id;
+    console.log("userId: ", userId);
     const addresses = await Address.find({ userId });
+    console.log("addresses",addresses);
     const saveData = await User.findById(userId)
-    const address = await Address.find({ user: userId });
-    const orders = await Order.find({ user: userId }).populate('items.product').sort({ orderDate: -1 })
-
-
+    console.log("saveData", saveData);
+    const address = await Address.find({ userId });
+    console.log("address",address);
+    const orders = await Order.find({ user:userId }).populate('items.product').populate('shippingAddress').sort({ orderDate: -1 })
+    console.log("orders",orders);
     let walletData = await Wallet.findOne({ user: userId })
+    console.log("walletData",walletData);
     if (!walletData) {
       walletData = new Wallet({ user: userId, walletBalance: 0, transactions: [] });
       await walletData.save();
     }
-    const orderid = req.query.id
-    res.render('userProfile', { user: userId, address: addresses, order: orders, saveData: saveData, walletData: walletData });
+    res.render('userProfile', 
+      { 
+        user: userId,
+         address: addresses, 
+         order: orders,
+          saveData: saveData, 
+          walletData: walletData 
+        })
   } catch (error) {
     console.log(error.message);
     res.status(500).send("something went wrong");
   }
-};
+}
 
 
 const editProfile = async (req, res) => {
@@ -527,7 +552,9 @@ const editedProfile = async (req, res) => {
 const addAddress = async (req, res) => {
   try {
     const { address, city, state, pincode } = req.body;
-    const userId = req.id.id
+    console.log("requested",req.body);
+    const userId = req.user.id
+    console.log("userId",userId);
     const userAddress = new Address({
       userId: userId,
       address: address,
@@ -536,14 +563,16 @@ const addAddress = async (req, res) => {
       pincode: pincode,
       user: userId
     })
-
+    console.log("userAddress",userAddress); 
     const saveAddress = await userAddress.save();
+    console.log("saveAddress",saveAddress);
     const user = await User.findById(userId);
+    console.log("user",user);
     // user.addresses.push(saveAddress._id);
     await user.save();
-    res.redirect("/userProfile");
+    res.redirect("/userProfile")
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message })
   }
 }
 
@@ -553,7 +582,9 @@ const addAddress = async (req, res) => {
 const renderEditAddress = async (req, res) => {
   try {
     const addressId = req.query.id;
+    console.log("addressId",addressId);
     const address = await Address.findById(addressId);
+    console.log("address",address);
     if (!address) {
       return res.status(404).send("Address not found");
     }
@@ -562,7 +593,7 @@ const renderEditAddress = async (req, res) => {
     console.log(error.message);
     res.status(500).send("Something went wrong");
   }
-};
+}
 
 
 const editAddress = async (req, res) => {
@@ -587,9 +618,13 @@ const editAddress = async (req, res) => {
 
 const deleteAddress = async (req, res) => {
   try {
+    console.log("hi there");
     const addressId = req.query.addressId;
+    console.log("AddressId",addressId);
     const userId = req.id.id;
+    console.log("UserId",userId);
     const address = await Address.findByIdAndDelete(addressId);
+    console.log("address",address);
     if (!address) {
       return res.status(404).send("Address not found");
     }
@@ -597,12 +632,13 @@ const deleteAddress = async (req, res) => {
       {
         $pull: { addresses: addressId }
       })
+    console.log("userData",userData);
     res.redirect("/userProfile");
   } catch (error) {
     console.log(error.message);
     res.status(500).send("Something went wrong");
   }
-};
+}
 
 
 
@@ -665,22 +701,17 @@ const loadCart = async (req, res) => {
 
 
 const addToCart = async (req, res) => {
-
   try {
     const token = req.cookies.jwt;
     if (!token) {
       throw new Error('JWT cookie not found');
     }
-
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log("decoded",decoded);
-    
     const userId = decoded.id;
-    console.log("userId",userId);
-    
+    console.log("userId",userId); 
     const productId = req.query.productId;
     console.log("productId",productId);
-    
     if (!mongoose.Types.ObjectId.isValid(productId)) {
       return res.status(400).json({ message: "Invalid product ID" });
     }
@@ -695,7 +726,8 @@ const addToCart = async (req, res) => {
     }
      const discountedPrice = product.discount ? product.price * (1 - product.discount/100):product.price;
      console.log("discountedPrice", discountedPrice);
-       
+
+     
     // console.log("productId", productId.toString());
     // console.log("objectIdProductId", objectIdProductId.toString());
 
@@ -801,7 +833,7 @@ const updateCartQuantity = async (req, res) => {
           item.subtotal = itemSubtotal;
         }
       }
-    });
+    })
     if (isNaN(totalAmount)) {
       console.log('Invalid total amount calculation');
       return res.status(500).json({ success: false, message: 'Invalid total amount calculation' });
@@ -995,6 +1027,7 @@ const updatePassword = async (req, res) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.id;
     const user = await User.findById(userId);
+
     const newPassword = req.body.password;
     const confirmPassword = req.body.confirmPassword;
 
@@ -1056,7 +1089,6 @@ const searchBook = async (req, res) => {
          currentPage:page,
          totalPages:totalPages,
          pageNumbers: Array.from({ length: totalPages }, (_, i) => i + 1)
-
         })
   } catch (error) {
     console.error('Error occurred while searching for products:', error);
@@ -1069,11 +1101,17 @@ const searchInShop = async (req, res) => {
     console.log("hiiiii");
     const { search } = req.body;
     console.log("requested",req.body);
+    const categoryId = req.query.category;
     const categories = await Category.find();
     console.log("categories",categories);
+
     const regex = new RegExp(search, 'i');
     console.log("regex",regex);
-    const products = await Product.find({ name: { $regex: regex } });
+    let filterCriteria = { name: { $regex: regex } };
+    if (categoryId) {
+      filterCriteria.category = mongoose.Types.ObjectId(categoryId);
+    }
+    const products = await Product.find(filterCriteria)
     console.log("products",products);
     const page = parseInt(req.query.page) || 1;
     console.log("page",page);
@@ -1081,7 +1119,7 @@ const searchInShop = async (req, res) => {
     console.log("limit",limit);
     const skip = (page - 1) * limit;
     console.log("skip",skip);
-    const totalProducts = await Product.countDocuments({ name: { $regex: regex } });
+    const totalProducts = await Product.countDocuments(filterCriteria);
     console.log("totalproducts",totalProducts);
     const totalPages = Math.ceil(totalProducts / limit);
     console.log("totalPages",totalPages);
@@ -1093,13 +1131,14 @@ const searchInShop = async (req, res) => {
       totalPages: totalPages,
       limit: limit,
       categories: categories,
+      categoryId : categoryId,
       pageNumbers: Array.from({ length: totalPages }, (_, i) => i + 1)
     });
   } catch (error) {
     console.error('Error occurred while searching for products:', error);
-    res.status(500).send({ error: 'An error occurred while searching for products' });
+    res.status(500).send({ error: 'An error occurred while searching for products' })
   }
-};
+}
 
 const showOrderDetails = async (req, res) => {
   try {
@@ -1110,7 +1149,9 @@ const showOrderDetails = async (req, res) => {
     if (!orderId) {
       return res.status(404).send('Order ID is required')
     }
-    const order = await Order.findById(orderId).populate('items.product').populate('shippingAddress')
+    const order = await Order.findById(orderId)
+    .populate('items.product')
+    .populate('shippingAddress')
     console.log("shippingAddress", order.shippingAddress)
 
     res.render("orderDetails", { order,address })
@@ -1195,7 +1236,7 @@ module.exports = {
   singleProduct,
   logout,
   loadShop,
-  shopCategory,
+  // shopCategory,
   userProfile,
   editProfile,
   editedProfile,
@@ -1222,6 +1263,7 @@ module.exports = {
   filterByCategory,
   googleAuthCallback,
   googleAuthFailure,
-  googleAuth,
+  googleAuth,   
 
+  
 };

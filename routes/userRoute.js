@@ -13,6 +13,8 @@ const checkOutController = require("../controllers/checkOutController")
 const orderController = require("../controllers/orderController")
 const wishlistController = require("../controllers/wishlistController")
 const paymentController = require("../controllers/paymentController")
+const reviewController = require("../controllers/reviewController")
+const { checkIfPurchased } = require('../controllers/orderController'); // Import the checkIfPurchased function
 
 
 require('../middleware/passport');
@@ -36,7 +38,6 @@ user_route.get('/auth/google/callback',
 
 user_route.get("/auth/google/failure", userController.googleAuthFailure)
 
-
 const bodyParser = require('body-parser');
 user_route.use(bodyParser.json());
 user_route.use(bodyParser.urlencoded({ extended: true }));
@@ -46,8 +47,6 @@ user_route.get('/register', middleware.isLoggedin, userController.loadRegister)
 user_route.post('/register', userController.insertUser)
 user_route.get('/login', middleware.isLoggedin, userController.loadLogin)
 user_route.get('/logout', userController.logout)
-
-
 
 user_route.get('/userProfile', middleware.requirelogin, userController.userProfile);
 user_route.get('/editProfile', middleware.requirelogin, userController.editProfile);
@@ -75,20 +74,19 @@ user_route.post('/placeorder', middleware.requirelogin, orderController.placeord
 user_route.get('/payonline', middleware.requirelogin, orderController.payonline);
 user_route.get('/fetchCoupons', couponController.fetchCoupons);
 user_route.post('/applyCoupons', couponController.applyCoupons);
-
 user_route.post('/createOrder', paymentController.createOrder);
 
 user_route.post('/forgot-password', userController.forgotPassword);
 user_route.get('/reset-password', userController.getResetPassword);
 user_route.post('/reset-password', userController.postResetPassword);
 user_route.get('/changePassword',middleware.requirelogin,userController.changePassword);
-
+user_route.post('/product/:productId/review',middleware.requirelogin,checkIfPurchased,reviewController.addReview);
 user_route.post('/checkCurrentPassword',middleware.requirelogin,userController.checkCurrentPassword);
-
+user_route.delete('/deleteAddress/:id',middleware.requirelogin,checkOutController.deleteAddress)
 user_route.post('/addressCheckout', checkOutController.addressCheckout);
 user_route.get('/deleteAddressCheckout', checkOutController.addressCheckout);
 user_route.get('/categorySearch', userController.categorySelect);
-user_route.get('/shopCategory', userController.shopCategory);
+// user_route.get('/shopCategory', userController.shopCategory);
 user_route.post('/search', userController.searchBook);
 user_route.post('/searchInShop', userController.searchInShop);
 
@@ -99,10 +97,9 @@ user_route.get('/category', userController.filterByCategory);
 user_route.get('/wishlist', middleware.requirelogin, wishlistController.loadWishlist);
 user_route.post('/wishlist/add', middleware.requirelogin, wishlistController.addToWishlist);
 user_route.post('/wishlist/remove', middleware.requirelogin, wishlistController.removeFromWishlist);
-
+user_route.get('/product/:productId')
 
 user_route.get('/home', middleware.requirelogin, userController.loadHome);
-
 user_route.get('/singleProduct', middleware.requirelogin, userController.singleProduct);
 user_route.get('/shop', middleware.requirelogin, userController.loadShop);
 user_route.post('/login', userController.loginUser);
@@ -118,6 +115,7 @@ user_route.get('/otp-verification', (req, res) => {
   const { userId, otpExpiry, message } = req.query;
   res.render('otp-verification', { userId, otpExpiry, message });
 });
+
 
 
 module.exports = user_route;

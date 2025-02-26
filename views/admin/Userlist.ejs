@@ -15,6 +15,146 @@
     <link rel="shortcut icon" type="image/x-icon" href="adminassets/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link href="adminassets/css/main.css" rel="stylesheet" type="text/css" />
+
+    <style>
+         .table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+            font-size: 16px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .table th, .table td {
+            padding: 15px;
+            text-align: left;
+            color: #333;
+        }
+
+        .table th {
+            background-color: #f4f7f9;
+            font-weight: bold;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .table tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f3f5;
+        }
+
+        /* Avatar and User Info */
+        .img-avatar {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .itemside {
+            display: flex;
+            align-items: center;
+        }
+
+        .info h6 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .info small {
+            color: #999;
+        }
+
+        /* Pagination Styling */
+        .pagination {
+            display: flex;
+            justify-content: flex-start;
+            gap: 8px;
+        }
+
+        .page-item a {
+            display: inline-block;
+            padding: 8px 12px;
+            background-color: #f4f7f9;
+            border-radius: 4px;
+            color: #333;
+            font-size: 14px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .page-item a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .page-item.active a {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .page-item.disabled a {
+            background-color: #f1f3f5;
+            color: #aaa;
+            cursor: not-allowed;
+        }
+
+        .page-item .dot {
+            padding: 8px 12px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+        }
+
+        .btn-sm {
+            font-size: 12px;
+            padding: 6px 12px;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .btn-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-icon i {
+            font-size: 20px;
+        }
+    </style>
 </head>
 
 <body>
