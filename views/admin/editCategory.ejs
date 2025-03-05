@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Category</title>
     <link rel="stylesheet" href="/adminassets/css/main.css">
 </head>
+
 <body>
     <main class="main-wrap">
         <section class="content-main">
@@ -20,35 +22,39 @@
                 </header>
                 <div class="card-body">
                     <% if (category) { %>
-                    <form action="/admin/editCategory" method="post">
-                        <div class="mb-2">
-                            
-                            <input type="text" name="id"  class="form-control" value="<%= category._id %>">
-                        </div>
-                        
-                        <div class="mb-2">
-                            <label for="name">Name:</label>
-                            <input type="text" name="name" id="name" class="form-control" value="<%= category.name %>">
-                        </div>
-                        <div class="mb-2">
-                            <label for="description">Description:</label>
-                            <textarea name="description" id="description" class="form-control"><%= category.description %></textarea>
-                        </div>
-                        <div class="mb-2">
-                            <label for="order">Order:</label>
-                            <input type="number" name="order" id="order" class="form-control" value="<%= category.order %>">
-                            <input type="hidden" name="categoryId" value="<%= category._id %>">
-                        </div>
-                        <button type="submit" class="btn btn-sm font-sm rounded btn-brand">
-                            <i class="material-icons md-edit"></i> Edit
-                        </button>
-                    </form>
-                    <% } else { %>
-                    <p>Category data is not available.</p>
-                    <% } %>
+                        <form action="/admin/editCategory" method="post">
+                            <div class="mb-2">
+
+                                <input type="text" name="id" class="form-control" value="<%= category._id %>">
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="name">Name:</label>
+                                <input type="text" name="name" id="name" class="form-control"
+                                    value="<%= category.name %>">
+                            </div>
+                            <div class="mb-2">
+                                <label for="description">Description:</label>
+                                <textarea name="description" id="description"
+                                    class="form-control"><%= category.description %></textarea>
+                            </div>
+                            <div class="mb-2">
+                                <label for="order">Order:</label>
+                                <input type="number" name="order" id="order" class="form-control"
+                                    value="<%= category.order %>">
+                                <input type="hidden" name="categoryId" value="<%= category._id %>">
+                            </div>
+                            <button type="submit" class="btn btn-sm font-sm rounded btn-brand">
+                                <i class="material-icons md-edit"></i> Edit
+                            </button>
+                        </form>
+                        <% } else { %>
+                            <p>Category data is not available.</p>
+                            <% } %>
                 </div>
             </div>
         </section>
     </main>
 </body>
+
 </html>

@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Product</title>
     <link rel="stylesheet" href="adminassets/css/main.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet"
+        type="text/css" />
     <style>
         .status-active {
             color: green;
@@ -73,7 +74,9 @@
         <section class="content-main">
             <div class="content-header">
                 <div>
-                    <h2 class="content-title card-title"><%= product.name %></h2>
+                    <h2 class="content-title card-title">
+                        <%= product.name %>
+                    </h2>
                 </div>
             </div>
             <div class="card mb-4">
@@ -84,59 +87,69 @@
                     <form id="productForm" method="post" action="/admin/editProduct" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label class="form-label" for="name">Product Name</label>
-                            <input type="text" class="form-control" id="name" name="name" value="<%= product.name %>" required>
+                            <input type="text" class="form-control" id="name" name="name" value="<%= product.name %>"
+                                required>
                             <div id="nameError" class="error"></div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="author">Author</label>
-                            <input type="text" class="form-control" id="author" name="author" value="<%= product.author %>" required>
+                            <input type="text" class="form-control" id="author" name="author"
+                                value="<%= product.author %>" required>
                             <div id="authorError" class="error"></div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="price">Price</label>
-                            <input type="number" class="form-control" id="price" name="price" value="<%= product.price %>" required min="0.01" step="0.01">
+                            <input type="number" class="form-control" id="price" name="price"
+                                value="<%= product.price %>" required min="0.01" step="0.01">
                             <div id="priceError" class="error"></div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="discount">Discount (%)</label>
-                            <input type="number" class="form-control" id="discount" name="discount" value="<%= product.discount %>">
+                            <input type="number" class="form-control" id="discount" name="discount"
+                                value="<%= product.discount %>">
                             <div id="discountError" class="error"></div>
                         </div>
                         <div class="mb-4">
                             <label class="form-label" for="description">Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="4" required><%= product.description %></textarea>
+                            <textarea class="form-control" id="description" name="description" rows="4"
+                                required><%= product.description %></textarea>
                             <div id="descriptionError" class="error"></div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="category">Category</label>
                             <select class="form-select" id="category" name="category" required>
-                                <% categories.forEach(item => { %>
-                                <option value="<%= item._id %>" <%= item._id.toString() === product.category.toString() ? 'selected' : '' %>><%= item.name %></option>
-                                <% }) %>
+                                <% categories.forEach(item=> { %>
+                                    <option value="<%= item._id %>" <%=item._id.toString()===product.category.toString()
+                                        ? 'selected' : '' %>><%= item.name %>
+                                    </option>
+                                    <% }) %>
                             </select>
                             <div id="categoryError" class="error"></div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="stock">Stock</label>
-                            <input type="number" class="form-control" id="stock" name="stock" value="<%= product.stock %>" required min="0" step="1">
+                            <input type="number" class="form-control" id="stock" name="stock"
+                                value="<%= product.stock %>" required min="0" step="1">
                             <div id="stockError" class="error"></div>
                         </div>
-                      
+
                         <div class="mb-3">
                             <label class="form-label" for="files">Images</label>
                             <input type="file" class="form-control" id="files" name="files" multiple>
                             <div id="filesError" class="error"></div>
                         </div>
                         <div id="image-preview-container">
-                            <% if (product.images && product.images.length > 0) { %>
-                            <% product.images.forEach((image, index) => { %>
-                            <div>
-                                <p>Current Image: <img src="/adminImages/<%= image %>" alt="Product Image" width="100"></p>
-                                <label for="removeImage_<%= index %>">Remove</label>
-                                <input type="checkbox" name="removeImages" value="<%= image %>" id="removeImage_<%= index %>">
-                            </div>
-                            <% }) %>
-                            <% } %>
+                            <% if (product.images && product.images.length> 0) { %>
+                                <% product.images.forEach((image, index)=> { %>
+                                    <div>
+                                        <p>Current Image: <img src="/adminImages/<%= image %>" alt="Product Image"
+                                                width="100"></p>
+                                        <label for="removeImage_<%= index %>">Remove</label>
+                                        <input type="checkbox" name="removeImages" value="<%= image %>"
+                                            id="removeImage_<%= index %>">
+                                    </div>
+                                    <% }) %>
+                                        <% } %>
                         </div>
                         <div id="image-error" class="error"></div>
                         <input type="hidden" name="productId" value="<%= product._id %>">
@@ -174,7 +187,7 @@
         const filesInput = document.getElementById('files');
         let selectedFiles = [];
 
-        filesInput.addEventListener('change', function(event) {
+        filesInput.addEventListener('change', function (event) {
             selectedFiles = Array.from(event.target.files);
             if (selectedFiles.length > 0) {
                 currentFileIndex = 0;
@@ -184,7 +197,7 @@
 
         function loadAndCropImage(file) {
             const reader = new FileReader();
-            reader.onload = function(event) {
+            reader.onload = function (event) {
                 cropperImage.src = event.target.result;
                 cropperModal.style.display = 'block';
                 cropper = new Cropper(cropperImage, {
@@ -195,9 +208,9 @@
             reader.readAsDataURL(file);
         }
 
-        document.getElementById('crop-button').addEventListener('click', function() {
+        document.getElementById('crop-button').addEventListener('click', function () {
             const canvas = cropper.getCroppedCanvas();
-            canvas.toBlob(function(blob) {
+            canvas.toBlob(function (blob) {
                 const url = URL.createObjectURL(blob);
                 const img = document.createElement('img');
                 img.src = url;
@@ -207,14 +220,12 @@
                 cropper.destroy();
                 cropperImage.src = '';
 
-                // Replace the original file with the cropped file
                 selectedFiles[currentFileIndex] = new File([blob], `cropped_image_${currentFileIndex}.jpg`, { type: 'image/jpeg' });
 
                 currentFileIndex++;
                 if (currentFileIndex < selectedFiles.length) {
                     loadAndCropImage(selectedFiles[currentFileIndex]);
                 } else {
-                    // Update the input element with the cropped files
                     const dataTransfer = new DataTransfer();
                     selectedFiles.forEach(file => dataTransfer.items.add(file));
                     filesInput.files = dataTransfer.files;
@@ -222,7 +233,7 @@
             });
         });
 
-        document.getElementById('cancel-crop-button').addEventListener('click', function() {
+        document.getElementById('cancel-crop-button').addEventListener('click', function () {
             cropperModal.style.display = 'none';
             cropper.destroy();
             cropperImage.src = '';
@@ -233,7 +244,7 @@
             }
         });
 
-        document.getElementById('submit-btn').addEventListener("click", function(event) {
+        document.getElementById('submit-btn').addEventListener("click", function (event) {
             event.preventDefault();
             const name = document.getElementById("name").value.trim();
             const price = document.getElementById("price").value.trim();
@@ -258,12 +269,11 @@
                 isValid = false;
             }
 
-            if (!/^\d+$/.test(stock) || parseInt(stock) <0) {
+            if (!/^\d+$/.test(stock) || parseInt(stock) < 0) {
                 stockError.textContent = 'Please enter a valid positive integer for stock';
                 isValid = false;
             }
 
-            // Removed the validation for the presence of images to be removed.
             const files = filesInput.files;
             imageError.textContent = "";
 
@@ -286,13 +296,13 @@
         function updateStatusColor() {
             const statusSelect = document.getElementById('status');
             const selectedOption = statusSelect.options[statusSelect.selectedIndex];
-            statusSelect.className = ''; // Reset the class
-            statusSelect.classList.add(selectedOption.className); // Apply the class of the selected option
+            statusSelect.className = '';
+            statusSelect.classList.add(selectedOption.className);
         }
 
         document.getElementById('status').addEventListener('change', updateStatusColor);
 
-        // Set initial color on page load
+
         updateStatusColor();
     </script>
 </body>

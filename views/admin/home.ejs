@@ -19,256 +19,245 @@
     <script src="/path-to-your-chart-script.js"></script>
 
     <style>
-  .card {
-        background: white;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
-        transition: all 0.3s ease; /* Smooth hover effect */
-    }
-
-    .card:hover {
-        transform: scale(1.03); /* Hover zoom effect */
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .card-title {
-        font-size: 20px;
-        color: #333;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 15px;
-    }
-
-    /* Insight Box Styles */
-    .insight-box {
-        background-color: #fff;
-        padding: 20px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        margin-bottom: 20px;
-    }
-
-    .insight-box h4 {
-        color: #333;
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 15px;
-    }
-
-    .insight-box h3,
-    .insight-box h4 {
-        color: #333;
-        font-weight: bold;
-    }
-
-    /* Table Styling */
-    .table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0 10px;
-        transition: all 0.3s ease;
-    }
-
-    table th,
-    table td {
-        padding: 12px 20px;
-        text-align: left;
-        border: 1px solid #e0e0e0; /* Subtle border for separation */
-        transition: all 0.3s ease;
-    }
-
-
-
-    table td {
-        background-color: #fff;
-        color: #666;
-    }
-
-    table tr:nth-child(even) {
-        background-color: #f2f2f2; /* Light gray for even rows */
-    }
-
-    table tr:hover {
-        background-color: #f1f1f1; /* Hover effect */
-        transform: scale(1.02);
-    }
-
-    table td.text-center {
-        text-align: center;
-    }
-
-    /* Monthly Sales Chart */
-    #monthlySalesChart {
-        background-color: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Yearly Sales Chart */
-    #yearlySalesChart {
-        background-color: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Pagination Styling */
-    .pagination .page-item.active .page-link {
-        background-color: #007bff;
-        color: white;
-    }
-
-    .pagination .page-item:hover .page-link {
-        background-color: #0056b3;
-        color: white;
-    }
-
-    /* Buttons Styling */
-    .btn-primary {
-        background-color: #007bff;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 4px;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .btn-primary:hover {
-        background-color: #0056b3;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Row Layout Styling */
-    .row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-    }
-
-    .col-xl-4, .col-xl-8 {
-        flex: 1;
-    }
-
-    .col-xl-4 {
-        max-width: 48%;
-    }
-
-    .col-xl-8 {
-        max-width: 48%;
-    }
-
-    /* Card Body Styling */
-    .card-body {
-        background-color: #fff;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-
-    .card-title {
-        color: #007bff; /* Blue color for card titles */
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin-bottom: 15px;
-    }
-
-    /* Highlight important statistics in Dashboard */
-    .dashboard-stats h4 {
-        background-color: #91b793; /* Green background for important stats */
-        color: white;
-        padding: 10px 15px;
-        border-radius: 5px;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-
-    /* Add some color to the chart legend */
-    .chart-legend {
-        font-size: 14px;
-        color: #333;
-        display: flex;
-        justify-content: space-between;
-        margin-top: 15px;
-    }
-
-    /* Enhanced layout for pagination and footer */
-    .insight-box table th, .insight-box table td {
-        padding: 12px 20px;
-        text-align: left;
-        border: 1px solid #e0e0e0;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .col-xl-4, .col-xl-8 {
-            max-width: 100%;
+        .card {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
         }
 
-        .row {
-            flex-direction: column;
+        .card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-title {
+            font-size: 20px;
+            color: #333;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
         }
 
         .insight-box {
-            padding: 15px;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
-    }
 
-    /* Animation for Cards and Insight Boxes */
-    .card, .insight-box {
-        animation: fadeInUp 0.8s ease-out;
-    }
-
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
+        .insight-box h4 {
+            color: #333;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
         }
-        to {
-            opacity: 1;
-            transform: translateY(0);
+
+        .insight-box h3,
+        .insight-box h4 {
+            color: #333;
+            font-weight: bold;
         }
-    }
 
-    .content-header {
-    display: flex;
-    justify-content: space-between;  /* Ensures the content is spaced out */
-    align-items: center;  /* Vertically centers the items */
-    padding: 20px;
-}
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            transition: all 0.3s ease;
+        }
 
-.content-title h2 {
-    font-size: 2rem;
-    color: #333;
-    font-weight: bold;
-    margin-right: 20px;  /* Adds space between the title and the stats */
-}
-
-.dashboard-stats {
-    display: flex;
-    flex-direction: column;  /* Stacks the statistics vertically */
-    align-items: flex-end;   /* Aligns the stats to the right */
-}
-
-.dashboard-stats h4 {
-    margin: 5px 0;  /* Adds vertical spacing between the stats */
-    font-size: 1.2rem;
-    color: #333;
-    font-weight: normal;
-}
-
-/* Add a small padding or margin to make the stats more spaced and visually balanced */
-.dashboard-stats h4:first-child {
-    margin-top: 0;  /* Prevents top margin for the first item */
-}
+        table th,
+        table td {
+            padding: 12px 20px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
 
 
 
-        
+        table td {
+            background-color: #fff;
+            color: #666;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+            transform: scale(1.02);
+        }
+
+        table td.text-center {
+            text-align: center;
+        }
+
+        #monthlySalesChart {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #yearlySalesChart {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .pagination .page-item:hover .page-link {
+            background-color: #0056b3;
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .col-xl-4,
+        .col-xl-8 {
+            flex: 1;
+        }
+
+        .col-xl-4 {
+            max-width: 48%;
+        }
+
+        .col-xl-8 {
+            max-width: 48%;
+        }
+
+        .card-body {
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            color: #007bff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .dashboard-stats h4 {
+            background-color: #91b793;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .chart-legend {
+            font-size: 14px;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .insight-box table th,
+        .insight-box table td {
+            padding: 12px 20px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+
+            .col-xl-4,
+            .col-xl-8 {
+                max-width: 100%;
+            }
+
+            .row {
+                flex-direction: column;
+            }
+
+            .insight-box {
+                padding: 15px;
+            }
+        }
+
+        .card,
+        .insight-box {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .content-title h2 {
+            font-size: 2rem;
+            color: #333;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+
+        .dashboard-stats {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .dashboard-stats h4 {
+            margin: 5px 0;
+            font-size: 1.2rem;
+            color: #333;
+            font-weight: normal;
+        }
+
+        .dashboard-stats h4:first-child {
+            margin-top: 0;
+
+        }
     </style>
 </head>
 
@@ -380,13 +369,17 @@
                     <h2>Dashboard</h2>
                 </div>
                 <div class="dashboard-stats">
-                    <h4>Total Orders: <%= overallStats.totalOrders %></h4>
-                    <h4>Total Revenue: ₹ <%= overallStats.totalRevenue[0]?.totalRevenue %></h4>
+                    <h4>Total Orders: <%= overallStats.totalOrders %>
+                    </h4>
+                    <h4>Total Revenue: ₹ <%= overallStats.totalRevenue && overallStats.totalRevenue[0] ?
+                            overallStats.totalRevenue[0].totalRevenue : 0 %>
+                    </h4>
+                    </h4>
                 </div>
             </div>
-            
+
             <div class="row">
-                <!-- Column 1: Graphs -->
+
                 <div class="col-xl-8">
                     <div class="card mb-4">
                         <article class="card-body">
@@ -403,7 +396,7 @@
                     </div>
                 </div>
 
-                <!-- Column 2: Tables -->
+
                 <div class="col-xl-4">
                     <div class="insight-box">
                         <h4>Top 10 Products</h4>
@@ -417,18 +410,24 @@
                             </thead>
                             <tbody>
                                 <% if (products && products.length) { %>
-                                    <% products.forEach(product => { %>
+                                    <% products.forEach(product=> { %>
                                         <tr>
-                                            <td><%= product._id.name %></td>
-                                            <td><%= product._id.price %></td>
-                                            <td><%= product.totalQuantity %></td>
+                                            <td>
+                                                <%= product._id.name %>
+                                            </td>
+                                            <td>
+                                                <%= product._id.price %>
+                                            </td>
+                                            <td>
+                                                <%= product.totalQuantity %>
+                                            </td>
                                         </tr>
-                                    <% }) %>
-                                <% } else { %>
-                                    <tr>
-                                        <td colspan="3">No products available.</td>
-                                    </tr>
-                                <% } %>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="3">No products available.</td>
+                                                </tr>
+                                                <% } %>
                             </tbody>
                         </table>
                     </div>
@@ -443,17 +442,21 @@
                             </thead>
                             <tbody>
                                 <% if (categories && categories.length) { %>
-                                    <% categories.forEach(category => { %>
+                                    <% categories.forEach(category=> { %>
                                         <tr>
-                                            <td><%= category._id %></td>
-                                            <td><%= category.totalQuantity %></td>
+                                            <td>
+                                                <%= category._id %>
+                                            </td>
+                                            <td>
+                                                <%= category.totalQuantity %>
+                                            </td>
                                         </tr>
-                                    <% }) %>
-                                <% } else { %>
-                                    <tr>
-                                        <td colspan="2" class="text-center">No categories available.</td>
-                                    </tr>
-                                <% } %>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="2" class="text-center">No categories available.</td>
+                                                </tr>
+                                                <% } %>
                             </tbody>
                         </table>
                     </div>
@@ -473,7 +476,7 @@
                     </ul>
                 </nav>
             </div>
-        </section> <!-- content-main end// -->
+        </section>
 
         <footer class="main-footer font-xs">
             <div class="row pb-30 pt-15">
@@ -497,48 +500,48 @@
     <script src="adminassets/js/vendors/perfect-scrollbar.js"></script>
     <script src="adminassets/js/vendors/jquery.fullscreen.min.js"></script>
     <script src="adminassets/js/vendors/chart.js"></script>
-    <!-- Main Script -->
     <script src="adminassets/js/main.js" type="text/javascript"></script>
     <script src="adminassets/js/custom-chart.js" type="text/javascript"></script>
 
     <script>
-
-        const logoutButton = document.getElementById('logoutButton')
+        const logoutButton = document.getElementById('logoutButton');
 
         logoutButton.addEventListener('click', function () {
             window.location.href = '/admin/logout';
         });
 
         document.addEventListener("DOMContentLoaded", () => {
+            console.log("Page Loaded Successfully");
 
-      const salesOrder = <%- JSON.stringify(salesOrder) %>;
-        const totalSales = <%- JSON.stringify(totalSales) %>;
-        const orderDates = <%- JSON.stringify(orderDates) %>;
-        const overallStats = <%- JSON.stringify(overallStats) %>;
+            console.log("Sales Order (raw data):", '<%= JSON.stringify(salesOrder) %>');
+            console.log("Total Sales (raw data):", '<%= JSON.stringify(totalSales) %>');
+            console.log("Order Dates (raw data):", '<%= JSON.stringify(orderDates) %>');
+            console.log("Overall Stats (raw data):", '<%= JSON.stringify(overallStats) %>');
 
-        console.log("salesOrder", salesOrder);
-        console.log("totalSales", totalSales);
-        console.log("orderDates", orderDates);
-        console.log("overallStats", overallStats);
+            const salesOrder = JSON.parse('<%= JSON.stringify(salesOrder) %>');
+            const totalSales = JSON.parse('<%= JSON.stringify(totalSales) %>');
+            const orderDates = JSON.parse('<%= JSON.stringify(orderDates) %>');
+            const overallStats = JSON.parse('<%= JSON.stringify(overallStats) %>');
 
+            console.log("salesOrder", salesOrder);
+            console.log("totalSales", totalSales);
+            console.log("orderDates", orderDates);
+            console.log("overallStats", overallStats);
 
+            const salesData = orderDates.map((date, index) => {
+                const revenue = totalSales.length > 0 ? totalSales.reduce((sum, sale) => sum + sale.totalSales, 0) / orderDates.length : 0;
+                return {
+                    orderDate: new Date(date),
+                    billTotal: revenue
+                };
+            });
 
-              const salesData = orderDates.map((date, index) => {
-        const revenue = totalSales.length > 0 ? totalSales[0].totalSales / orderDates.length : 0; // Use totalRevenue evenly for each order
-        return {
-            orderDate: new Date(date),
-            billTotal: revenue
-        };
-    });
-
-
-            // Extract data from the table
             document.querySelectorAll("tbody tr").forEach(row => {
                 const cells = row.querySelectorAll("td");
 
-                if(cells.length >= 6){
-                    const orderDateStr = cells[1].textContent.trim(); // Order Date
-                    const billTotalStr = cells[5].textContent.trim(); // Bill Total
+                if (cells.length >= 6) {
+                    const orderDateStr = cells[1].textContent.trim();
+                    const billTotalStr = cells[5].textContent.trim();
 
                     if (orderDateStr && billTotalStr) {
                         const orderDate = new Date(orderDateStr);
@@ -556,15 +559,13 @@
             generateCharts(monthlySales, yearlySales);
         });
 
-
         function processSalesData(orders) {
             const monthlySales = {};
             const yearlySales = {};
 
             orders.forEach(({ orderDate, billTotal }) => {
-
                 const year = orderDate.getFullYear();
-                const month = `${year}-${(orderDate.getMonth() + 1).toString().padStart(2, '0')}`; // Format: YYYY-MM
+                const month = `${year}-${(orderDate.getMonth() + 1).toString().padStart(2, '0')}`;
 
                 if (!monthlySales[month]) {
                     monthlySales[month] = 0;
@@ -580,20 +581,18 @@
             return { monthlySales, yearlySales };
         }
 
-
         function generateCharts(monthlySales, yearlySales) {
             const monthlyLabels = [
                 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
             ];
+
             const monthlyValues = monthlyLabels.map((label, index) => {
                 const monthKey = `2025-${(index + 1).toString().padStart(2, '0')}`;
-                return monthlySales[monthKey] || 0; 
+                return monthlySales[monthKey] || 0;
             });
 
             const yearlyLabels = ['2021', '2022', '2023', '2024', '2025'];
-            const yearlyValues = yearlyLabels.map(year => {
-                return yearlySales[year] || 0; 
-            });
+            const yearlyValues = yearlyLabels.map(year => yearlySales[year] || 0);
 
             const monthlyCtx = document.getElementById("monthlySalesChart").getContext("2d");
             new Chart(monthlyCtx, {
@@ -622,16 +621,15 @@
                                 display: true,
                                 text: 'Total Ordered Sales'
                             },
-                            min: 500, // Set minimum value for Y-axis
-                            max: 10000, // Set maximum value for Y-axis
-                            stepSize: 1000, // Set step size for the Y-axis
-                            beginAtZero: false // Avoid zero for better visual
+                            min: 500,
+                            max: 10000,
+                            stepSize: 1000,
+                            beginAtZero: false
                         }
                     }
                 }
             });
 
-            // Yearly Sales Chart
             const yearlyCtx = document.getElementById("yearlySalesChart").getContext("2d");
             new Chart(yearlyCtx, {
                 type: "line",
@@ -643,7 +641,7 @@
                         backgroundColor: "rgba(255, 99, 132, 0.7)",
                         borderColor: "rgba(255, 99, 132, 1)",
                         borderWidth: 2,
-                        fill: false // No fill for the line
+                        fill: false
                     }]
                 },
                 options: {
@@ -660,17 +658,15 @@
                                 display: true,
                                 text: 'Total Ordered Sales'
                             },
-                            min: 10000, // Set minimum value for Y-axis
-                            max: 100000, // Set maximum value for Y-axis
-                            stepSize: 10000, // Set step size for the Y-axis
-                            beginAtZero: false // Avoid zero for better visual
+                            min: 10000,
+                            max: 100000,
+                            stepSize: 10000,
+                            beginAtZero: false
                         }
                     }
                 }
             });
         }
-
-
     </script>
 
 </body>

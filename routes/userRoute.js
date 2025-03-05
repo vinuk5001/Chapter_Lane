@@ -80,7 +80,7 @@ user_route.post('/forgot-password', userController.forgotPassword);
 user_route.get('/reset-password', userController.getResetPassword);
 user_route.post('/reset-password', userController.postResetPassword);
 user_route.get('/changePassword',middleware.requirelogin,userController.changePassword);
-user_route.post('/product/:productId/review',middleware.requirelogin,checkIfPurchased,reviewController.addReview);
+user_route.post('/product/:productId/review',middleware.requirelogin,reviewController.addReview);
 user_route.post('/checkCurrentPassword',middleware.requirelogin,userController.checkCurrentPassword);
 user_route.delete('/deleteAddress/:id',middleware.requirelogin,checkOutController.deleteAddress)
 user_route.post('/addressCheckout', checkOutController.addressCheckout);

@@ -15,15 +15,17 @@ const ObjectId = mongoose.Types.ObjectId;
 const jwt = require("jsonwebtoken");
 const Passport = require("passport");
 require("dotenv").config();
-const {checkIfPurchased} = require('../controllers/orderController');
-//.............create a token.......................//
+
+
+//--------------------------create a token---------------------------//
 const createToken = (user) => {
   const JWT_SECRET = process.env.JWT_SECRET
   return jwt.sign(user, JWT_SECRET, { expiresIn: "24h" })
 
 }
 
-//.......Function to calculate OTP expiry time...//
+//--------------------Function to calculate OTP expiry time-------------//
+
 const otpExpiryTime = () => {
   const now = new Date();
   now.setMinutes(now.getMinutes() + 10);
@@ -31,7 +33,7 @@ const otpExpiryTime = () => {
 };
 
 
-//............... Generate OTP......................//
+//---------------------- Generate OTP------------------------------//
 const generateOTP = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
@@ -45,7 +47,9 @@ const securePassword = async (password) => {
   }
 };
 
-//..............Send OTP to Mail.....................//
+//----------------------------Send OTP to Mail-------------------------------//
+
+
 const sendOTP = async (email, otp) => {
   try {
     const transporter = nodemailer.createTransport({
@@ -78,7 +82,9 @@ const sendOTP = async (email, otp) => {
 
 
 
-//...................Load Register Page.........................//
+//-------------------------Load Register Page-----------------------------//
+
+
 const loadRegister = async (req, res) => {
   try {
     res.render("registration");
@@ -87,7 +93,8 @@ const loadRegister = async (req, res) => {
   }
 };
 
-//..................... Load Login Page.........................//
+//----------------------------Load Login Page-----------------------------//
+
 const loadLogin = async (req, res) => {
   try {
     res.render("login");
@@ -102,7 +109,7 @@ const loadHome = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = 12;
     const skip = (page - 1) * limit;
-    
+
     const totalProducts = await Product.countDocuments({ isListed: true });
     const listedProducts = await Product.find({ isListed: true }).skip(skip).limit(limit).exec();
 
@@ -119,14 +126,14 @@ const loadHome = async (req, res) => {
       .limit(10);
 
     const topSelling = await Product.find({ isListed: true })
-      .sort({ salesCount: -1 }) 
+      .sort({ salesCount: -1 })
       .limit(10)
       .lean();
 
     const totalPages = Math.ceil(totalProducts / limit);
-  
+
     res.render("home", {
-      products: listedProducts,     
+      products: listedProducts,
       categories: categories,
       currentPage: page,
       totalPages: totalPages,
@@ -142,12 +149,12 @@ const loadHome = async (req, res) => {
 
 
 
-//.....................Category.................................//
+//------------------------------Category------------------------------------//
+
 const categorySelect = async (req, res) => {
   try {
     const categoryId = req.query.id;
-    console.log("categoryId: " + categoryId);
-    const categories = await Category.find(); 
+    const categories = await Category.find();
 
     if (!categoryId || !mongoose.Types.ObjectId.isValid(categoryId)) {
       return res.render('home', { categories, message: "Invalid category", products: [] });
@@ -161,16 +168,17 @@ const categorySelect = async (req, res) => {
     const products = await Product.find({ category: categoryId });
 
     res.render('home', { categories, category, products });
-  }catch (error){
+  } catch (error) {
     console.log("Error in categorySelect:", error.message);
     res.status(500).render('home', { categories: [], error: "Server Error", products: [] })
-
   }
 }
 
 
 
-//.....................Load shop................................//
+//-----------------------------------Load shop-----------------------------------------//
+
+
 const loadShop = async (req, res) => {
   try {
     let sortOption = req.query.sort || 'nameAsc';
@@ -195,30 +203,22 @@ const loadShop = async (req, res) => {
     }
 
     const page = parseInt(req.query.page) || 1;
-    console.log("page:",page);
     const limit = parseInt(req.query.limit) || 12;
-    console.log("limit:",limit);
     const skip = (page - 1) * limit;
-    console.log("skip:", skip);
     const categories = await Category.find();
     const categoryId = req.query.category;
-    console.log("categoryId:", categoryId);
     let filterCriteria = { isListed: true, status: "Active" };
     if (categoryId && mongoose.Types.ObjectId.isValid(categoryId)) {
       filterCriteria.category = new mongoose.Types.ObjectId(categoryId);
     }
-    const totalProducts = await Product.countDocuments( filterCriteria );
-    console.log("Total products",totalProducts);
-
+    const totalProducts = await Product.countDocuments(filterCriteria);
     const products = await Product.find(filterCriteria)
       .sort(sortCriteria)
       .skip(skip)
       .limit(limit)
       .populate("category");
-   const totalPages = totalProducts > 0 ? Math.ceil(totalProducts / limit) : 1;
-   console.log("totalPages",totalPages);
-   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
-    console.log("pageNumbers", pageNumbers);
+    const totalPages = totalProducts > 0 ? Math.ceil(totalProducts / limit) : 1;
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
     res.render("shop", {
       product: products,
       sortOption: sortOption,
@@ -226,8 +226,8 @@ const loadShop = async (req, res) => {
       totalPages: totalPages,
       limit: limit,
       categories: categories,
-      pageNumbers: pageNumbers, 
-      categoryId:categoryId
+      pageNumbers: pageNumbers,
+      categoryId: categoryId
     })
   } catch (error) {
     console.log(error.message);
@@ -236,45 +236,7 @@ const loadShop = async (req, res) => {
 }
 
 
-// const shopCategory = async (req, res) => {
-//   try {
-//     const categoryId = req.query.category;  
-//     console.log("loading Category:",+categoryId);
-//     const page = parseInt(req.query.page) || 1;
-//     console.log('page:',page);
-//     const limit = parseInt(req.query.limit) || 10;
-//     console.log("limit:",limit);
-//     const skip = (page - 1) * limit;
-//     console.log("skip",skip);
-//     const categories = await Category.find();
-//     console.log("categories:",categories);
-//     if (!Array.isArray(categories)) {
-//       return res.status(500).send({ error: 'Categories data is not in the expected format' });
-//     }
-//     const totalProducts = await Product.countDocuments({ category: categoryId, isListed: true, status: "Active" });
-//     console.log("Total products", totalProducts);
-//     const products = await Product.find({ category: categoryId, isListed: true, status: "Active" })
-//       .skip(skip)
-//       .limit(limit);
-//       console.log("Total products", products)
-//     const totalPages = Math.ceil(totalProducts / limit);
-//     console.log("Total pages", totalPages)
-//     const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
-//     console.log("pageNumbers", pageNumbers);
-//     res.render("shop", {
-//       product: products,
-//       currentPage: page,
-//       totalPages: totalPages,
-//       limit: limit,
-//       categories: categories,  
-//       pageNumbers: pageNumbers,
-//       categoryId: categoryId 
-//     })
-//   } catch (error) {
-//     console.error("Error occurred while filtering products by category:", error)
-//     res.status(500).send({ error: 'An error occurred while filtering products by category' })
-//   }
-// }
+//------------------------------Insert User ------------------------------//
 
 const insertUser = async (req, res) => {
   try {
@@ -310,6 +272,7 @@ const insertUser = async (req, res) => {
 }
 
 
+//----------------------------verify OTP ----------------------------//
 
 const verifyOTP = async (req, res) => {
   try {
@@ -321,8 +284,7 @@ const verifyOTP = async (req, res) => {
       return res.render('otp-verification', { userId: null, message: "Invalid user ID." });
     }
     const user = await User.findById(userId);
-    console.log("User", user);
-    
+
     if (!user) {
       return res.render('otp-verification', { userId: null, message: "User not found." });
     }
@@ -342,6 +304,9 @@ const verifyOTP = async (req, res) => {
     res.status(500).send("An error occurred during OTP verification.");
   }
 }
+
+
+//---------------------------Resend OTP-------------------------------//
 
 const resendOTP = async (req, res) => {
   try {
@@ -372,10 +337,12 @@ const resendOTP = async (req, res) => {
   }
 };
 
+//----------------------------Login User------------------------------------//
+
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({email:email});
+    const user = await User.findOne({ email: email });
     if (user) {
       const passwordMatch = await bcrypt.compare(password, user.password);
       if (passwordMatch) {
@@ -386,7 +353,7 @@ const loginUser = async (req, res) => {
         const token = createToken({ id: user._id });
         res.cookie("jwt", token, {
           httpOnly: true,
-          maxAge: 60 * 60 * 1000 * 24,  
+          maxAge: 60 * 60 * 1000 * 24,
         });
         return res.redirect("/home");
       } else {
@@ -402,8 +369,7 @@ const loginUser = async (req, res) => {
 }
 
 
-
-
+//----------------------------single Product-------------------------------//
 
 const singleProduct = async (req, res) => {
   try {
@@ -414,31 +380,42 @@ const singleProduct = async (req, res) => {
     }
 
     const product = await Product.findOne({ _id: id }).populate({
-      path:'reviews',
-      populate:{
-        path:'userId',
-        select:'username'
+      path: 'reviews',
+      populate: {
+        path: 'userId',
+        select: 'username'
       }
-    })
+    });
+
     if (!product) {
       return res.status(404).send("Product not found");
     }
+
     let userId = null;
-    let hasPurchased = false;
+    let hasOrdered = false;
     let isInWishlist = false;
     let isInCart = false;
 
     const relatedProducts = await Product.find({ category: product.category });
     const token = req.cookies.jwt;
+
     if (token) {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       userId = decoded.id;
-      hasPurchased =  await checkIfPurchased(userId,id);
+      const order = await Order.findOne({
+        userId: userId,
+        'items.productId': id,
+      });
 
-    const wishlist = await Wishlist.findOne({ user: userId });
+      if (order) {
+        hasOrdered = true;
+      }
+
+      const wishlist = await Wishlist.findOne({ user: userId });
       if (wishlist && wishlist.items.some(item => item.productId.toString() === id)) {
         isInWishlist = true;
       }
+
       const cart = await Cart.findOne({ userId: userId });
       if (cart && cart.Product && Array.isArray(cart.Product)) {
         isInCart = cart.Product.some(item => item.productId.toString() === product._id.toString());
@@ -450,18 +427,17 @@ const singleProduct = async (req, res) => {
       relatedProducts: relatedProducts,
       isInWishlist: isInWishlist,
       isInCart: isInCart,
-      reviews : product.reviews,
-      hasPurchased:hasPurchased,
+      reviews: product.reviews,
+      hasOrdered: hasOrdered,
     });
 
   } catch (error) {
     console.log(error.message);
     res.status(500).send("An error occurred while loading the product details.");
   }
-}
+};
 
-
-//............................Logout load Page..........................//
+//-------------------------------- Logout ------------------------------//
 
 const logout = async (req, res) => {
   try {
@@ -473,40 +449,35 @@ const logout = async (req, res) => {
   }
 }
 
-//.............................userProfile.................................// 
+//--------------------------------userProfile-------------------------------// 
 
 const userProfile = async (req, res) => {
   try {
     const userId = req.user.id;
-    console.log("userId: ", userId);
     const addresses = await Address.find({ userId });
-    console.log("addresses",addresses);
     const saveData = await User.findById(userId)
-    console.log("saveData", saveData);
     const address = await Address.find({ userId });
-    console.log("address",address);
-    const orders = await Order.find({ user:userId }).populate('items.product').populate('shippingAddress').sort({ orderDate: -1 })
-    console.log("orders",orders);
+    const orders = await Order.find({ user: userId }).populate('items.product').populate('shippingAddress').sort({ orderDate: -1 })
     let walletData = await Wallet.findOne({ user: userId })
-    console.log("walletData",walletData);
     if (!walletData) {
       walletData = new Wallet({ user: userId, walletBalance: 0, transactions: [] });
       await walletData.save();
     }
-    res.render('userProfile', 
-      { 
+    res.render('userProfile',
+      {
         user: userId,
-         address: addresses, 
-         order: orders,
-          saveData: saveData, 
-          walletData: walletData 
-        })
+        address: addresses,
+        order: orders,
+        saveData: saveData,
+        walletData: walletData
+      })
   } catch (error) {
     console.log(error.message);
     res.status(500).send("something went wrong");
   }
 }
 
+//--------------------------------Render Edit Profile-------------------------------//
 
 const editProfile = async (req, res) => {
   try {
@@ -519,6 +490,7 @@ const editProfile = async (req, res) => {
   }
 }
 
+//-------------------------------Edit Edited Profile--------------------------------//
 
 const editedProfile = async (req, res) => {
   try {
@@ -549,12 +521,15 @@ const editedProfile = async (req, res) => {
   }
 }
 
+
+//------------------------------Add Address-----------------------------------//
+
 const addAddress = async (req, res) => {
   try {
     const { address, city, state, pincode } = req.body;
-    console.log("requested",req.body);
+    console.log("requested", req.body);
     const userId = req.user.id
-    console.log("userId",userId);
+    console.log("userId", userId);
     const userAddress = new Address({
       userId: userId,
       address: address,
@@ -563,11 +538,11 @@ const addAddress = async (req, res) => {
       pincode: pincode,
       user: userId
     })
-    console.log("userAddress",userAddress); 
+    console.log("userAddress", userAddress);
     const saveAddress = await userAddress.save();
-    console.log("saveAddress",saveAddress);
+    console.log("saveAddress", saveAddress);
     const user = await User.findById(userId);
-    console.log("user",user);
+    console.log("user", user);
     // user.addresses.push(saveAddress._id);
     await user.save();
     res.redirect("/userProfile")
@@ -577,14 +552,14 @@ const addAddress = async (req, res) => {
 }
 
 
-
+//----------------------------Render Edit Address----------------------------//
 
 const renderEditAddress = async (req, res) => {
   try {
     const addressId = req.query.id;
-    console.log("addressId",addressId);
+    console.log("addressId", addressId);
     const address = await Address.findById(addressId);
-    console.log("address",address);
+    console.log("address", address);
     if (!address) {
       return res.status(404).send("Address not found");
     }
@@ -594,6 +569,9 @@ const renderEditAddress = async (req, res) => {
     res.status(500).send("Something went wrong");
   }
 }
+
+
+//-----------------------------Edit Address-------------------------------//
 
 
 const editAddress = async (req, res) => {
@@ -616,15 +594,14 @@ const editAddress = async (req, res) => {
   }
 }
 
+
+//-----------------------------Delete Address-------------------------------//
+
 const deleteAddress = async (req, res) => {
   try {
-    console.log("hi there");
     const addressId = req.query.addressId;
-    console.log("AddressId",addressId);
     const userId = req.id.id;
-    console.log("UserId",userId);
     const address = await Address.findByIdAndDelete(addressId);
-    console.log("address",address);
     if (!address) {
       return res.status(404).send("Address not found");
     }
@@ -632,7 +609,6 @@ const deleteAddress = async (req, res) => {
       {
         $pull: { addresses: addressId }
       })
-    console.log("userData",userData);
     res.redirect("/userProfile");
   } catch (error) {
     console.log(error.message);
@@ -640,6 +616,8 @@ const deleteAddress = async (req, res) => {
   }
 }
 
+
+//-----------------------------------Load Cart ------------------------------//
 
 
 const loadCart = async (req, res) => {
@@ -673,7 +651,7 @@ const loadCart = async (req, res) => {
         $lookup: {
           from: "categories",
           localField: "productDetails.category",
-          foreignField: "_id", 
+          foreignField: "_id",
           as: "categoryDetails"
         }
       },
@@ -692,13 +670,15 @@ const loadCart = async (req, res) => {
     ]);
     const categories = await Category.find();
     const totalAmount = cartItems.reduce((acc, item) => acc + item.subtotal, 0);
-    res.render('cart', { cartItems:cartItems, totalAmount, categories });
+    res.render('cart', { cartItems: cartItems, totalAmount, categories });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("An error occurred while loading the cart.");
   }
 };
 
+
+//-------------------------------AddTOCart--------------------------------//
 
 const addToCart = async (req, res) => {
   try {
@@ -707,39 +687,27 @@ const addToCart = async (req, res) => {
       throw new Error('JWT cookie not found');
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("decoded",decoded);
     const userId = decoded.id;
-    console.log("userId",userId); 
     const productId = req.query.productId;
-    console.log("productId",productId);
     if (!mongoose.Types.ObjectId.isValid(productId)) {
       return res.status(400).json({ message: "Invalid product ID" });
     }
     const objectIdProductId = new mongoose.Types.ObjectId(productId);
-    console.log("objectIdProductId",objectIdProductId);
-    
     const product = await Product.findById(objectIdProductId);
-    console.log("product", product);
-    
     if (!product) {
       throw new Error('Product not found');
     }
-     const discountedPrice = product.discount ? product.price * (1 - product.discount/100):product.price;
-     console.log("discountedPrice", discountedPrice);
-
-     
-    // console.log("productId", productId.toString());
-    // console.log("objectIdProductId", objectIdProductId.toString());
+    const discountedPrice = product.discount ? product.price * (1 - product.discount / 100) : product.price;
 
     let cart = await Cart.findOne({ userId: userId });
-    console.log("cart", cart)
     let isProductIncart = false;
     if (!cart) {
       cart = new Cart({
         userId: userId,
-        Product: [{ 
+        Product: [{
           productId: objectIdProductId,
-           quantity: 1,price:discountedPrice }]
+          quantity: 1, price: discountedPrice
+        }]
       })
     } else {
       const existingProduct = cart.Product.find(
@@ -753,18 +721,15 @@ const addToCart = async (req, res) => {
         existingProduct.quantity += 1;
         existingProduct.price = discountedPrice;
       } else {
-        cart.Product.push({ productId: objectIdProductId, quantity: 1 ,price:discountedPrice});
+        cart.Product.push({ productId: objectIdProductId, quantity: 1, price: discountedPrice });
       }
     }
-
     let wishlist = await Wishlist.findOne({ user: userId });
     if (wishlist) {
       wishlist.items = wishlist.items.filter(item => item.productId.toString() !== productId.toString());
       await wishlist.save();
     }
-
     await cart.save();
-
     res.redirect("/cart");
   } catch (error) {
     console.error(error.message);
@@ -772,40 +737,32 @@ const addToCart = async (req, res) => {
   }
 }
 
+//---------------------------------------updateCartQuantity----------------------------------//
+
 
 const updateCartQuantity = async (req, res) => {
   try {
     const token = req.cookies.jwt;
-
     if (!token) {
       return res.status(401).json({ success: false, message: 'JWT cookie not found' });
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.id;
-    console.log("userId: " + userId);
-     
     const { productId, quantity } = req.body;
-    console.log("requested",req.body);
-    
-
     if (quantity <= 0 || !Number.isInteger(quantity)) {
       return res.status(400).json({ success: false, message: 'Invalid quantity value' });
     }
-
     const product = await Product.findById(productId);
     if (!product) {
       return res.status(404).json({ success: false, message: 'Product not found' });
     }
-
     if (product.stock < quantity) {
       return res.status(400).json({ success: false, message: 'Not enough stock available' });
     }
-
     const cart = await Cart.findOne({ userId: userId });
     if (!cart) {
       return res.status(404).json({ success: false, message: 'Cart not found' });
     }
-
     const cartItemIndex = cart.Product.findIndex(item => item.productId.toString() === productId);
     if (cartItemIndex === -1) {
       return res.status(404).json({ success: false, message: 'Product not found in cart' });
@@ -819,16 +776,14 @@ const updateCartQuantity = async (req, res) => {
         const discountedPrice = itemProduct.price - (itemProduct.price * (itemProduct.discount / 100));
         if (isNaN(discountedPrice)) {
           console.log(`Invalid discounted price for product ${itemProduct._id}`);
-          return; 
+          return;
         }
-        const itemSubtotal = discountedPrice * item.quantity;        
+        const itemSubtotal = discountedPrice * item.quantity;
         if (isNaN(itemSubtotal)) {
           console.log(`Invalid subtotal for product ${itemProduct._id}`);
-          return; 
+          return;
         }
-
         totalAmount += itemSubtotal;
-
         if (item.productId.toString() === productId) {
           item.subtotal = itemSubtotal;
         }
@@ -838,8 +793,6 @@ const updateCartQuantity = async (req, res) => {
       console.log('Invalid total amount calculation');
       return res.status(500).json({ success: false, message: 'Invalid total amount calculation' });
     }
-
-
     cart.totalAmount = totalAmount;
     await cart.save();
     res.json({
@@ -847,7 +800,6 @@ const updateCartQuantity = async (req, res) => {
       totalAmount: totalAmount,
       subtotal: cart.Product[cartItemIndex].subtotal
     });
-
   } catch (error) {
     console.error("Error updating cart quantity:", error);
     return res.status(500).json({ success: false, message: 'Internal server error' });
@@ -855,7 +807,7 @@ const updateCartQuantity = async (req, res) => {
 }
 
 
-
+//------------------------------------Remove Item--------------------------------//
 
 const removeItem = async (req, res) => {
   try {
@@ -896,12 +848,14 @@ const removeItem = async (req, res) => {
 }
 
 
-
+//-----------------------------------Reset Password-----------------------------------//
 const getResetPassword = (req, res) => {
   const { token } = req.query;
   res.render('resetPassword', { token, message: '' });
 };
 
+
+//-----------------------------------ForgotPassword------------------------------------//
 
 const forgotPassword = async (req, res) => {
   const { forgotEmail } = req.body;
@@ -913,7 +867,7 @@ const forgotPassword = async (req, res) => {
 
     const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     user.resetPasswordToken = resetToken;
-    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+    user.resetPasswordExpires = Date.now() + 3600000;
     await user.save();
 
     const transporter = nodemailer.createTransport({
@@ -944,8 +898,10 @@ const forgotPassword = async (req, res) => {
 }
 
 
+//---------------------------------Post Reset Password-------------------------------//
+
 const postResetPassword = async (req, res) => {
-  const { token } = req.body; // Get the token from the form data
+  const { token } = req.body;
   const { password, confirmPassword } = req.body;
 
   if (password !== confirmPassword) {
@@ -973,6 +929,7 @@ const postResetPassword = async (req, res) => {
 };
 
 
+//---------------------------------change Password-----------------------------------//
 
 const changePassword = async (req, res) => {
   try {
@@ -984,6 +941,7 @@ const changePassword = async (req, res) => {
 }
 
 
+//-----------------------------CheckCurrentPassword----------------------------//
 
 const checkCurrentPassword = async (req, res) => {
   try {
@@ -1006,6 +964,7 @@ const checkCurrentPassword = async (req, res) => {
   }
 }
 
+//-------------------------------Profile Forgot Password---------------------------//
 
 const profileForgotPassword = async (req, res) => {
   try {
@@ -1016,10 +975,10 @@ const profileForgotPassword = async (req, res) => {
   }
 }
 
+//-------------------------------update Password----------------------------------//
 
 const updatePassword = async (req, res) => {
   try {
-
     const token = req.cookies.jwt;
     if (!token) {
       throw new Error('JWT cookie not found');
@@ -1034,8 +993,6 @@ const updatePassword = async (req, res) => {
     if (newPassword !== confirmPassword) {
       return res.render('profileChangePassword', { message: "Error: Passwords do not match." });
     }
-
-
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
     await user.save();
@@ -1047,7 +1004,7 @@ const updatePassword = async (req, res) => {
 }
 
 
-
+//-----------------------------------Profile Logout------------------------------//
 const profileLogout = (req, res) => {
   try {
     res.clearCookie('jwt');
@@ -1060,69 +1017,68 @@ const profileLogout = (req, res) => {
 }
 
 
+//--------------------------------Search Book----------------------------------//
 
 const searchBook = async (req, res) => {
   try {
-    const { search,page = 1} = req.body;
+    const { search, page = 1 } = req.body;
+    const categoryId = req.query.category;
+
     const categories = await Category.find()
     const regex = new RegExp(search, 'i');
     const limit = 12;
-    const skip = (page - 1)* limit
+    const skip = (page - 1) * limit
     const products = await Product.find({ name: { $regex: regex } })
-    .skip(skip)
-    .limit(limit)
-    const newArrivals = await Product.find({isListed:true})
-    .sort({createdAt:-1})
-    .limit(10)
-    const topSelling = await Product.find({isListed:true})
-    .sort({salesCount:-1})
-    .limit(10);
-    const totalProducts = await Product.countDocuments({name:{$regex:regex}});
-    const totalPages = Math.ceil(totalProducts/limit);
-    res.render('shop', 
-      { 
-         categories:categories,
-         product:products, 
-         newArrivals:newArrivals, 
-         topSelling:topSelling ,
-         limit: limit,
-         currentPage:page,
-         totalPages:totalPages,
-         pageNumbers: Array.from({ length: totalPages }, (_, i) => i + 1)
-        })
+      .skip(skip)
+      .limit(limit)
+    const newArrivals = await Product.find({ isListed: true })
+      .sort({ createdAt: -1 })
+      .limit(10)
+    const topSelling = await Product.find({ isListed: true })
+      .sort({ salesCount: -1 })
+      .limit(10);
+    const totalProducts = await Product.countDocuments({ name: { $regex: regex } });
+    const totalPages = Math.ceil(totalProducts / limit);
+    res.render('shop',
+      {
+        sortOption: req.query.sort || 'nameAsc',
+
+        categoryId: categoryId,
+        categories: categories,
+        product: products,
+        newArrivals: newArrivals,
+        topSelling: topSelling,
+        limit: limit,
+        currentPage: page,
+        totalPages: totalPages,
+        pageNumbers: Array.from({ length: totalPages }, (_, i) => i + 1)
+      })
   } catch (error) {
     console.error('Error occurred while searching for products:', error);
     res.status(500).send({ error: 'An error occurred while searching for products' });
   }
 }
 
+
+//--------------------------------Search In Shop----------------------------------//
+
 const searchInShop = async (req, res) => {
   try {
-    console.log("hiiiii");
     const { search } = req.body;
-    console.log("requested",req.body);
     const categoryId = req.query.category;
     const categories = await Category.find();
-    console.log("categories",categories);
 
     const regex = new RegExp(search, 'i');
-    console.log("regex",regex);
     let filterCriteria = { name: { $regex: regex } };
     if (categoryId) {
       filterCriteria.category = mongoose.Types.ObjectId(categoryId);
     }
     const products = await Product.find(filterCriteria)
-    console.log("products",products);
     const page = parseInt(req.query.page) || 1;
-    console.log("page",page);
     const limit = parseInt(req.query.limit) || 10;
-    console.log("limit",limit);
     const skip = (page - 1) * limit;
-    console.log("skip",skip);
     const totalProducts = await Product.countDocuments(filterCriteria);
-    console.log("totalproducts",totalProducts);
     const totalPages = Math.ceil(totalProducts / limit);
-    console.log("totalPages",totalPages);
 
     res.render('shop', {
       product: products,
@@ -1131,7 +1087,7 @@ const searchInShop = async (req, res) => {
       totalPages: totalPages,
       limit: limit,
       categories: categories,
-      categoryId : categoryId,
+      categoryId: categoryId,
       pageNumbers: Array.from({ length: totalPages }, (_, i) => i + 1)
     });
   } catch (error) {
@@ -1139,6 +1095,8 @@ const searchInShop = async (req, res) => {
     res.status(500).send({ error: 'An error occurred while searching for products' })
   }
 }
+
+//----------------------------------ShowOrderDetails---------------------------------//
 
 const showOrderDetails = async (req, res) => {
   try {
@@ -1150,21 +1108,21 @@ const showOrderDetails = async (req, res) => {
       return res.status(404).send('Order ID is required')
     }
     const order = await Order.findById(orderId)
-    .populate('items.product')
-    .populate('shippingAddress')
+      .populate('items.product')
+      .populate('shippingAddress')
     console.log("shippingAddress", order.shippingAddress)
 
-    res.render("orderDetails", { order,address })
+    res.render("orderDetails", { order, address })
   } catch (error) {
     console.error("Error in showOrderDetails:", error)
     res.status(500).send('Server Error')
   }
 }
 
+//---------------------------------Filtering Category --------------------------------//
 
 const filterByCategory = async (req, res) => {
   try {
-
     const categoryId = req.query.id
     const categories = await Category.find()
     const selectedCategory = await Category.findById(categoryId);
@@ -1209,6 +1167,7 @@ const googleAuthCallback = async (req, res) => {
   return res.redirect("/home");
 };
 
+
 const googleAuthFailure = async (req, res) => {
   try {
     const errorMessage = "User is blocked. Please contact support."
@@ -1220,12 +1179,14 @@ const googleAuthFailure = async (req, res) => {
     const errorMessage = "An unexpected error occurred. Please try again later."
     res.redirect(`/login?error=${errorMessage}`);
   }
-};
+
+}
 
 
 
 
 module.exports = {
+
   loadRegister,
   loadLogin,
   insertUser,
@@ -1236,7 +1197,6 @@ module.exports = {
   singleProduct,
   logout,
   loadShop,
-  // shopCategory,
   userProfile,
   editProfile,
   editedProfile,
@@ -1263,7 +1223,6 @@ module.exports = {
   filterByCategory,
   googleAuthCallback,
   googleAuthFailure,
-  googleAuth,   
+  googleAuth,
 
-  
 };

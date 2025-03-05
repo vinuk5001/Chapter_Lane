@@ -11,9 +11,7 @@
     <meta property="og:type" content="">
     <meta property="og:url" content="">
     <meta property="og:image" content="">
-    <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="adminassets/imgs/theme/favicon.svg">
-    <!-- Template CSS -->
     <link href="adminassets/css/main.css" rel="stylesheet" type="text/css" />
     <style>
         #showUnlisted {
@@ -34,44 +32,43 @@
             background-color: red;
             color: white;
         }
+
         .row {
-         font-size: 1rem; /* Adjust as needed */
+            font-size: 1rem;
         }
 
         .bg-light {
-          background-color: #f8f9fa;
+            background-color: #f8f9fa;
         }
 
-       .border-bottom {
-         border-bottom: 1px solid #dee2e6;
+        .border-bottom {
+            border-bottom: 1px solid #dee2e6;
         }
 
-    .text-uppercase {
-       text-transform: uppercase;
+        .text-uppercase {
+            text-transform: uppercase;
         }
 
         strong {
-       color: #343a40;
+            color: #343a40;
         }
 
-       .d-flex {
-       display: flex;
-       }
+        .d-flex {
+            display: flex;
+        }
 
-      .align-items-center {
-       align-items: center;
-       }
+        .align-items-center {
+            align-items: center;
+        }
 
-      .justify-content-end {
-       justify-content: flex-end;
-      }
+        .justify-content-end {
+            justify-content: flex-end;
+        }
 
-      .py-3 {
-      padding-top: 1rem;
-      padding-bottom: 1rem;
- }
- 
-
+        .py-3 {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
     </style>
 </head>
 
@@ -83,7 +80,8 @@
                 <img src="adminassets/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard">
             </a>
             <div>
-                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+                </button>
             </div>
         </div>
         <nav>
@@ -97,7 +95,7 @@
                     <a class="menu-link" href="users"> <i class="icon material-icons md-store"></i>
                         <span class="text">Users</span>
                     </a>
-                    <div class="submenu"> 
+                    <div class="submenu">
                         <a href="/admin/userlist">Users List</a>
                     </div>
                 </li>
@@ -142,7 +140,7 @@
                     <div class="submenu">
                         <a href="/admin/addCoupon">Create Coupon</a>
                     </div>
-                </li> 
+                </li>
                 <li class="menu-item has-submenu ">
                     <a class="menu-link" href="SalesReport"> <i class="icon material-icons md-card_giftcard"></i>
                         <span class="text">Sales</span>
@@ -150,26 +148,29 @@
                     <div class="submenu">
                         <a href="/admin/salesReport">sales report</a>
                     </div>
-                </li> 
+                </li>
             </ul>
         </nav>
     </aside>
     <main class="main-wrap">
         <header class="main-header navbar">
             <div class="col-search">
-             
+
             </div>
             <div class="col-nav">
-                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                        class="material-icons md-apps"></i> </button>
                 <ul class="nav">
-                 
+
                     <li class="nav-item">
-                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                        <a href="#" class="requestfullscreen nav-link btn-icon"><i
+                                class="material-icons md-cast"></i></a>
                     </li>
-                 
+
                 </ul>
             </div>
         </header>
@@ -219,112 +220,135 @@
                         <strong class="text-lowercase">Action</strong>
                     </div>
                 </div>
-                
-                    <!-- End of Header Row -->
-                
-                    <% products.forEach(item => { %>
-                        <article class="itemlist">
-                            <div class="row align-items-center">
-                                <div class="col-lg-3 col-sm-3 col-8 flex-grow-1 col-name">
-                                    <a class="itemside" href="/admin/editProduct?id=<%= item._id %>">
-                                        <div class="left">
-                                            <% if (item.images && item.images.length > 0) { %>
-                                                <img src="/adminImages/<%= item.images[1] %>" alt="<%= item.name %>" class="img-sm img-thumbnail">
+
+
+                <% products.forEach(item=> { %>
+                    <article class="itemlist">
+                        <div class="row align-items-center">
+                            <div class="col-lg-3 col-sm-3 col-8 flex-grow-1 col-name">
+                                <a class="itemside" href="/admin/editProduct?id=<%= item._id %>">
+                                    <div class="left">
+                                        <% if (item.images && item.images.length> 0) { %>
+                                            <img src="/adminImages/<%= item.images[1] %>" alt="<%= item.name %>"
+                                                class="img-sm img-thumbnail">
                                             <% } else { %>
-                                                <img src="/path/to/default-image.jpg" alt="Default Image" class="img-sm img-thumbnail">
-                                            <% } %>
-                                        </div>
-                                        <div class="info">
-                                            <h6 class="mb-0"><%= item.name %></h6>
-                                        </div>
+                                                <img src="/path/to/default-image.jpg" alt="Default Image"
+                                                    class="img-sm img-thumbnail">
+                                                <% } %>
+                                    </div>
+                                    <div class="info">
+                                        <h6 class="mb-0">
+                                            <%= item.name %>
+                                        </h6>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-lg-2 col-sm-2 col-4 col-category">
+                                <span>
+                                    <%= item.category.name %>
+                                </span>
+                            </div>
+
+                            <div class="col-lg-2 col-sm-2 col-4 col-author">
+                                <span>
+                                    <%= item.author %>
+                                </span>
+                            </div>
+
+                            <div class="col-lg-2 col-sm-2 col-4 col-price">
+                                <span>
+                                    <%= item.price %>
+                                </span>
+                            </div>
+
+                            <div class="col-lg-1 col-sm-2 col-4 col-stock">
+                                <span>
+                                    <%= item.stock %>
+                                </span>
+                            </div>
+
+                            <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+                                <% if (item.isListed===true) { %>
+                                    <a href="/admin/unlistProduct?id=<%= item._id %>">
+                                        <button type="submit" class="btn btn-sm font-sm btn-light rounded">
+                                            <i class="material-icons md-delete_forever"></i> Unlist
+                                        </button>
                                     </a>
-                                </div>
-                
-                                <!-- Category Column -->
-                                <div class="col-lg-2 col-sm-2 col-4 col-category"> 
-                                    <span><%= item.category.name %></span>
-                                </div>
-                
-                                <div class="col-lg-2 col-sm-2 col-4 col-author"> 
-                                    <span><%= item.author %></span>
-                                </div>
-                
-                                <div class="col-lg-2 col-sm-2 col-4 col-price"> 
-                                    <span><%= item.price %></span>
-                                </div>
-                
-                                <div class="col-lg-1 col-sm-2 col-4 col-stock">
-                                    <span><%= item.stock %></span>
-                                </div>
-                
-                                <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
-                                    <% if (item.isListed === true) { %>
-                                        <a href="/admin/unlistProduct?id=<%= item._id %>">
-                                            <button type="submit" class="btn btn-sm font-sm btn-light rounded">
-                                                <i class="material-icons md-delete_forever"></i> Unlist
-                                            </button>
-                                        </a>
                                     <% } else { %>
                                         <a href="/admin/listProduct?id=<%= item._id %>">
                                             <button type="submit" class="btn btn-sm font-sm btn-light rounded">
                                                 <i class="material-icons md-delete_forever"></i> List
                                             </button>
                                         </a>
-                                    <% } %>
-                                </div>
+                                        <% } %>
                             </div>
-                        </article>
+                        </div>
+                    </article>
                     <% }) %>
-                </div>
-                
+            </div>
+
             </div>
             <div class="pagination-area mt-30 mb-50">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-start">
-                        <% if (currentPage > 1) { %>
+                        <% if (currentPage> 1) { %>
                             <li class="page-item">
-                                <a class="page-link" href="/admin/productList?page=<%= currentPage - 1 %>&limit=<%= limit %>">
+                                <a class="page-link"
+                                    href="/admin/productList?page=<%= currentPage - 1 %>&limit=<%= limit %>">
                                     <i class="material-icons md-chevron_left"></i>
                                 </a>
                             </li>
-                        <% } %>
-            
-                        <% if (totalPages > 1) { %>
-                            <% if (currentPage > 3) { %>
-                                <li class="page-item">
-                                    <a class="page-link" href="/admin/productList?page=1&limit=<%= limit %>">1</a>
-                                </li>
-                                <% if (currentPage > 4) { %>
-                                    <li class="page-item disabled"><a class="page-link dot" href="#">...</a></li>
-                                <% } %>
                             <% } %>
-                            <% for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) { %>
-                                <li class="page-item <%= i === currentPage ? 'active' : '' %>">
-                                    <a class="page-link" href="/admin/productList?page=<%= i %>&limit=<%= limit %>"><%= i %></a>
-                                </li>
-                            <% } %>
-                            <% if (currentPage < totalPages - 2) { %>
-                                <% if (currentPage < totalPages - 3) { %>
-                                    <li class="page-item disabled"><a class="page-link dot" href="#">...</a></li>
-                                <% } %>
-                                <li class="page-item">
-                                    <a class="page-link" href="/admin/productList?page=<%= totalPages %>&limit=<%= limit %>"><%= totalPages %></a>
-                                </li>
-                            <% } %>
-                        <% } %>
-            
-                        <% if (currentPage < totalPages) { %>
-                            <li class="page-item">
-                                <a class="page-link" href="/admin/productList?page=<%= currentPage + 1 %>&limit=<%= limit %>">
-                                    <i class="material-icons md-chevron_right"></i>
-                                </a>
-                            </li>
-                        <% } %>
+
+                                <% if (totalPages> 1) { %>
+                                    <% if (currentPage> 3) { %>
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                                href="/admin/productList?page=1&limit=<%= limit %>">1</a>
+                                        </li>
+                                        <% if (currentPage> 4) { %>
+                                            <li class="page-item disabled"><a class="page-link dot" href="#">...</a>
+                                            </li>
+                                            <% } %>
+                                                <% } %>
+                                                    <% for (let i=Math.max(1, currentPage - 2); i <=Math.min(totalPages,
+                                                        currentPage + 2); i++) { %>
+                                                        <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                                                            <a class="page-link"
+                                                                href="/admin/productList?page=<%= i %>&limit=<%= limit %>">
+                                                                <%= i %>
+                                                            </a>
+                                                        </li>
+                                                        <% } %>
+                                                            <% if (currentPage < totalPages - 2) { %>
+                                                                <% if (currentPage < totalPages - 3) { %>
+                                                                    <li class="page-item disabled"><a
+                                                                            class="page-link dot" href="#">...</a></li>
+                                                                    <% } %>
+                                                                        <li class="page-item">
+                                                                            <a class="page-link"
+                                                                                href="/admin/productList?page=<%= totalPages %>&limit=<%= limit %>">
+                                                                                <%= totalPages %>
+                                                                            </a>
+                                                                        </li>
+                                                                        <% } %>
+                                                                            <% } %>
+
+                                                                                <% if (currentPage < totalPages) { %>
+                                                                                    <li class="page-item">
+                                                                                        <a class="page-link"
+                                                                                            href="/admin/productList?page=<%= currentPage + 1 %>&limit=<%= limit %>">
+                                                                                            <i
+                                                                                                class="material-icons md-chevron_right"></i>
+                                                                                        </a>
+                                                                                    </li>
+                                                                                    <% } %>
                     </ul>
                 </nav>
             </div>
-            
-            
+
+
         </section>
     </main>
     <script src="adminassets/js/vendors/jquery-3.6.0.min.js"></script>
@@ -332,14 +356,14 @@
     <script src="adminassets/js/vendors/select2.min.js"></script>
     <script src="adminassets/js/vendors/perfect-scrollbar.js"></script>
     <script src="adminassets/js/vendors/jquery.fullscreen.min.js"></script>
-    <!-- Main Script -->
     <script src="adminassets/js/main.js" type="text/javascript"></script>
 
     <script>
-        document.getElementById('sortOptions').addEventListener('change', function() {
+        document.getElementById('sortOptions').addEventListener('change', function () {
             const selectedOption = this.value;
             window.location.href = `/admin/productList?sort=${selectedOption}`;
         });
     </script>
 </body>
+
 </html>

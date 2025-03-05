@@ -1,4 +1,7 @@
-const Order = require('../models/orderModel'); 
+const Order = require('../models/orderModel');
+
+
+// --------------------Payonline continue ---------------------//
 
 const payOnlineContinue = async (req, res) => {
     try {
@@ -10,9 +13,9 @@ const payOnlineContinue = async (req, res) => {
         }
         if (order.paymentFailed && order.orderStatus === "Pending") {
             order.paymentFailed = false;
-            order.orderStatus = "Shipped"; 
+            order.orderStatus = "Shipped";
 
-            await order.save(); 
+            await order.save();
 
             return res.redirect("/order-Confirmation")
         } else {
@@ -23,6 +26,8 @@ const payOnlineContinue = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+
 
 module.exports = {
     payOnlineContinue

@@ -248,7 +248,7 @@
                     <div class="submenu">
                         <a href="/admin/salesReport">sales report</a>
                     </div>
-                </li> 
+                </li>
             </ul>
         </nav>
     </aside>
@@ -256,29 +256,15 @@
     <main class="main-wrap">
         <header class="main-header navbar">
             <div class="col-search">
-              
+
             </div>
             <div class="col-nav">
-                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
-                        class="material-icons md-apps"></i> </button>
-                <ul class="nav">
-                    <li class="nav-item">
-                       
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="requestfullscreen nav-link btn-icon"><i
-                                class="material-icons md-cast"></i></a>
-                    </li>
-                    <li class="dropdown nav-item">
-                       
-                    </li>
-                    <li class="dropdown nav-item">
-                     
-                    </li>
+                <li class="dropdown nav-item">
+
+                </li>
+                <li class="dropdown nav-item">
+
+                </li>
                 </ul>
             </div>
         </header>
@@ -290,7 +276,7 @@
 
                     <div class="card mb-4">
                         <div class="card-body">
-                            <form action="/admin/postCoupon" id = "couponForm" method="POST">
+                            <form action="/admin/postCoupon" id="couponForm" method="POST">
                                 <div class="mb-4">
                                     <label for="couponCode" class="form-label">Coupon Code</label>
                                     <input type="text" placeholder="Enter Coupon Code" class="form-control"
@@ -318,7 +304,7 @@
                                         name="minimumAmount" id="minimumAmount">
                                     <div class="error-message" id="minimumAmountError"></div>
                                 </div>
-                             
+
 
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
@@ -344,21 +330,22 @@
                                     <% if (availableCoupons && availableCoupons.length> 0) { %>
                                         <% availableCoupons.forEach(coupon=> { %>
                                             <tr data-coupon-id="<%= coupon._id %>"></tr>
-                                                <td>
-                                                    <%= coupon.couponCode %>
-                                                </td>
-                                                <td>
-                                                    <%= coupon.couponName %>
-                                                </td>
-                                                <td>
-                                                    <%= coupon.discount %>
-                                                </td>
-                                                <td>
-                                                    <%= coupon.minimumAmount %>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-danger btn-sm" onclick="deleteCoupon('<%= coupon._id %>')">Delete</button>
-                                                </td>
+                                            <td>
+                                                <%= coupon.couponCode %>
+                                            </td>
+                                            <td>
+                                                <%= coupon.couponName %>
+                                            </td>
+                                            <td>
+                                                <%= coupon.discount %>
+                                            </td>
+                                            <td>
+                                                <%= coupon.minimumAmount %>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-danger btn-sm"
+                                                    onclick="deleteCoupon('<%= coupon._id %>')">Delete</button>
+                                            </td>
                                             </tr>
                                             <% }) %>
                                                 <% } else { %>
@@ -366,22 +353,22 @@
                                                         <td colspan="5">No coupons available</td>
                                                     </tr>
                                                     <% } %>
-                               
-                                                </tbody>
-                            
-                                            </table>
-                       
-                                        </div>
-                    
-                                    </div>
-                
-                 </div>
 
-            
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
             </div>
-        
+
         </section>
-    
+
     </main>
 
     <script src="/adminassets-admin/js/vendors/jquery-3.6.0.min.js"></script>
@@ -395,85 +382,73 @@
     <script>
 
         document.getElementById('couponForm').addEventListener('submit', function (e) {
-            
-            let isValid = true;
 
-            // Clear previous errors
+            let isValid = true;
             document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
 
-            // Validate Coupon Code
             const couponCode = document.getElementById('couponCode').value.trim();
             if (couponCode === '') {
                 document.getElementById('couponCodeError').textContent = 'Coupon Code is required';
                 isValid = false;
             }
-
-            // Validate Coupon Name
             const couponName = document.getElementById('couponName').value.trim();
             if (couponName === '') {
                 document.getElementById('couponNameError').textContent = 'Coupon Name is required';
                 isValid = false;
             }
-
-            // Validate Discount
             const discount = parseFloat(document.getElementById('discount').value);
             if (isNaN(discount) || discount < 0) {
                 document.getElementById('discountError').textContent = 'Discount must be a positive number';
                 isValid = false;
             }
-
-            // Validate Minimum Amount
             const minimumAmount = parseFloat(document.getElementById('minimumAmount').value);
             if (isNaN(minimumAmount) || minimumAmount < 0) {
                 document.getElementById('minimumAmountError').textContent = 'Minimum Amount must be a positive number';
                 isValid = false;
             }
-
-            // Prevent form submission if validation fails
             if (!isValid) {
                 e.preventDefault();
             }
         });
-    
+
         function deleteCoupon(couponId) {
-    if (confirm('Are you sure you want to delete this coupon?')) {
-        fetch(`/admin/coupons?couponId=${couponId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
+            if (confirm('Are you sure you want to delete this coupon?')) {
+                fetch(`/admin/coupons?couponId=${couponId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            alert(data.message);
+                            const row = document.querySelector(`tr[data-coupon-id="${couponId}"]`);
+                            console.log('Row to be removed:', row);
+                            if (row) {
+                                row.remove();
+                                console.log('Row removed successfully');
+                            } else {
+                                console.error('Row not found for couponId:', couponId);
+                            }
+                        } else {
+                            alert(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('There was a problem with the delete request:', error);
+                    });
             }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                alert(data.message);
-                // Remove the coupon row from the table
-                const row = document.querySelector(`tr[data-coupon-id="${couponId}"]`);
-                console.log('Row to be removed:', row);
-                if (row) {
-                    row.remove();
-                    console.log('Row removed successfully'); // Confirm removal
-                }else {
-                    console.error('Row not found for couponId:', couponId); // Error if row is not found
-                }
-            } else {
-                alert(data.message);
-            }
-        })
-        .catch(error => {
-            console.error('There was a problem with the delete request:', error);
-        });
-    }
-}
-    
+        }
 
 
-     
+
+
     </script>
 </body>
 

@@ -164,7 +164,7 @@
             margin-bottom: 10px;
         }
 
-        .tab-pane .profile-details h5 + br {
+        .tab-pane .profile-details h5+br {
             display: none;
         }
 
@@ -184,6 +184,7 @@
                 margin-bottom: 30px;
             }
         }
+
         .btn-brand {
             background-color: #007bff;
             color: #fff;
@@ -207,11 +208,9 @@
 
 <body>
     <header class="header-area header-style-5">
-        <!-- Header content here -->
     </header>
 
     <div class="mobile-header-active mobile-header-wrapper-style">
-        <!-- Mobile header content here -->
     </div>
 
     <main class="main">
@@ -232,40 +231,55 @@
                                 <div class="dashboard-menu">
                                     <ul class="nav flex-column" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="fi-rs-user mr-10"></i>Account details</a>
+                                            <a class="nav-link active" id="account-detail-tab" data-bs-toggle="tab"
+                                                href="#account-detail" role="tab" aria-controls="account-detail"
+                                                aria-selected="true"><i class="fi-rs-user mr-10"></i>Account details</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="fi-rs-shopping-bag mr-10"></i>Orders</a>
+                                            <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders"
+                                                role="tab" aria-controls="orders" aria-selected="false"><i
+                                                    class="fi-rs-shopping-bag mr-10"></i>Orders</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="true"><i class="fi-rs-marker mr-10"></i>My Address</a>
+                                            <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address"
+                                                role="tab" aria-controls="address" aria-selected="true"><i
+                                                    class="fi-rs-marker mr-10"></i>My Address</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" id="wallet-tab" data-bs-toggle="tab" href="#wallet" role="tab" aria-controls="wallet" aria-selected="false"><i class="fi-rs-wallet mr-10"></i>Wallet</a>
+                                            <a class="nav-link" id="wallet-tab" data-bs-toggle="tab" href="#wallet"
+                                                role="tab" aria-controls="wallet" aria-selected="false"><i
+                                                    class="fi-rs-wallet mr-10"></i>Wallet</a>
                                         </li>
-                                        
+
                                         <li class="nav-item">
-                                            <a class="nav-link" href="/changePassword"><i class="fi-rs-sign-out mr-10"></i>Change Password</a>
+                                            <a class="nav-link" href="/changePassword"><i
+                                                    class="fi-rs-sign-out mr-10"></i>Change Password</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="/profileLogout"><i class="fi-rs-sign-out mr-10"></i>Logout</a>
+                                            <a class="nav-link" href="/profileLogout"><i
+                                                    class="fi-rs-sign-out mr-10"></i>Logout</a>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="col-md-8">
                                 <div class="tab-content dashboard-content">
-                                    <div class="tab-pane fade show active" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
+                                    <div class="tab-pane fade show active" id="account-detail" role="tabpanel"
+                                        aria-labelledby="account-detail-tab">
                                         <div class="card">
                                             <div class="card-header">
                                                 <h5>Account Details</h5>
                                             </div>
                                             <div class="card-body">
                                                 <div class="profile-details">
-                                                    <h5>User Name: <%= saveData.username %></h5>
-                                                    <h5>Email: <%= saveData.email %></h5>
-                                                    <h5>Mobile Number: <%= saveData.mobile_number %></h5>
-                                                    <a href="/editProfile?id=<%= saveData._id %>" class="btn btn-sm font-sm rounded btn-brand">
+                                                    <h5>User Name: <%= saveData.username %>
+                                                    </h5>
+                                                    <h5>Email: <%= saveData.email %>
+                                                    </h5>
+                                                    <h5>Mobile Number: <%= saveData.mobile_number %>
+                                                    </h5>
+                                                    <a href="/editProfile?id=<%= saveData._id %>"
+                                                        class="btn btn-sm font-sm rounded btn-brand">
                                                         <i class="material-icons md-edit"></i> Edit Profile
                                                     </a>
                                                 </div>
@@ -291,89 +305,132 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <% order.forEach(order => { %>
+                                                            <% order.forEach(order=> { %>
                                                                 <tr>
                                                                     <td>
-                                                                        <% order.items.forEach((item, index) => { %>
-                                                                            <% if (item.product && item.product.name) { %>
-                                                                                <%= item.product.name %><%= (index < order.items.length - 1) ? ', ' : '' %>
-                                                                            <% } else { %>
-                                                                                Product not available
-                                                                            <% } %>
-                                                                        <% }) %>
+                                                                        <% order.items.forEach((item, index)=> { %>
+                                                                            <% if (item.product && item.product.name) {
+                                                                                %>
+                                                                                <%= item.product.name %>
+                                                                                    <%= (index < order.items.length - 1)
+                                                                                        ? ', ' : '' %>
+                                                                                        <% } else { %>
+                                                                                            Product not available
+                                                                                            <% } %>
+                                                                                                <% }) %>
                                                                     </td>
-                                                                    <td><%= new Date(order.orderDate).toLocaleDateString() %></td>
-                                                                    <td><%= order.orderStatus %></td>
-                                                                    <td><%= order.billTotal %></td>
                                                                     <td>
-                                                                        <a href='orderDetails?orderid=<%= order._id %>' class="btn btn-small btn-primary">View</a>
+                                                                        <%= new
+                                                                            Date(order.orderDate).toLocaleDateString()
+                                                                            %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= order.orderStatus %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= order.billTotal %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href='orderDetails?orderid=<%= order._id %>'
+                                                                            class="btn btn-small btn-primary">View</a>
                                                                     </td>
                                                                 </tr>
-                                                            <% }) %>
+                                                                <% }) %>
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    
 
-                                    <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+
+                                    <div class="tab-pane fade" id="address" role="tabpanel"
+                                        aria-labelledby="address-tab">
                                         <div class="card">
                                             <div class="card-header">
                                                 <h5>Address Form</h5>
                                             </div>
                                             <div class="card-body">
-                                                <% if(address.length > 0) { %>
-                                                    <% for(let i = 0; i < address.length; i++) { %>
+                                                <% if(address.length> 0) { %>
+                                                    <% for(let i=0; i < address.length; i++) { %>
                                                         <div class="address-item mb-4">
-                                                            <p><strong>Address:</strong> <%= address[i].address %></p>
-                                                            <p><strong>City:</strong> <%= address[i].city %></p>
-                                                            <p><strong>State:</strong> <%= address[i].state %></p>
-                                                            <p><strong>Pincode:</strong> <%= address[i].pincode %></p>
-                                                            <a href="/editAddress?id=<%= address[i]._id %>" class="btn btn-sm font-sm rounded btn-brand">
+                                                            <p><strong>Address:</strong>
+                                                                <%= address[i].address %>
+                                                            </p>
+                                                            <p><strong>City:</strong>
+                                                                <%= address[i].city %>
+                                                            </p>
+                                                            <p><strong>State:</strong>
+                                                                <%= address[i].state %>
+                                                            </p>
+                                                            <p><strong>Pincode:</strong>
+                                                                <%= address[i].pincode %>
+                                                            </p>
+                                                            <a href="/editAddress?id=<%= address[i]._id %>"
+                                                                class="btn btn-sm font-sm rounded btn-brand">
                                                                 <i class="material-icons md-edit"></i> Edit Address
                                                             </a>
-                                                            <a href="/deleteAddress?addressId=<%= address[i]._id %>" class="btn btn-sm font-sm rounded btn-brand">
+                                                            <a href="/deleteAddress?addressId=<%= address[i]._id %>"
+                                                                class="btn btn-sm font-sm rounded btn-brand">
                                                                 <i class="material-icons md-delete"></i> Delete Address
                                                             </a>
                                                         </div>
-                                                    <% } %>
-                                                <% } else { %>
-                                                    <p>No addresses found</p>
-                                                <% } %>
-                                                <br><br>
-                                                <div class="container">
-                                                    <form id="addressForm" action="/updateAddress" method="post" novalidate>
-                                                        <div class="form-group mb-3">
-                                                            <label for="address" class="form-label">Address:</label>
-                                                            <input type="text" id="address" name="address" class="form-control" required >
-                                                            <div class="invalid-feedback">Please enter an address.</div>
+                                                        <% } %>
+                                                            <% } else { %>
+                                                                <p>No addresses found</p>
+                                                                <% } %>
+                                                                    <br><br>
+                                                                    <div class="container">
+                                                                        <form id="addressForm" action="/updateAddress"
+                                                                            method="post" novalidate>
+                                                                            <div class="form-group mb-3">
+                                                                                <label for="address"
+                                                                                    class="form-label">Address:</label>
+                                                                                <input type="text" id="address"
+                                                                                    name="address" class="form-control"
+                                                                                    required>
+                                                                                <div class="invalid-feedback">Please
+                                                                                    enter an address.</div>
 
-                                                        </div>
-                                                        <div class="form-group mb-3">
-                                                            <label for="city" class="form-label">City:</label>
-                                                            <input type="text" id="city" name="city" class="form-control" required>
-                                                            <div class="invalid-feedback">Please enter a city.</div>
+                                                                            </div>
+                                                                            <div class="form-group mb-3">
+                                                                                <label for="city"
+                                                                                    class="form-label">City:</label>
+                                                                                <input type="text" id="city" name="city"
+                                                                                    class="form-control" required>
+                                                                                <div class="invalid-feedback">Please
+                                                                                    enter a city.</div>
 
-                                                        </div>
-                                                        <div class="form-group mb-3">
-                                                            <label for="state" class="form-label">State:</label>
-                                                            <input type="text" id="state" name="state" class="form-control" required>
-                                                            <div class="invalid-feedback">Please enter a state.</div>
+                                                                            </div>
+                                                                            <div class="form-group mb-3">
+                                                                                <label for="state"
+                                                                                    class="form-label">State:</label>
+                                                                                <input type="text" id="state"
+                                                                                    name="state" class="form-control"
+                                                                                    required>
+                                                                                <div class="invalid-feedback">Please
+                                                                                    enter a state.</div>
 
-                                                        </div>
-                                                        <div class="form-group mb-3">
-                                                            <label for="pincode" class="form-label">Pincode:</label>
-                                                            <input type="number" id="pincode" name="pincode" class="form-control" required>
-                                                            <div class="invalid-feedback" id="pincodeError">Please enter a valid 6-digit pincode without repeating digits.</div>
+                                                                            </div>
+                                                                            <div class="form-group mb-3">
+                                                                                <label for="pincode"
+                                                                                    class="form-label">Pincode:</label>
+                                                                                <input type="number" id="pincode"
+                                                                                    name="pincode" class="form-control"
+                                                                                    required>
+                                                                                <div class="invalid-feedback"
+                                                                                    id="pincodeError">Please enter a
+                                                                                    valid 6-digit pincode without
+                                                                                    repeating digits.</div>
 
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <button type="submit" class="btn btn-brand btn-block">Add Address</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <button type="submit"
+                                                                                    class="btn btn-brand btn-block">Add
+                                                                                    Address</button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
                                             </div>
                                         </div>
                                     </div>
@@ -392,39 +449,50 @@
                                                             <tr>
                                                                 <th>Date</th>
                                                                 <th>Description</th>
-                                                                 <th>Amount</th>
+                                                                <th>Amount</th>
                                                                 <th>Status</th>
 
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <% if (walletData && walletData.transactions && walletData.transactions.length > 0) { %>
-                                                                <% walletData.transactions.forEach(transaction => { %>
+                                                            <% if (walletData && walletData.transactions &&
+                                                                walletData.transactions.length> 0) { %>
+                                                                <% walletData.transactions.forEach(transaction=> { %>
                                                                     <tr>
-                                                                        <td><%= new Date(transaction.date).toLocaleDateString() %></td>
-                                                                        <td><%= transaction.description %></td>
-                                                                        <td>₹<%= transaction.amount %></td>
-                                                                        <td><%= transaction.status %></td>
+                                                                        <td>
+                                                                            <%= new
+                                                                                Date(transaction.date).toLocaleDateString()
+                                                                                %>
+                                                                        </td>
+                                                                        <td>
+                                                                            <%= transaction.description %>
+                                                                        </td>
+                                                                        <td>₹<%= transaction.amount %>
+                                                                        </td>
+                                                                        <td>
+                                                                            <%= transaction.status %>
+                                                                        </td>
                                                                     </tr>
-                                                                <% }); %>
-                                                            <% } else { %>
-                                                                <tr>
-                                                                    <td colspan="4" class="no-transactions">No transactions found.</td>
-                                                                </tr>
-                                                            <% } %>
+                                                                    <% }); %>
+                                                                        <% } else { %>
+                                                                            <tr>
+                                                                                <td colspan="4" class="no-transactions">
+                                                                                    No transactions found.</td>
+                                                                            </tr>
+                                                                            <% } %>
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
-                                         </div>
+                                        </div>
 
- 
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </section>
     </main>
 
@@ -436,14 +504,14 @@
     <!-- Template JS -->
     <script src="assets/js/main.js?v=3.4"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const form = document.getElementById("addressForm");
             const pincodeInput = document.getElementById("pincode");
             const pincodeError = document.getElementById("pincodeError");
-    
-            form.addEventListener("submit", function(event) {
+
+            form.addEventListener("submit", function (event) {
                 let valid = true;
-                
+
                 // Custom pincode validation
                 const pincode = pincodeInput.value;
                 if (pincode.length !== 6 || isNaN(pincode) || /^(\d)\1*$/.test(pincode)) {
@@ -454,12 +522,12 @@
                     pincodeInput.classList.remove("is-invalid");
                     pincodeError.style.display = 'none';
                 }
-    
+
                 if (!form.checkValidity() || !valid) {
                     event.preventDefault();
                     event.stopPropagation();
                 }
-    
+
                 form.classList.add("was-validated");
             }, false);
         });

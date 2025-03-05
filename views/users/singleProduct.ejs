@@ -14,35 +14,34 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=3.4">
-    
+
     <style>
         .button {
-  display: inline-block;
-  padding: 10px 20px;
-  text-decoration: none; 
-  color: #ffffff;
-  background-color: #007bff; 
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  text-align: center;
-}
-
-.button:hover {
-  background-color: #0056b3; 
-}
-
-.button-add-to-cart {
-}
-
-:root {
-            --primary-color: #000000; 
-            --text-color: #ffffff; 
-            --hover-color: #333333; 
-            --button-color: #00bfae; 
+            display: inline-block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
         }
 
-        
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .button-add-to-cart {}
+
+        :root {
+            --primary-color: #000000;
+            --text-color: #ffffff;
+            --hover-color: #333333;
+            --button-color: #00bfae;
+        }
+
+
         .navbar {
             background-color: var(--primary-color);
             padding: 10px 20px;
@@ -202,31 +201,32 @@
         .footer .social-links a:hover {
             color: var(--hover-color);
         }
-        
-        .out-of-stock {
-            background-color: red; 
-            color: white;          
-            border: none;           
-            padding: 10px 20px;      
-            font-size: 16px;         
-            cursor: not-allowed;   
-            font-weight: bold;       
-            text-transform: uppercase; 
-       }
 
-       .out-of-stock:disabled {
-            background-color: red; 
-            color: white;          
-            cursor: not-allowed;  
-       }
+        .out-of-stock {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: not-allowed;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .out-of-stock:disabled {
+            background-color: red;
+            color: white;
+            cursor: not-allowed;
+        }
     </style>
 
-   
+
 </head>
 
 <body>
     <!-- Quick view -->
-    <div class="modal fade custom-modal" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
+    <div class="modal fade custom-modal" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -261,17 +261,18 @@
                                 </div>
                                 <!-- THUMBNAILS -->
                                 <div class="slider-nav-thumbnails pl-15 pr-15">
-                                    <img src="/adminImages/" alt="product image"></div>
-                                       
+                                    <img src="/adminImages/" alt="product image">
                                 </div>
+
                             </div>
-                            <!-- End Gallery -->
-                        
                         </div>
+                        <!-- End Gallery -->
+
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <nav class="navbar">
         <div class="logo">
@@ -310,7 +311,7 @@
                     </button>
                 </div>
             </div>
-          
+
         </div>
     </div>
     <main class="main">
@@ -318,7 +319,7 @@
             <div class="container">
                 <div class="breadcrumb">
                     <a href="index.html" rel="nofollow">Home</a>
-                    <span></span> Product Details 
+                    <span></span> Product Details
                     <span></span> Abstract Print Patchwork Dress
                 </div>
             </div>
@@ -333,20 +334,20 @@
                                     <div class="detail-gallery">
                                         <span class="zoom-icon"><i class="fi-rs-search"></i></span>
                                         <!-- MAIN SLIDES -->
-                                        <div class="product-image-slider" >
-                                            <% products.images.reverse().forEach(image => { %>
-                                            <figure class="border-radius-12 shadow-sm">
-                                                <img src="/adminImages/<%=image%>" alt="product image">
-                                            </figure>
-                                            <%})%>
+                                        <div class="product-image-slider">
+                                            <% products.images.reverse().forEach(image=> { %>
+                                                <figure class="border-radius-12 shadow-sm">
+                                                    <img src="/adminImages/<%=image%>" alt="product---image">
+                                                </figure>
+                                                <%})%>
                                         </div>
                                         <div class="slider-nav-thumbnails pl-15 pr-15">
                                             <%products.images.forEach(image=> {%>
                                                 <div class="thumb-item">
 
-                                            <img src="/adminImages/<%= image  %>" alt="product image">
-                                        </div>
-                                            <% }) %>
+                                                    <img src="/adminImages/<%= image  %>" alt="product image">
+                                                </div>
+                                                <% }) %>
                                         </div>
 
                                     </div>
@@ -354,82 +355,104 @@
                                     <div class="social-icons single-share mt-20">
                                         <ul class="text-grey-5 d-inline-block">
                                             <li><strong class="mr-10">Share this:</strong></li>
-                                            <li class="social-facebook"><a href="#"><img src="assets/imgs/theme/icons/icon-facebook.svg" alt=""></a></li>
-                                            <li class="social-twitter"> <a href="#"><img src="assets/imgs/theme/icons/icon-twitter.svg" alt=""></a></li>
-                                            <li class="social-instagram"><a href="#"><img src="assets/imgs/theme/icons/icon-instagram.svg" alt=""></a></li>
-                                            <li class="social-linkedin"><a href="#"><img src="assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a></li>
+                                            <li class="social-facebook"><a href="#"><img
+                                                        src="assets/imgs/theme/icons/icon-facebook.svg" alt=""></a></li>
+                                            <li class="social-twitter"> <a href="#"><img
+                                                        src="assets/imgs/theme/icons/icon-twitter.svg" alt=""></a></li>
+                                            <li class="social-instagram"><a href="#"><img
+                                                        src="assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                                            </li>
+                                            <li class="social-linkedin"><a href="#"><img
+                                                        src="assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-12 col-xs-12">
                                     <div class="detail-info">
-                                        <h2 class="title-detail text-uppercase font-weight-bold mb-3"><%= products.name %></h2>
+                                        <h2 class="title-detail text-uppercase font-weight-bold mb-3">
+                                            <%= products.name %>
+                                        </h2>
                                         <div class="product-detail-rating mb-3">
-                                           
+
                                             <div class="product-rate-cover text-end">
                                                 <div class="product-rate d-inline-block">
                                                     <div class="product-rating" style="width:90%">
                                                     </div>
                                                 </div>
-                                                <span class="font-small ml-5 text-muted"><%= products.ratings %></span>
+                                                <span class="font-small ml-5 text-muted">
+                                                    <%= products.ratings %>
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="clearfix product-price-cover mb-4">
                                             <div class="product-price primary-color float-left">
-                                                <ins><span class="text-brand"><%= products.price %>Rs</span></ins>
+                                                <ins><span class="text-brand">
+                                                        <%= products.price %>Rs
+                                                    </span></ins>
                                                 <ins><span class="old-price font-md ml-15">200.00Rs</span></ins>
-                                                <span class="save-price  font-md color3 ml-15"><%= products.discount %></span>
+                                                <span class="save-price  font-md color3 ml-15">
+                                                    <%= products.discount %>
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="bt-1 border-color-1 mt-15 mb-15"></div>
                                         <div class="short-desc mb-4">
-                                            <p><%= products.description %></p>
+                                            <p>
+                                                <%= products.description %>
+                                            </p>
                                         </div>
                                         <div class="product_sort_info font-xs mb-4">
                                             <ul>
-                                                
-                                                <li class="mb-10"><i class="fi-rs-refresh mr-5"></i> 30 Day Return Policy</li>
-                                                <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery available</li>
+
+                                                <li class="mb-10"><i class="fi-rs-refresh mr-5"></i> 30 Day Return
+                                                    Policy</li>
+                                                <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery available
+                                                </li>
                                             </ul>
                                         </div>
-                                       
-                                       
+
+
                                         <div class="bt-1 border-color-1 mt-4"></div>
                                         <div class="detail-extralink">
-                                            <div class="product-extra-link2 mt-3" style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
-                                                
+                                            <div class="product-extra-link2 mt-3"
+                                                style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+
                                                 <!-- Add to Cart Button -->
-                                                <% if(products.stock > 0 && products.status !== 'OutOfStock'){ %>
-                                                    <a id="addToCart-<%= products._id %>" href="javascript:void(0);" 
-                                                        class="button button-add-to-cart" 
+                                                <% if(products.stock> 0 && products.status !== 'OutOfStock'){ %>
+                                                    <a id="addToCart-<%= products._id %>" href="javascript:void(0);"
+                                                        class="button button-add-to-cart"
                                                         style="width: 200px; padding: 10px; background: #ff4500; color: white; text-align: center; border-radius: 5px;"
                                                         onclick="addToCart('<%= products._id %>')">
                                                         🛒 Add to Cart
-                                                     </a>
-                                                     
-                                                     <% } else { %>
-                                                    <button class="button button-add-to-cart out-of-stock" 
-                                                        style="width: 200px; padding: 10px; background: gray; color: white; text-align: center; border-radius: 5px;" 
-                                                        disabled>
-                                                        ❌ Out of Stock
-                                                    </button>
-                                                <% } %>
-                                        
-                                                <!-- Add to Wishlist Button -->
-                                                <button class="button button-add-to-wishlist" 
-                                                    aria-label="Add To Wishlist"
-                                                    onclick="addToWishlist('<%= products._id %>', this)" 
-                                                    style="width: 200px; padding: 10px; background: <%= isInWishlist ? 'green' : '#ff9900' %>; 
+                                                    </a>
+
+                                                    <% } else { %>
+                                                        <button class="button button-add-to-cart out-of-stock"
+                                                            style="width: 200px; padding: 10px; background: gray; color: white; text-align: center; border-radius: 5px;"
+                                                            disabled>
+                                                            ❌ Out of Stock
+                                                        </button>
+                                                        <% } %>
+
+                                                            <!-- Add to Wishlist Button -->
+                                                            <button class="button button-add-to-wishlist"
+                                                                aria-label="Add To Wishlist"
+                                                                onclick="addToWishlist('<%= products._id %>', this)"
+                                                                style="width: 200px; padding: 10px; background: <%= isInWishlist ? 'green' : '#ff9900' %>; 
                                                            color: white; text-align: center; border-radius: 5px; cursor: pointer;"
-                                                    <% if (isInWishlist) { %> disabled <% } %>>
-                                                    <%= isInWishlist ? '✔️ Already in Wishlist' : '❤️ Add to Wishlist' %>
-                                                </button>
-                                        
+                                                                <% if (isInWishlist) { %> disabled <% } %>>
+                                                                    <%= isInWishlist ? '✔️ Already in Wishlist'
+                                                                        : '❤️ Add to Wishlist' %>
+                                                            </button>
+
                                             </div>
                                         </div>
-                                          <ul class="product-meta font-xs color-grey mt-4">
-                                           
-                                            <li>Availability:<span class="in-stock text-success ml-5"><%= products.stock%></span></li>
+                                        <ul class="product-meta font-xs color-grey mt-4">
+
+                                            <li>Availability:<span class="in-stock text-success ml-5">
+                                                    <%= products.stock%>
+                                                </span></li>
                                         </ul>
                                     </div>
                                     <!-- Detail Info -->
@@ -438,104 +461,131 @@
                             <div class="tab-style3 mt-4">
                                 <ul class="nav nav-tabs text-uppercase">
                                     <li class="nav-item">
-                                        <a class="nav-link active" id="Description-tab" data-bs-toggle="tab" href="#Description">Description</a>
+                                        <a class="nav-link active" id="Description-tab" data-bs-toggle="tab"
+                                            href="#Description">Description</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="Reviews-tab" data-bs-toggle="tab" href="#Reviews">Reviews</a>
+                                        <a class="nav-link" id="Reviews-tab" data-bs-toggle="tab"
+                                            href="#Reviews">Reviews</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content shop_info_tab entry-main-content">
                                     <div class="tab-pane fade show active" id="Description">
                                         <div class="">
-                                            <p><%= products.description%></p>
-                                            
+                                            <p>
+                                                <%= products.description%>
+                                            </p>
+
                                         </div>
                                     </div>
-                                
+
                                     <div class="tab-pane fade" id="Reviews">
                                         <div class="comments-area">
                                             <div class="row">
                                                 <div class="col-lg-8">
                                                     <h4 class="mb-30">Customer questions & answers</h4>
                                                     <div class="comment-list" id="reviews-list">
-                                                        <%if(reviews && reviews.length > 0){%>
-                                                            <%reviews.forEach(review => {%>
-                                                        <div class="single-comment justify-content-between d-flex">
-                                                            <div class="user justify-content-between d-flex">
-                                                                <div class="desc">
-                                                                    <div class="product-rate d-inline-block">
-                                                                        <div class="product-rating" style="width:<%= review.rating * 20%>%">
+                                                        <%if(reviews && reviews.length> 0){%>
+                                                            <%reviews.forEach(review=> {%>
+                                                                <div
+                                                                    class="single-comment justify-content-between d-flex">
+                                                                    <div class="user justify-content-between d-flex">
+                                                                        <div class="desc">
+                                                                            <div class="product-rate d-inline-block">
+                                                                                <div class="product-rating"
+                                                                                    style="width:<%= review.rating * 20%>%">
+                                                                                </div>
+                                                                            </div>
+                                                                            <p>
+                                                                                <%= review.comment%>
+                                                                            </p>
+                                                                            <small>By <%= review.userId.username %> on
+                                                                                    <%= new
+                                                                                        Date(review.createdAt).toLocaleDateString()
+                                                                                        %></small>
                                                                         </div>
                                                                     </div>
-                                                                    <p><%= review.comment%></p>
-                                                                    <small>By <%= review.userId.username %> on <%= new Date(review.createdAt).toLocaleDateString() %></small>
-                                                            
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                        <%});%>
-                                                     
-                                                          <%}%>  
+                                                                <%});%>
+                                                                    <%}%>
                                                     </div>
                                                 </div>
-                                    
+
                                             </div>
                                         </div>
+
+
                                         <div class="review-form">
                                             <h4>Write a review</h4>
-                                            <%if (hasPurchased){%>
-                                            <form id="review-form">
-                                                <label for="rating">Rating:</label>
-                                                <select id="rating" name="rating" required>
-                                                    <option value="1">1</option>
-                                                    <option value="2">2</option>
-                                                    <option value="3">3</option>
-                                                    <option value="4">4</option>
-                                                    <option value="5">5</option>
-                                                </select>
-                                                <label for="comment">Comment:</label>
-                                                <textarea id="comment" name="comment" required></textarea>
-                                                <button type="submit">Submit Review</button>
+
+                                            <!-- Only show the review form if the user has ordered the product -->
+                                            <form id="review-form" <% if (!hasOrdered) { %> style="display: none;"
+                                                <% } %> >
+                                                    <label for="rating">Rating:</label>
+                                                    <select id="rating" name="rating" required>
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                    </select>
+
+                                                    <label for="comment">Comment:</label>
+                                                    <textarea id="comment" name="comment" required></textarea>
+
+                                                    <button type="submit">Submit Review</button>
                                             </form>
-                                            <% } else { %>
-                                                <p>You must purchase this product before leaving a review.</p>
-                                                <% } %>
-                                            
-                                         </div>  
-                                    
+
+                                            <!-- Message displayed if the user has not ordered the product -->
+                                            <div id="no-order-message" <% if (hasOrdered) { %> style="display:
+                                                none;" <% } %> >
+                                                    <p>You need to purchase this product before leaving a review.
+                                                    </p>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
                             <div class="row mt-60">
-                                <div class="col-12">                
+                                <div class="col-12">
                                     <h3 class="section-title style-1 mb-30">Related Products</h3>
                                 </div>
                                 <div class="col-12">
                                     <div class="row related-products">
-                                        <% relatedProducts.forEach(item => { %>
+                                        <% relatedProducts.forEach(item=> { %>
                                             <div class="col-lg-3 col-md-4 col-12 col-sm-6 mb-4">
-                                               <div class="product-cart-wrap small hover-up border-radius-12 shadow-sm">
-                                                <div class="product-img-action-wrap">
-                                                    <div class="product-img product-img-zoom">
-                                                        <a href="/singleProduct?id=<%= item._id %>" tabindex="0">
-                                                            <img class="default-img" src="/adminImages/<%= item.images[0] %>" alt="product image">
-                                                            <img class="hover-img" src="/adminImages/<%= item.images[0] %>" alt="product image">
-                                                        </a>
+                                                <div
+                                                    class="product-cart-wrap small hover-up border-radius-12 shadow-sm">
+                                                    <div class="product-img-action-wrap">
+                                                        <div class="product-img product-img-zoom">
+                                                            <a href="/singleProduct?id=<%= item._id %>" tabindex="0">
+                                                                <img class="default-img"
+                                                                    src="/adminImages/<%= item.images[0] %>"
+                                                                    alt="product image">
+                                                                <img class="hover-img"
+                                                                    src="/adminImages/<%= item.images[0] %>"
+                                                                    alt="product image">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="product-content-wrap text-center p-3">
+                                                        <h2><a href="/singleProduct?id=<%= item._id %>">
+                                                                <%= item.name %>
+                                                            </a></h2>
+                                                        <div class="rating-result" title="90%">
+                                                            <span></span>
+                                                        </div>
+                                                        <div class="product-price">
+                                                            <span>
+                                                                <%= item.price %>Rs
+                                                            </span>
+                                                            <span class="old-price">Rs245.8</span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="product-content-wrap text-center p-3">
-                                                    <h2><a href="/singleProduct?id=<%= item._id %>"><%= item.name %></a></h2>
-                                                    <div class="rating-result" title="90%">
-                                                        <span></span>
-                                                    </div>
-                                                    <div class="product-price">
-                                                        <span><%= item.price %>Rs</span>
-                                                        <span class="old-price">Rs245.8</span>
-                                                      </div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                        <% }) %>
+                                            </div>
+                                            <% }) %>
                                     </div>
                                 </div>
                             </div>
@@ -560,7 +610,7 @@
             <a href="#"><i class="fab fa-instagram"></i></a>
         </div>
     </footer>
-   
+
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
@@ -590,163 +640,182 @@
 
     <script>
 
-     async function addToCart(productId) {
-    try {
-    const response = await fetch(`/addToCart?productId=${productId}`, {
-      method: 'GET',
-      credentials: 'same-origin'
-    });
+        async function addToCart(productId) {
+            try {
+                const response = await fetch(`/addToCart?productId=${productId}`, {
+                    method: 'GET',
+                    credentials: 'same-origin'
+                });
 
-    if (response.ok) {
-      Swal.fire({
-        title: "Added to Cart!",
-        text: "Product has been added successfully.",
-        icon: "success",
-        showCancelButton: true,
-        confirmButtonText: "Go to Cart",
-        cancelButtonText: "Continue Shopping"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = '/cart';
+                if (response.ok) {
+                    Swal.fire({
+                        title: "Added to Cart!",
+                        text: "Product has been added successfully.",
+                        icon: "success",
+                        showCancelButton: true,
+                        confirmButtonText: "Go to Cart",
+                        cancelButtonText: "Continue Shopping"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/cart';
+                        }
+                    })
+
+                    // Disable the "Add to Cart" button after adding
+                    const button = document.getElementById(`addToCart-${productId}`);
+                    if (button) {
+                        button.innerText = "✔️ Already in Cart";
+                        button.style.background = "gray";
+                        button.style.pointerEvents = "none";
+                    }
+
+                } else {
+                    const result = await response.json();
+                    if (result.message === 'Out of stock') {
+                        const button = document.getElementById(`addToCart-${productId}`);
+                        if (button) {
+                            button.innerText = "Out of stock";
+                            button.href = "#";
+                            button.style.background = "gray";
+                        }
+
+                        Swal.fire({
+                            title: "Out of Stock!",
+                            text: "This product is currently unavailable.",
+                            icon: "error",
+                            confirmButtonText: "OK"
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire({
+                    title: "Error!",
+                    text: "Something went wrong. Please try again.",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                });
+            }
         }
-      })
 
-      // Disable the "Add to Cart" button after adding
-      const button = document.getElementById(`addToCart-${productId}`);
-      if (button) {
-        button.innerText = "✔️ Already in Cart";
-        button.style.background = "gray";
-        button.style.pointerEvents = "none";
-      }
-      
-    } else {
-      const result = await response.json();
-      if (result.message === 'Out of stock') {
-        const button = document.getElementById(`addToCart-${productId}`);
-        if (button) {
-          button.innerText = "Out of stock";
-          button.href = "#";
-          button.style.background = "gray";
+
+        function addToWishlist(productId, element) {
+            fetch('/wishlist/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productId: productId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        element.innerHTML = '✔️ Already in Wishlist';
+                        element.disabled = true;  // Prevent multiple clicks
+
+                        Swal.fire({
+                            title: "Added to Wishlist!",
+                            text: "This book has been added to your wishlist.",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Oops!",
+                            text: data.message || "Failed to add to wishlist.",
+                            icon: "error"
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Something went wrong. Try again!",
+                        icon: "error"
+                    });
+                })
         }
 
-        Swal.fire({
-          title: "Out of Stock!",
-          text: "This product is currently unavailable.",
-          icon: "error",
-          confirmButtonText: "OK"
+
+        document.getElementById('review-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            const rating = document.getElementById('rating').value;
+            const comment = document.getElementById('comment').value;
+
+            const reviewData = { rating, comment };
+            const token = localStorage.getItem('userToken');
+
+            try {
+                const orderCheckResponse = await fetch(`/product/${productId}/has-ordered`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+
+                const orderCheckResult = await orderCheckResponse.json();
+
+                if (!orderCheckResult.ordered) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'You need to purchase this product before leaving a review.',
+                        showConfirmButton: true
+                    });
+                    return; // Stop the function from continuing
+                }
+
+                // Step 2: If the user has ordered the product, proceed with adding the review
+                const response = await fetch(`/product/${productId}/review`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`, // Pass the JWT token
+                    },
+                    body: JSON.stringify(reviewData),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Review Added',
+                        text: 'Your review has been added successfully!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                    addReviewToDOM(result.review); // Add the review to the DOM
+                    document.getElementById('review-form').reset(); // Reset the form after submission
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: result.error || 'Something went wrong. Please try again later.',
+                        showConfirmButton: true
+                    });
+                }
+            } catch (error) {
+                console.error('Error adding review:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while submitting your review.',
+                    showConfirmButton: true
+                });
+            }
         });
-      }
-    }
-  } catch (error) {
-    console.error('Error:', error);
-    Swal.fire({
-      title: "Error!",
-      text: "Something went wrong. Please try again.",
-      icon: "error",
-      confirmButtonText: "OK"
-    });
-  }
-}
-
-
-function addToWishlist(productId, element) {
-    fetch('/wishlist/add', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ productId: productId })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            element.innerHTML = '✔️ Already in Wishlist';  
-            element.disabled = true;  // Prevent multiple clicks
-
-            Swal.fire({
-                title: "Added to Wishlist!",
-                text: "This book has been added to your wishlist.",
-                icon: "success",
-                showConfirmButton: false,
-                timer: 2000
-            });
-        } else {
-            Swal.fire({
-                title: "Oops!",
-                text: data.message || "Failed to add to wishlist.",
-                icon: "error"
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        Swal.fire({
-            title: "Error!",
-            text: "Something went wrong. Try again!",
-            icon: "error"
-        });
-    })
-}
-
-document.getElementById('review-form').addEventListener('submit', async function (e) {
-    e.preventDefault(); 
-
-    const urlParams = new URLSearchParams(window.location.search);  // Get query parameters
-    const productId = urlParams.get('id');  // Get 'id' from the URL
-    const rating = document.getElementById('rating').value;
-    const comment = document.getElementById('comment').value;
-
-    const reviewData = { rating, comment };
-
-    const token = localStorage.getItem('userToken'); // Get the token from localStorage, sessionStorage, or however you're storing it.
-
-    try {
-        const response = await fetch(`/product/${productId}/review`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`, // Pass the JWT token if you have one
-            },
-            body: JSON.stringify(reviewData),
-        });
-
-        const result = await response.json();
-        if (response.ok) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Review Added',
-                text: 'Your review has been added successfully!',
-                showConfirmButton: false,
-                timer: 1500
-            });
-
-            addReviewToDOM(result.review);
-            document.getElementById('review-form').reset();
-
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: result.error || 'Something went wrong. Please try again later.',
-                showConfirmButton: true
-            });
-        }
-    } catch (error) {
-        console.error('Error adding review:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'An error occurred while submitting your review.',
-            showConfirmButton: true
-        });
-    }
-})
-
-function addReviewToDOM(review) {
-    const reviewsList = document.getElementById('reviews-list');
-    const reviewElement = document.createElement('div');
-    reviewElement.classList.add('single-comment', 'justify-content-between', 'd-flex');
-    reviewElement.innerHTML = `
+        function addReviewToDOM(review) {
+            const reviewsList = document.getElementById('reviews-list');
+            const reviewElement = document.createElement('div');
+            reviewElement.classList.add('single-comment', 'justify-content-between', 'd-flex');
+            reviewElement.innerHTML = `
         <div class="user justify-content-between d-flex">
             <div class="desc">
                 <div class="product-rate d-inline-block">
@@ -758,14 +827,13 @@ function addReviewToDOM(review) {
         </div>
     `;
 
-    reviewsList.prepend(reviewElement); 
+            reviewsList.prepend(reviewElement); // Prepend the review to the top of the list
+            reviewsList.scrollIntoView({ behavior: 'smooth' }); // Scroll to the top of the reviews list
+        }
 
-    reviewsList.scrollIntoView({ behavior: 'smooth' });
-}
+    </script>
 
-</script>
-      
-  
+
 </body>
 
 </html>

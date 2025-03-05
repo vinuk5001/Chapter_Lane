@@ -11,13 +11,11 @@
     <meta property="og:type" content="">
     <meta property="og:url" content="">
     <meta property="og:image" content="">
-    <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="adminassets/imgs/theme/favicon.svg">
 
-    <!-- Template CSS -->
     <link href="adminassets/css/main.css" rel="stylesheet" type="text/css" />
-    <!-- Cropper.js CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet"
+        type="text/css" />
 
     <style>
         body {
@@ -120,7 +118,8 @@
                 <img src="adminassets/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard">
             </a>
             <div>
-                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+                </button>
             </div>
         </div>
         <nav>
@@ -134,7 +133,7 @@
                     <a class="menu-link" href="users"> <i class="icon material-icons md-store"></i>
                         <span class="text">Users</span>
                     </a>
-                    <div class="submenu"> 
+                    <div class="submenu">
                         <a href="/admin/userlist">Users List</a>
                     </div>
                 </li>
@@ -179,7 +178,7 @@
                     <div class="submenu">
                         <a href="/admin/addCoupon">Create Coupon</a>
                     </div>
-                </li> 
+                </li>
                 <li class="menu-item has-submenu ">
                     <a class="menu-link" href="SalesReport"> <i class="icon material-icons md-card_giftcard"></i>
                         <span class="text">Sales</span>
@@ -187,25 +186,29 @@
                     <div class="submenu">
                         <a href="/admin/salesReport">sales report</a>
                     </div>
-                </li> 
+                </li>
             </ul>
         </nav>
+
     </aside>
     <main class="main-wrap">
         <header class="main-header navbar">
             <div class="col-search">
             </div>
             <div class="col-nav">
-                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                        class="material-icons md-apps"></i> </button>
                 <ul class="nav">
                     <li class="nav-item">
-                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                        <a href="#" class="requestfullscreen nav-link btn-icon"><i
+                                class="material-icons md-cast"></i></a>
                     </li>
                     <li class="dropdown nav-item me-3">
-                       
+
                     </li>
                 </ul>
             </div>
@@ -232,7 +235,8 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="price">Price</label>
-                            <input type="number" class="form-control" id="price" name="price" required min="0.01" step="0.01">
+                            <input type="number" class="form-control" id="price" name="price" required min="0.01"
+                                step="0.01">
                             <div id="priceError" class="error"></div>
                         </div>
                         <div class="mb-3">
@@ -242,15 +246,18 @@
                         </div>
                         <div class="mb-4">
                             <label class="form-label" for="description">Description</label>
-                            <textarea placeholder="Type here" name="description" id="description" class="form-control" rows="4" required></textarea>
+                            <textarea placeholder="Type here" name="description" id="description" class="form-control"
+                                rows="4" required></textarea>
                             <div id="descriptionError" class="error"></div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="category">Category</label>
                             <select class="form-select" id="category" name="category" required>
-                                <% categories.forEach(item => { %>
-                                <option value="<%= item._id %>"><%= item.name %></option>
-                                <% }) %>
+                                <% categories.forEach(item=> { %>
+                                    <option value="<%= item._id %>">
+                                        <%= item.name %>
+                                    </option>
+                                    <% }) %>
                             </select>
                             <div id="categoryError" class="error"></div>
                         </div>
@@ -268,21 +275,7 @@
                             </select>
                             <div id="statusError" class="error"></div>
                         </div>
-                        <!-- <div class="mb-3">
-                            <label class="form-label" for="ratings">Ratings (1-5)</label>
-                            <input type="number" class="form-control" id="ratings" name="ratings" min="1" max="5" step="0.1" required>
-                            <div id="ratingsError" class="error"></div>
-                        </div> -->
-                        <!-- <div class="mb-4">
-                            <label class="form-label" for="highlights">Highlights/Specs</label>
-                            <textarea class="form-control" id="highlights" name="highlights" rows="3" required></textarea>
-                            <div id="highlightsError" class="error"></div>
-                        </div> -->
-                        <!-- <div class="mb-4">
-                            <label class="form-label" for="reviews">Reviews</label>
-                            <textarea class="form-control" id="reviews" name="reviews" rows="3" required></textarea>
-                            <div id="reviewsError" class="error"></div>
-                        </div> -->
+
                         <div class="mb-3">
                             <label class="form-label" for="files">Images</label>
                             <input type="file" class="form-control" id="files" name="files" multiple required>
@@ -292,7 +285,6 @@
                         <div class="spin error" id="image-error"></div>
                         <button type="submit" class="btn btn-primary" id="submit-btn">Submit</button>
                     </form>
-                    <!-- Cropper Modal -->
                     <div id="cropper-modal">
                         <div class="modal-content">
                             <div class="crop-container">
@@ -326,7 +318,7 @@
         const filesInput = document.getElementById('files');
         let selectedFiles = [];
 
-        filesInput.addEventListener('change', function(event) {
+        filesInput.addEventListener('change', function (event) {
             selectedFiles = Array.from(event.target.files);
             if (selectedFiles.length > 0) {
                 currentFileIndex = 0;
@@ -336,20 +328,20 @@
 
         function loadAndCropImage(file) {
             const reader = new FileReader();
-            reader.onload = function(event) {
+            reader.onload = function (event) {
                 cropperImage.src = event.target.result;
                 cropperModal.style.display = 'block';
                 cropper = new Cropper(cropperImage, {
-                    aspectRatio:.6,
-                    viewMode:2,
+                    aspectRatio: .6,
+                    viewMode: 2,
                 });
             };
             reader.readAsDataURL(file);
         }
 
-        document.getElementById('crop-button').addEventListener('click', function() {
+        document.getElementById('crop-button').addEventListener('click', function () {
             const canvas = cropper.getCroppedCanvas();
-            canvas.toBlob(function(blob) {
+            canvas.toBlob(function (blob) {
                 const url = URL.createObjectURL(blob);
                 const img = document.createElement('img');
                 img.src = url;
@@ -359,14 +351,12 @@
                 cropper.destroy();
                 cropperImage.src = '';
 
-                // Replace the original file with the cropped file
                 selectedFiles[currentFileIndex] = new File([blob], `cropped_image_${currentFileIndex}.jpg`, { type: 'image/jpeg' });
 
                 currentFileIndex++;
                 if (currentFileIndex < selectedFiles.length) {
                     loadAndCropImage(selectedFiles[currentFileIndex]);
                 } else {
-                    // Update the input element with the cropped files
                     const dataTransfer = new DataTransfer();
                     selectedFiles.forEach(file => dataTransfer.items.add(file));
                     filesInput.files = dataTransfer.files;
@@ -374,7 +364,7 @@
             });
         });
 
-        document.getElementById('cancel-crop-button').addEventListener('click', function() {
+        document.getElementById('cancel-crop-button').addEventListener('click', function () {
             cropperModal.style.display = 'none';
             cropper.destroy();
             cropperImage.src = '';
@@ -385,7 +375,7 @@
             }
         });
 
-        document.getElementById('submit-btn').addEventListener("click", function(event) {
+        document.getElementById('submit-btn').addEventListener("click", function (event) {
             event.preventDefault();
             const name = document.getElementById("name").value.trim();
             const price = document.getElementById("price").value.trim();
@@ -416,13 +406,12 @@
                 stockError.textContent = 'Please enter a valid positive integer for stock';
                 isValid = false;
             }
-            if(!/^\d+$/.test(discount) || parseInt(discount) < 0 || parseInt(discount) > 100){
+            if (!/^\d+$/.test(discount) || parseInt(discount) < 0 || parseInt(discount) > 100) {
                 discountError.textContent = 'Please enter a valid discount between 0 and 100';
                 isValid = false;
-            } else{
+            } else {
                 discountError.textContent = "";
             }
-
             const files = filesInput.files;
             imageError.textContent = "";
 
@@ -446,4 +435,5 @@
         });
     </script>
 </body>
+
 </html>

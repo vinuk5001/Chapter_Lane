@@ -9,29 +9,25 @@ const Review = require("../models/reviewsModel");
 const mongoose = require("mongoose");
 
 
+//------------------------Cash On Delivery Order---------------------//
+
 const placeorder = async (req, res) => {
     try {
-        console.log("hiiiihloo")
         const userId = req.user.id;
         const { subtotal, addressId, discountedTotal, paymentMethod, selectedCoupons } = req.body;
-        console.log("selectedCoupons",selectedCoupons);
-
-        console.log("cashrequested", req.body);
         const address = await Address.findById(addressId);
-        console.log("cashaddress", address);
         const cart = await Cart.findOne({ userId });
         if (!cart) {
             return res.status(400).json({ message: 'Cart not found' });
         }
-        console.log("cashcart", cart);
         let totalDiscount = 0;
         let finalSubtotal = parseFloat(subtotal);
         let finalTotalAmount = finalSubtotal;
         let minAmount = 0;
         if (selectedCoupons && selectedCoupons.length > 0) {
             selectedCoupons.forEach((coupon) => {
-                const { couponId, discount,minAmount:couponMinAmount} = coupon;
-                  minAmount = Math.max(minAmount,couponMinAmount);
+                const { couponId, discount, minAmount: couponMinAmount } = coupon;
+                minAmount = Math.max(minAmount, couponMinAmount);
                 console.log(`Applying coupon: ${couponId}, Discount: ${discount}%,minAmount:${couponMinAmount}`);
 
                 if (finalTotalAmount >= couponMinAmount) {
@@ -43,18 +39,16 @@ const placeorder = async (req, res) => {
                 }
             });
             finalTotalAmount -= totalDiscount;
-            console.log("Final Total Amount after discount:", finalTotalAmount);
         }
 
-        if(paymentMethod === 'cashondelivery' && finalTotalAmount > 1000){
-             return res.status(400).json({
-                message:'Cash on Delivery is not available for orders above Rs 1000.'
-             })
+        if (paymentMethod === 'cashondelivery' && finalTotalAmount > 1000) {
+            return res.status(400).json({
+                message: 'Cash on Delivery is not available for orders above Rs 1000.'
+            })
         }
 
         const cartItems = await Promise.all(cart.Product.map(async (item) => {
             const product = await Product.findById(item.productId);
-            console.log("cashProduct", product);
             if (!product) {
                 console.error(`Product with ID ${item.productId} not found`);
                 return null;
@@ -72,19 +66,16 @@ const placeorder = async (req, res) => {
         const newOrder = new Order({
             user: userId,
             items: validCartItems,
-            couponDiscount:totalDiscount,
-            couponAmount :minAmount, 
+            couponDiscount: totalDiscount,
+            couponAmount: minAmount,
             billTotal: finalTotalAmount,
-            paymentMethod: paymentMethod, 
+            paymentMethod: paymentMethod,
             subtotal: subtotal || finalTotalAmount,
             shippingAddress: address,
-            orderStatus : "Shipped"
+            orderStatus: "Shipped"
         });
 
-        console.log("cashnewOrder", newOrder);
         const saveData = await newOrder.save();
-        console.log("cashSaveDta", saveData);
-
         if (saveData) {
             await Promise.all(validCartItems.map(async (item) => {
                 const product = await Product.findById(item.product._id);
@@ -104,42 +95,37 @@ const placeorder = async (req, res) => {
     }
 }
 
+//-----------------------------Online Payment ----------------------------//
+
 
 const payonline = async (req, res) => {
     try {
         const userId = req.user.id;
-        console.log("onlineuserID", userId);
-        
+
         if (!userId) {
             return res.status(401).json({ message: "User not authenticated" });
         }
         const { subtotal, discountedTotal, paymentMethod, selectedCoupons } = req.query;
-        console.log("onlineRequestBody:", req.query);
-
         const addressId = req.query.address_id;
-        console.log("onlineaddressID", addressId);
-        
         if (!addressId) {
-            return res.status(400).json({message: "Address ID is required"});
+            return res.status(400).json({ message: "Address ID is required" });
         }
-
         const address = await Address.findById(addressId);
         if (!address) {
-            return res.status(400).json({message: "Address not found"});
+            return res.status(400).json({ message: "Address not found" });
         }
         const cart = await Cart.findOne({ userId: userId });
         if (!cart) {
             return res.status(400).json({ message: "Cart not found" });
         }
         let totalDiscount = 0;
-        let finalSubtotal= parseFloat(subtotal);
+        let finalSubtotal = parseFloat(subtotal);
         let finalTotalAmount = finalSubtotal;
         let parsedCoupons = [];
         let minAmount = 0;
         try {
             if (selectedCoupons) {
                 parsedCoupons = JSON.parse(decodeURIComponent(selectedCoupons));  // Decode and parse it into an array
-                console.log("Parsed selectedCoupons:", parsedCoupons);
             }
         } catch (err) {
             console.error("Error parsing selectedCoupons:", err);
@@ -147,21 +133,19 @@ const payonline = async (req, res) => {
 
         if (Array.isArray(parsedCoupons) && parsedCoupons.length > 0) {
             parsedCoupons.forEach((coupon) => {
-                const { couponId, discount, minAmount:couponMinAmount } = coupon;
-                minAmount = Math.max(minAmount,couponMinAmount);
+                const { couponId, discount, minAmount: couponMinAmount } = coupon;
+                minAmount = Math.max(minAmount, couponMinAmount);
                 console.log(`Applying coupon: ${couponId}, Discount: ${discount}%,minAmount:${couponMinAmount}`);
 
                 if (finalTotalAmount >= couponMinAmount) {
                     const discountAmount = (finalTotalAmount * discount) / 100;
                     totalDiscount += discountAmount;
-                    console.log(`Applying discount: Rs ${discountAmount}`);
                 } else {
                     console.log(`Coupon ${couponId} cannot be applied because the total amount is below the minimum`);
                 }
             });
 
             finalTotalAmount -= totalDiscount;
-            console.log("Final Total Amount after applying discounts:", finalTotalAmount);
         } else {
             console.log("No valid coupons or parsing failed.");
         }
@@ -186,19 +170,19 @@ const payonline = async (req, res) => {
         const newOrder = new Order({
             user: userId,
             items: validCartItems,
-            couponDiscount:totalDiscount,
-            couponAmount :minAmount, 
-            billTotal: finalTotalAmount, 
+            couponDiscount: totalDiscount,
+            couponAmount: minAmount,
+            billTotal: finalTotalAmount,
             paymentMethod: "onlinePayment",
-            subtotal: parseFloat(subtotal), 
-            shippingAddress: address, 
-            paymentFailed : false, 
-            orderStatus :'Shipped'                     
+            subtotal: parseFloat(subtotal),
+            shippingAddress: address,
+            paymentFailed: false,
+            orderStatus: 'Shipped'
         });
 
         const savedOrder = await newOrder.save();
         if (savedOrder) {
-    
+
             await Promise.all(validCartItems.map(async (item) => {
                 const product = await Product.findById(item.product._id);
                 if (product) {
@@ -219,20 +203,19 @@ const payonline = async (req, res) => {
 };
 
 
+//-------------------------------Repayment --------------------------------//
+
+
 const payonlineFailed = async (req, res) => {
     try {
         const userId = req.user.id;
-        console.log("Failed online user ID", userId);
-
         if (!userId) {
             return res.status(401).json({ message: "User not authenticated" });
         }
 
         const { subtotal, discountedTotal, paymentMethod, selectedCoupons } = req.query;
-        console.log("Failed online request body:", req.query);
 
         const addressId = req.query.address_id;
-        console.log("Failed online address ID", addressId);
 
         if (!addressId) {
             return res.status(400).json({ message: "Address ID is required" });
@@ -240,7 +223,7 @@ const payonlineFailed = async (req, res) => {
 
         const address = await Address.findById(addressId);
         if (!address) {
-            return res.status(400).json({message: "Address not found" });
+            return res.status(400).json({ message: "Address not found" });
         }
 
         const cart = await Cart.findOne({ userId: userId });
@@ -253,23 +236,20 @@ const payonlineFailed = async (req, res) => {
         let finalTotalAmount = finalSubtotal;
         let minAmount = 0;
 
-        // Parse selectedCoupons, if it is a string, decode and parse it into an array
         let parsedCoupons = [];
         try {
             if (selectedCoupons) {
-                parsedCoupons = JSON.parse(decodeURIComponent(selectedCoupons));  // Decode and parse it into an array
-                console.log("Parsed selectedCoupons:", parsedCoupons);
+                parsedCoupons = JSON.parse(decodeURIComponent(selectedCoupons));
             }
         } catch (err) {
             console.error("Error parsing selectedCoupons:", err);
         }
 
-        // If selectedCoupons is an array, apply discounts
         if (Array.isArray(parsedCoupons) && parsedCoupons.length > 0) {
             parsedCoupons.forEach((coupon) => {
-                const { couponId, discount, minAmount:couponMinAmount } = coupon;
-                minAmount = Math.max(minAmount,couponMinAmount);              
-                  console.log(`Applying coupon: ${couponId}, Discount: ${discount}%`);
+                const { couponId, discount, minAmount: couponMinAmount } = coupon;
+                minAmount = Math.max(minAmount, couponMinAmount);
+                console.log(`Applying coupon: ${couponId}, Discount: ${discount}%`);
 
                 if (finalTotalAmount >= couponMinAmount) {
                     const discountAmount = (finalTotalAmount * discount) / 100;
@@ -281,7 +261,6 @@ const payonlineFailed = async (req, res) => {
             })
 
             finalTotalAmount -= totalDiscount;
-            console.log("Final Total Amount after applying discounts:", finalTotalAmount);
         } else {
             console.log("No valid coupons or parsing failed.");
         }
@@ -303,23 +282,21 @@ const payonlineFailed = async (req, res) => {
 
         const validCartItems = cartItems.filter(item => item !== null);
 
-        // Create the order with paymentFailed flag as true (payment failed)
         const newFailedOrder = new Order({
             user: userId,
             items: validCartItems,
-            couponDiscount:totalDiscount,
-            couponAmount :minAmount, 
+            couponDiscount: totalDiscount,
+            couponAmount: minAmount,
             billTotal: finalTotalAmount,
             paymentMethod: "onlinePayment",
             subtotal: parseFloat(subtotal),
             shippingAddress: address,
-            orderStatus: "Pending",  // Status set to "pending"
-            paymentFailed: true,     // Payment failed
+            orderStatus: "Pending",
+            paymentFailed: true,
         });
 
         const savedFailedOrder = await newFailedOrder.save();
         if (savedFailedOrder) {
-            // Optionally, notify the user or trigger logs for failed payment
             await Promise.all(validCartItems.map(async (item) => {
                 const product = await Product.findById(item.product._id);
                 if (product) {
@@ -340,38 +317,42 @@ const payonlineFailed = async (req, res) => {
 };
 
 
-const orderConfirmation = async(req,res)=>{
+//------------------------------- Payment Confirmation --------------------------//
+
+const orderConfirmation = async (req, res) => {
     try {
-       res.render("orderConfirmation")
+        res.render("orderConfirmation")
     } catch (error) {
         console.log(error)
     }
 }
 
-const orderFailed = async(req,res)=>{
+//------------------------------- Order Failed Confirmation --------------------------//
+
+const orderFailed = async (req, res) => {
     try {
         res.render("orderFailed")
     } catch (error) {
-       console.log(error) 
+        console.log(error)
     }
 }
+
+
+//-----------------------------------Cancel Order --------------------------------//
 
 
 const cancelOrder = async (req, res) => {
     try {
         const { orderId } = req.body;
-        console.log("requested",req.body);
         const order = await Order.findById(orderId);
-        console.log("order:",order)
         if (!order) {
             return res.status(404).send('Order not found');
         }
         order.orderStatus = "Cancelled";
-        console.log("order.orderStatus",order.orderStatus);
+        console.log("order.orderStatus", order.orderStatus);
         await order.save();
-        let refundAmount = 0;  
-        if (order.paymentMethod === 'onlinePayment')
-        {
+        let refundAmount = 0;
+        if (order.paymentMethod === 'onlinePayment') {
             refundAmount = order.billTotal;
 
             if (isNaN(refundAmount)) {
@@ -379,16 +360,13 @@ const cancelOrder = async (req, res) => {
                 return res.status(400).send('Invalid refund amount');
             }
             const userId = order.user;
-            console.log("userId",userId);
 
             const wallet = await Wallet.findOne({ user: userId });
-            console.log("wallet",wallet);
             if (!wallet) {
                 return res.status(404).json({ error: "Wallet not found" });
             }
 
             wallet.walletBalance += refundAmount;
-            console.log("Updated wallet balance:", wallet.walletBalance);
 
             wallet.transactions.push({
                 date: new Date(),
@@ -398,12 +376,9 @@ const cancelOrder = async (req, res) => {
             });
 
             await wallet.save();
-            console.log("Wallet updated with refund and transaction details");
 
             res.status(200).send('Order cancelled and refund processed');
         } else {
-        
-            console.log("Order is not eligible for refund based on payment method and status");
             res.status(400).send("Order is not eligible for refund");
         }
 
@@ -414,49 +389,42 @@ const cancelOrder = async (req, res) => {
 }
 
 
+//------------------------------Return Order --------------------------------//
+
 
 const returnOrder = async (req, res) => {
     try {
         const { orderId, reason } = req.body;
-        console.log("req return:",req.body);
         const order = await Order.findById(orderId);
-        console.log("returnorder:",order);
         if (!order) {
             return res.status(404).send('Order not found');
         }
-        // Update order status to 'Returned'
         order.orderStatus = "Returned";
-        order.returnReason = reason; 
-        console.log("OrderReason:", orderReason)
+        order.returnReason = reason;
         await order.save()
         let refundAmount = 0;
-            refundAmount = order.billTotal;
-            
-            if (isNaN(refundAmount)) {
-                console.error("Refund amount is not a valid number:", refundAmount);
-                return res.status(400).send('Invalid refund amount');
-            }
-            console.log("Order status updated to Returned");
-            const userId = order.user;
-            console.log("User ID associated with the order:", userId);
-            const wallet = await Wallet.findOne({ user: userId });
-            if (!wallet) {
-                return res.status(404).json({ error: "Wallet not found" });
-            }
-            console.log("User's wallet details:", wallet);
-            wallet.walletBalance += refundAmount;
-            console.log("Updated wallet balance:", wallet.walletBalance);
-            wallet.transactions.push({
-                date: new Date(),
-                description: `Refund for returned Order ID: ${orderId}`,
-                amount: refundAmount,
-                status: "Refunded"
-            })
+        refundAmount = order.billTotal;
 
-            await wallet.save();
-            console.log("Wallet updated with refund and transaction details");
+        if (isNaN(refundAmount)) {
+            console.error("Refund amount is not a valid number:", refundAmount);
+            return res.status(400).send('Invalid refund amount');
+        }
+        const userId = order.user;
+        const wallet = await Wallet.findOne({ user: userId });
+        if (!wallet) {
+            return res.status(404).json({ error: "Wallet not found" });
+        }
+        wallet.walletBalance += refundAmount;
+        wallet.transactions.push({
+            date: new Date(),
+            description: `Refund for returned Order ID: ${orderId}`,
+            amount: refundAmount,
+            status: "Refunded"
+        })
 
-            res.status(200).send('Order returned and refund processed');
+        await wallet.save();
+
+        res.status(200).send('Order returned and refund processed');
 
     } catch (error) {
         console.error("Error returning order:", error);
@@ -464,30 +432,24 @@ const returnOrder = async (req, res) => {
     }
 }
 
+//----------------------checking if Ordered -------------------------//
 
-const checkIfPurchased = async (userId, productId) => {
+const hasOrderedProduct = async (req, res) => {
     try {
-        if (!mongoose.Types.ObjectId.isValid(userId)) {
-            console.log('Invalid userId format');
-            return false;  // Return false if userId is invalid
-          }
-      
-        console.log("Checking purchase for userId:", userId);
+        const userId = req.user.id;
+        const productId = req.params.productId;
         const order = await Order.findOne({
-            user: userId,
-            orderStatus: { $in: ['Confirmed', 'Shipped', 'Delivered'] },
+            userId: userId,
+            'items.productId': productId,
         })
-        console.log('Order:', order);
         if (order) {
-            console.log("Order matched!");
-            return true;
+            return res.status(200).json({ ordered: true });
         } else {
-            console.log("No order found.");
-            return false;
+            return res.status(200).json({ ordered: false });
         }
     } catch (error) {
-        console.error('Error checking purchase:', error);
-        return false;
+        console.log("Error checking order status:", error);
+        return res.status(200).json({ error: error.message });
     }
 }
 
@@ -495,7 +457,7 @@ const checkIfPurchased = async (userId, productId) => {
 
 
 
- module.exports = {
+module.exports = {
     placeorder,
     cancelOrder,
     returnOrder,
@@ -503,7 +465,7 @@ const checkIfPurchased = async (userId, productId) => {
     payonline,
     orderFailed,
     payonlineFailed,
-    checkIfPurchased
+    hasOrderedProduct,
 }
 
 

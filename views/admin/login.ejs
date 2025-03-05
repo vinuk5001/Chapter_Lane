@@ -11,14 +11,12 @@
     <meta property="og:type" content="">
     <meta property="og:url" content="">
     <meta property="og:image" content="">
-    <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="adminassets/imgs/theme/favicon.svg">
-    <!-- Template CSS -->
     <link href="adminassets/css/main.css" rel="stylesheet" type="text/css" />
 
     <style>
-                .modal {
-            display: none; /* Hidden by default */
+        .modal {
+            display: none;
             position: fixed;
             z-index: 1;
             left: 0;
@@ -26,7 +24,7 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4); /* Black with opacity */
+            background-color: rgba(0, 0, 0, 0.4);
             padding-top: 60px;
         }
 
@@ -71,7 +69,6 @@
         .btn-close-modal:hover {
             background-color: #45a049;
         }
-
     </style>
 </head>
 
@@ -94,14 +91,13 @@
                     <form method="post">
                         <div class="mb-3">
                             <input class="form-control" placeholder="Username or email" name="email" type="text">
-                        </div> <!-- form-group// -->
+                        </div>
                         <div class="mb-3">
                             <input class="form-control" placeholder="Password" type="password" name="password">
-                        </div> <!-- form-group// -->
-                        <!-- form-group form-check .// -->
+                        </div>
                         <div class="mb-4">
                             <button type="submit" class="btn btn-primary w-100"> Login </button>
-                        </div> <!-- form-group// -->
+                        </div>
                     </form>
 
                 </div>
@@ -134,36 +130,36 @@
 
     <script>
 
-        document.addEventListener('DOMContentLoaded',function(){
+        document.addEventListener('DOMContentLoaded', function () {
             const loginForm = document.querySelector('form');
             const errorModal = document.getElementById('errorModal');
             const closeModal = document.getElementById('closeModal');
             const closeModalBtn = document.getElementById('closeModalBtn');
             const modalMessage = document.getElementById('modalMessage');
-            
 
-            closeModal.addEventListener('click',()=>{
+
+            closeModal.addEventListener('click', () => {
                 errorModal.style.display = 'none';
             })
 
-            closeModalBtn.addEventListener('click',()=>{
+            closeModalBtn.addEventListener('click', () => {
                 errorModal.style.display = 'none';
             })
 
-            loginForm.addEventListener('submit',async function(e){
+            loginForm.addEventListener('submit', async function (e) {
                 e.preventDefault()
                 const email = document.querySelector('input[name="email"]').value
                 const password = document.querySelector('input[name="password"]').value
-                try{
-                    const response = await axios.post('/admin/login',{email,password});
-                    console.log("responseee",response)
-                    localStorage.setItem("admin",response.data.token);
-                    if(response.status === 200){
-                    window.location.href = '/admin/home';
+                try {
+                    const response = await axios.post('/admin/login', { email, password });
+                    console.log("responseee", response)
+                    localStorage.setItem("admin", response.data.token);
+                    if (response.status === 200) {
+                        window.location.href = '/admin/home';
                     }
-                }catch(error){
+                } catch (error) {
                     console.log(error)
-                    const errorMessage = error.response?.data?.error||'An unknown error occured.please try again later'
+                    const errorMessage = error.response?.data?.error || 'An unknown error occured.please try again later'
                     modalMessage.textContent = errorMessage;
                     errorModal.style.display = 'block';
                 }

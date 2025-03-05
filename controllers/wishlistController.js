@@ -3,19 +3,18 @@ const Wishlist = require("../models/wishlistModel");
 const Product = require('../models/productModel');
 const jwt = require('jsonwebtoken');
 const Category = require("../models/categoryModel");
+
+
+//------------------------------Load WishList------------------------------//
+
 const loadWishlist = async (req, res) => {
     try {
-        console.log("hiiiiii");
         const token = req.cookies.jwt;
-        console.log("token:",token);
         if (!token) throw new Error('JWT cookie not found');
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log("decoded",decoded);
         const userId = decoded.id;
-        console.log("userId",userId);
-
-     const wishlist = await Wishlist.aggregate([
-            {$match:{ user: new mongoose.Types.ObjectId(userId)}},
+        const wishlist = await Wishlist.aggregate([
+            { $match: { user: new mongoose.Types.ObjectId(userId) } },
             { $unwind: "$items" },
             {
                 $lookup: {
@@ -34,9 +33,9 @@ const loadWishlist = async (req, res) => {
                     as: "categoryDetails"
                 }
             },
-            { $unwind:{path:"$categoryDetails", preserveNullAndEmptyArrays:true } },
+            { $unwind: { path: "$categoryDetails", preserveNullAndEmptyArrays: true } },
 
-            { 
+            {
                 $project: {
                     _id: 0,
                     productId: "$productDetails._id",
@@ -46,27 +45,26 @@ const loadWishlist = async (req, res) => {
                     productImage: { $arrayElemAt: ["$productDetails.images", 0] },
                     productStock: "$productDetails.stock",
                     productStatus: "$productDetails.status",
-                    categoryName:"$categoryDetails.name",
+                    categoryName: "$categoryDetails.name",
                 }
             }
         ]);
-        // const categoryId = req.body.Id
-        // const category = await Category.findById({categoryId})
-        // console.log("category",category);
-
-        console.log("wishlist",wishlist);
 
         if (!wishlist || wishlist.length === 0) {
             return res.render('wishlist', { wishlist: [], message: "Your wishlist is empty" });
         }
 
-        res.render('wishlist', { wishlist, message: null ,userId});
+        res.render('wishlist', { wishlist, message: null, userId });
 
     } catch (error) {
         console.error('Error loading wishlist:', error);
         res.status(500).send("An error occurred while loading the wishlist.");
     }
 };
+
+
+//------------------------------------AddToWishList------------------------------------//
+
 
 const addToWishlist = async (req, res) => {
     try {
@@ -90,12 +88,9 @@ const addToWishlist = async (req, res) => {
         if (!Array.isArray(wishlist.items)) {
             wishlist.items = [];
         }
-
         if (!wishlist.items.some(item => item.productId.toString() === productId.toString())) {
             wishlist.items.push({ productId: new mongoose.Types.ObjectId(productId) });
             await wishlist.save();
-
-            // 🔹 Instead of redirecting, send JSON response
             return res.json({ success: true, message: 'Added to wishlist' });
         }
 
@@ -107,6 +102,7 @@ const addToWishlist = async (req, res) => {
 };
 
 
+//-------------------------------------------Remove From WishList---------------------------------//
 
 const removeFromWishlist = async (req, res) => {
     try {
@@ -122,7 +118,7 @@ const removeFromWishlist = async (req, res) => {
 
         wishlist.items = wishlist.items.filter(item => item.productId.toString() !== productId);
         await wishlist.save();
-        
+
 
         return res.json({ success: true, message: 'Product removed from wishlist' });
     } catch (error) {

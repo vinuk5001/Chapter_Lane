@@ -15,17 +15,20 @@ const fs = require('fs');
 const { parse } = require("path");
 
 //---------Admin Login ------------//
+
 const loadLogin = (req, res) => {
     res.render('login');
 }
 
 //---------Create JWT Token---------//
+
 const createToken = (user) => {
     const JWT_SECRET = process.env.JWT_SECRET;
-    return jwt.sign(user, JWT_SECRET, { expiresIn: "1h" });
+    return jwt.sign(user, JWT_SECRET, { expiresIn: "1h" })
 }
 
 //----------Admin Authentication------//
+
 const isAdmin = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -53,6 +56,7 @@ const isAdmin = async (req, res) => {
 }
 
 //------------Admin Logout-------------//
+
 const logout = async (req, res) => {
     try {
         res.clearCookie('token');
@@ -66,82 +70,102 @@ const logout = async (req, res) => {
 //-----------Admin Home-----------------//
 const loadHome = async (req, res) => {
     try {
+        console.log("home");
+
         const products = await Order.aggregate([
-            {$unwind:"$items"},
+            { $unwind: "$items" },
             {
-              $group:{
-                _id:{
-                    productId:"$items.product._id",
-                    name :"$items.product.name",
-                    image:{$arrayElemAt:["$items.product.images",0]},
-                    price:"$items.product.price"
-                },
-                totalQuantity:{$sum:"$items.quantity"}
-              }   
+                $group: {
+                    _id: {
+                        productId: "$items.product._id",
+                        name: "$items.product.name",
+                        image: { $arrayElemAt: ["$items.product.images", 0] },
+                        price: "$items.product.price"
+                    },
+                    totalQuantity: { $sum: "$items.quantity" }
+                }
             },
-            {$sort:{totalQuantity:-1}},
-            {$limit:5}
-        ])
+            { $sort: { totalQuantity: -1 } },
+            { $limit: 5 }
+        ]);
+        console.log("products", products);
 
         const categories = await Order.aggregate([
             { $unwind: "$items" },
             {
                 $lookup: {
-                    from: "categories", 
+                    from: "categories",
                     localField: "items.product.category",
                     foreignField: "_id",
                     as: "categoryInfo"
                 }
             },
-            { $unwind: { path: "$categoryInfo", preserveNullAndEmptyArrays: true } }, 
+            { $unwind: { path: "$categoryInfo", preserveNullAndEmptyArrays: true } },
             {
                 $group: {
-                    _id: "$categoryInfo.name", 
-                    totalQuantity: { $sum: "$items.quantity" } 
+                    _id: "$categoryInfo.name",
+                    totalQuantity: { $sum: "$items.quantity" }
                 }
             },
-            { $sort: { totalQuantity: -1 } }, 
-            { $limit: 5 } 
+            { $sort: { totalQuantity: -1 } },
+            { $limit: 5 }
         ]);
+        console.log("categories", categories);
+
         const salesOrder = await Order.aggregate([
-            {
-                $project:{
-                    _id:0,
-                    billTotal:1,
-                    createdAt:1
-                }
-            }
-        ])
-        console.log("salesOrder",salesOrder);
+            { $project: { _id: 0, billTotal: 1, createdAt: 1 } }
+        ]);
+        const totalSales = salesOrder.reduce((total, order) => {
+            const billTotal = parseFloat(order.billTotal);
+            if (!isNaN(billTotal)) return total + billTotal;
+            console.warn('Invalid billTotal for order:', order);
+            return total;
+        }, 0);
+        console.log("Total Sales:", totalSales);
 
-        const totalSales = salesOrder.reduce((total,order)=> total + order.billTota,0);
-        console.log("totalSales",totalSales);
-        const orderDates = salesOrder.map(order => order.createdAt); 
-        console.log("orderDates",orderDates);
-      const overallStats = {
-        totalSales : await Order.aggregate([
-            {$group:{_id:null,totalSales: {$sum:"$billTotal"}}}
-        ]),
-        totalOrders: await Order.countDocuments(),
-        totalRevenue: await Order.aggregate([
-            {$group:{_id:null,totalRevenue:{$sum:"$billTotal"}}}
-        ])      
-      }  
-      console.log("overallStats",overallStats);
+        const orderDates = salesOrder.map(order => order.createdAt);
 
-      const totalSalesFromDb = overallStats.totalSales[0]?.totalSales || 0;
-      console.log("totalSalesFromDb", totalSalesFromDb);
+        const overallStats = {
+            totalSales: await Order.aggregate([
+                { $group: { _id: null, totalSales: { $sum: "$billTotal" } } }
+            ]),
+            totalOrders: await Order.countDocuments(),
+            totalRevenue: await Order.aggregate([
+                { $group: { _id: null, totalRevenue: { $sum: "$billTotal" } } }
+            ])
+        };
+        console.log("overallStats", overallStats);
 
-         return res.render("home",{products:products,categories:categories,salesOrder:salesOrder,overallStats:overallStats,totalSales:totalSalesFromDb,orderDates:orderDates});
+        const totalSalesFromDb = overallStats.totalSales[0]?.totalSales || 0;
+        console.log("totalSalesFromDb", totalSalesFromDb);
+
+        const serializedSalesOrder = JSON.stringify(salesOrder);
+        const serializedTotalSales = JSON.stringify(totalSales);
+        const serializedOrderDates = JSON.stringify(orderDates);
+        const serializedOverallStats = JSON.stringify(overallStats);
+
+        return res.render("home", {
+            products,
+            categories,
+            salesOrder: serializedSalesOrder,
+            totalSales: serializedTotalSales,
+            orderDates: serializedOrderDates,
+            overallStats: serializedOverallStats,
+            totalSales: totalSalesFromDb
+        });
+
     } catch (error) {
         console.log(error.message);
-        if(!res.headersSent){
-        return res.render('login', { error: "Session expired. Please log in again." });
+        if (!res.headersSent) {
+            return res.render('login', { error: "Session expired. Please log in again." });
         }
     }
 }
 
+
+
 //-----------User List-----------------//
+
 const userList = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1
@@ -161,6 +185,7 @@ const userList = async (req, res) => {
     }
 }
 
+// ---------------------------toggle User Status-------------------------//
 
 const toggleUserStatus = async (req, res) => {
     try {
@@ -190,21 +215,22 @@ const toggleUserStatus = async (req, res) => {
 }
 
 
+//------------------OrderList in Admin --------------------//
 
 const orderlist = async (req, res) => {
     try {
-        const page = parseInt(req.query.page)||1
+        const page = parseInt(req.query.page) || 1
         const limit = 5;
         const skip = (page - 1) * limit;
         const totalOrders = await Order.countDocuments()
         const orders = await Order.find().skip(skip).limit(limit).populate('items.product');
-        const totalPages = Math.ceil(totalOrders/limit);
-        res.render('orderlist', { 
+        const totalPages = Math.ceil(totalOrders / limit);
+        res.render('orderlist', {
             orders: orders,
-            currentPage:page,
-            totalPages:totalPages,
-            limit:limit,
-         })
+            currentPage: page,
+            totalPages: totalPages,
+            limit: limit,
+        })
     } catch (error) {
         console.log(error.message);
         res.status(500).send("Server Error");
@@ -212,6 +238,7 @@ const orderlist = async (req, res) => {
 }
 
 
+//--------------------OrderDetails-------------------//
 
 const viewOrderDetails = async (req, res) => {
     try {
@@ -221,28 +248,26 @@ const viewOrderDetails = async (req, res) => {
         }
         const order = await Order.findOne({ _id: orderId })
         if (!order) {
-            console.log("Order not found with ID:",orderId)
             return res.status(404).send('Order not found')
         }
-       const address = await Address.findById({ _id: order.shippingAddress })
-        if(!address){
-            console.log("Address not found for order:",orderId)
+        const address = await Address.findById({ _id: order.shippingAddress })
+        if (!address) {
             return res.status(404).send("Address not found")
-        }    
-         const user = await User.findById({ _id: order.user })
-            console.log("user",user);
-         if(!user){
-            console.log("User not found for order:",orderId)
+        }
+        const user = await User.findById({ _id: order.user })
+        if (!user) {
             return res.status(404).send("User not found")
-         } 
+        }
         const returnReason = order.returnReason || '';
-         res.render('viewOrderDetails', { order, address, user, returnReason })
+        res.render('viewOrderDetails', { order, address, user, returnReason })
     } catch (error) {
-        console.error("Error in viewOrderDetails:",error)
+        console.error("Error in viewOrderDetails:", error)
         res.status(500).send('Server Error')
     }
-
 }
+
+
+// ----------------------OrderStatus----------------------//
 
 const orderStatus = async (req, res) => {
     try {
@@ -257,6 +282,7 @@ const orderStatus = async (req, res) => {
     }
 }
 
+//---------------------Return Approval ----------------------//
 
 const approveReturn = async (req, res) => {
     const { orderId, reason, isReturnApproved } = req.body;
@@ -282,6 +308,7 @@ const approveReturn = async (req, res) => {
     }
 }
 
+//----------------------Return Reject -----------------------//
 
 const rejectReturn = async (req, res) => {
     try {
@@ -317,50 +344,35 @@ const categoryOffer = async (req, res) => {
     }
 }
 
-
+//---------------------Sales Report---------------------//
 
 const salesReport = async (req, res) => {
     try {
+        console.log("salesReport");
         const { startDate, endDate } = req.query;
         console.log("req.query", req.query);
-
-        if (startDate && isNaN(new Date(startDate))) {
-            return res.status(400).json({ error: "Invalid start date format" });
-        }
-        if (endDate && isNaN(new Date(endDate))) {
-            return res.status(400).json({ error: "Invalid end date format" });
-        }
-
-        const filterConditions = {};
-        console.log("filterConditions: " + JSON.stringify(filterConditions))
-        if (startDate) filterConditions.createdAt = { ...filterConditions.createdAt, $gte: new Date(startDate) };
-        if (endDate) filterConditions.createdAt = { ...filterConditions.createdAt, $lte: new Date(endDate) };
-
         const page = parseInt(req.query.page) || 1;
         console.log("page", page);
         const limit = 5;
         console.log("limit", limit);
         const skip = (page - 1) * limit;
         console.log("skip", skip);
+        const filterConditions = {};
+        if (startDate) filterConditions.createdAt = { ...filterConditions.createdAt, $gte: new Date(startDate) };
+        if (endDate) filterConditions.createdAt = { ...filterConditions.createdAt, $lte: new Date(endDate) };
 
-        // Total number of orders (for pagination)
         const totalOrders = await Order.countDocuments(filterConditions);
-        console.log("totalOrders", totalOrders);
-
+        console.log("totalOrders");
         const salesOrder = await Order.find(filterConditions)
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
             .populate('items.product');
-
         console.log("salesOrder", salesOrder);
-
-        // Calculate the total amount
         const totalAmount = salesOrder.reduce((acc, order) => acc + order.billTotal, 0);
-        console.log("Total Amount: ", totalAmount);
-
+        console.log("totalAmount", totalAmount);
         const totalPages = Math.ceil(totalOrders / limit);
-        console.log("Total Pages: ", totalPages);
+        console.log("totalPages", totalPages);
 
         res.render("salesReport", {
             salesOrder,
@@ -369,8 +381,57 @@ const salesReport = async (req, res) => {
             totalPages,
             totalOrders,
             limit,
-            startDate: req.query.startDate || "",
-            endDate: req.query.endDate || ""
+            startDate: startDate || "",
+            endDate: endDate || ""
+        })
+
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Error fetching orders');
+    }
+}
+
+
+
+
+const filterSales = async (req, res) => {
+    try {
+
+        console.log("filterSales");
+        const { startDate, endDate } = req.body;
+        console.log("req.body", req.body);
+        const page = parseInt(req.query.page) || 1;
+        console.log("page", page);
+        const limit = 5;
+        console.log("limit", limit);
+        const skip = (page - 1) * limit;
+        console.log("skip", skip);
+
+        const filterConditions = {};
+        if (startDate) filterConditions.createdAt = { ...filterConditions.createdAt, $gte: new Date(startDate) };
+        if (endDate) filterConditions.createdAt = { ...filterConditions.createdAt, $lte: new Date(endDate) };
+
+        const totalOrders = await Order.countDocuments(filterConditions);
+        console.log("totalOrders", totalOrders);
+        const salesOrder = await Order.find(filterConditions)
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .populate('items.product');
+        console.log("salesOrder", salesOrder);
+        const totalAmount = salesOrder.reduce((acc, order) => acc + order.billTotal, 0);
+        console.log("totalAmount:", totalAmount);
+        const totalPages = Math.ceil(totalOrders / limit);
+        console.log("totalPages", totalPages);
+        res.render("salesReport", {
+            salesOrder,
+            totalAmount,
+            currentPage: page,
+            totalPages,
+            totalOrders,
+            limit,
+            startDate: startDate || "",
+            endDate: endDate || ""
         });
 
     } catch (error) {
@@ -380,103 +441,28 @@ const salesReport = async (req, res) => {
 }
 
 
-const salesFilter = async (req, res) => {
-    try {
-        console.log("Filtering sales...");
-
-        let { startDate, endDate, page } = req.body;
-        console.log("Start Date:", startDate);
-        console.log("End Date:", endDate);
-        console.log("Page:", page);
-
-        if (!startDate || !endDate) {
-            console.log("❌ Missing Date Values");
-            return res.status(400).json({ error: "Start date and end date are required" });
-        }
-
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-
-        console.log("Parsed Start Date:", start);
-        console.log("Parsed End Date:", end);
-
-        start.setHours(0, 0, 0, 0);
-        end.setHours(23, 59, 59, 999);
-
-        console.log(`✅ Querying sales from: ${start} to ${end}`);
-
-        const limit = 5;
-        console.log("Limit:", limit);
-        const currentPage = parseInt(page) || 1;
-        console.log("Current Page:", currentPage);
-        const skip = (currentPage - 1) * limit;
-        console.log("Skip:", skip);
-
-        const totalOrders = await Order.countDocuments({
-            createdAt: { $gte: start, $lte: end }
-        });
-        console.log("totalOrders:", totalOrders);
-
-        const sales = await Order.find({
-            createdAt: { $gte: start, $lte: end }
-        })
-        .sort({ createdAt: 1 })
-        .skip(skip)
-        .limit(limit);
-
-        console.log(`🔹 Found ${sales.length} sales`);
-
-        const totalPages = Math.max(Math.ceil(totalOrders / limit), 1);
-        console.log("Total Pages:", totalPages);
-
-        // Calculate the total amount
-        const totalAmount = sales.reduce((acc, order) => acc + order.billTotal, 0);
-        console.log("Total Amount:", totalAmount);
-
-        res.render('salesReport', {
-            salesOrder: sales,
-            totalAmount,
-            currentPage,
-            totalPages,
-            totalOrders,
-            startDate,
-            endDate
-        });
-
-    } catch (error) {
-        console.error("🔥 Error in sales filter:", error);
-        res.status(500).json({ error: "Internal server error" });
-    }
-}
+//------------------------Sales Report PDF ----------------------//
 
 const salesReportPDF = async (req, res) => {
     try {
-        console.log("Full request:", req);
         console.log("Query Params:", req.query);
         const { startDate, endDate } = req.query;
-
         console.log("Received Query Parameters:", req.query);
         console.log('Start Date:', startDate);
         console.log('End Date:', endDate);
-
-        // Validation for missing startDate or endDate
         if (!startDate || !endDate) {
-            console.log("❌ Missing Date Values");
+            console.log("❌ Missing Date Values")
             return res.status(400).json({ error: "Start date and end date are required" });
         }
-
-        // Check if startDate and endDate are valid date strings
         if (isNaN(new Date(startDate)) || isNaN(new Date(endDate))) {
-            console.log("❌ Invalid Date Format");
+            console.log("❌ Invalid Date Format")
             return res.status(400).json({ error: "Invalid date format" });
         }
-
         const start = new Date(startDate);
         const end = new Date(endDate);
 
-        // Log parsed dates to ensure correctness
-        console.log(`Parsed Start Date: ${start}`);
-        console.log(`Parsed End Date: ${end}`);
+        console.log(`Parsed Start Date: ${start}`)
+        console.log(`Parsed End Date: ${end}`)
 
         start.setHours(0, 0, 0, 0);
         end.setHours(23, 59, 59, 999);
@@ -486,37 +472,31 @@ const salesReportPDF = async (req, res) => {
         const limit = 5;
         const currentPage = parseInt(req.query.page) || 1;
 
-        // Debugging: Log page and limit for pagination
         console.log(`Pagination - Current Page: ${currentPage}, Limit: ${limit}`);
 
-        // Query to get total order count within the date range
         const totalOrders = await Order.countDocuments({
             createdAt: { $gte: start, $lte: end }
-        });
-         
+        })
+
         console.log(`Total Orders Found: ${totalOrders}`);
-                
-        // Fetching sales data within the given date range and pagination
+
         const sales = await Order.find({
             createdAt: { $gte: start, $lte: end }
         })
             .sort({ createdAt: 1 })
             .skip((currentPage - 1) * limit)
             .limit(limit)
-            .populate('items.product'); // Populate product details
-          
+            .populate('items.product');
+
         console.log(`Sales Data Fetched: ${sales.length} orders`);
 
-        // If no sales data is found, inform the user
         if (sales.length === 0) {
             return res.status(404).json({ error: 'No sales data found for the given date range' });
         }
 
-        // Calculate the total amount of all orders in the fetched sales data
         const totalAmount = sales.reduce((acc, order) => acc + order.billTotal, 0);
         console.log(`Total Amount of Sales: ₹${totalAmount.toFixed(2)}`);
 
-        // PDF generation logic...
         const PDFDocument = require('pdfkit');
         const fs = require('fs');
         const path = require('path');
@@ -525,16 +505,11 @@ const salesReportPDF = async (req, res) => {
         const doc = new PDFDocument({ margin: 40, size: 'A4' });
         const stream = fs.createWriteStream(filePath);
         doc.pipe(stream);
-
-        // Add the report header
         doc.fontSize(16).font('Helvetica-Bold').text('Sales Report', { align: 'center' });
         doc.moveDown(1);
-
-        // Add table headers
         const colWidths = [180, 100, 100, 80];
         const colX = [50, 240, 350, 460];
         const rowHeight = 35;
-
         const headerY = doc.y;
         doc.fillColor('#eeeeee').rect(50, headerY, 490, rowHeight).fill();
         doc.fillColor('black').font('Helvetica-Bold').fontSize(10);
@@ -546,10 +521,8 @@ const salesReportPDF = async (req, res) => {
         doc.moveTo(50, headerY + rowHeight).lineTo(540, headerY + rowHeight).stroke();
         doc.moveDown(1.5);
 
-        // Populate rows with data
         let rowCount = 0;
         sales.forEach((order) => {
-            // Concatenate product names from items array
             const productNames = order.items.map(item => item.product?.name || 'Unknown Product').join(', ');
             const currentY = doc.y;
 
@@ -568,7 +541,6 @@ const salesReportPDF = async (req, res) => {
             doc.moveDown(2);
         });
 
-        // Finalize the document
         doc.end();
 
         stream.on('finish', () => {
@@ -585,15 +557,14 @@ const salesReportPDF = async (req, res) => {
 }
 
 
-
-
+//-----------------------Sales Report Excel --------------------------//
 
 const salesReportExcel = async (req, res) => {
     try {
-        const salesOrder = await Order.find().sort({ orderDate: -1 }).populate('items.product');
+        const salesOrder = await Order.find().sort({ orderDate: -1 }).populate('items.product')
         const totalAmount = salesOrder.reduce((acc, item) => acc + item.billTotal, 0);
-        const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet('Sales Report');
+        const workbook = new ExcelJS.Workbook()
+        const worksheet = workbook.addWorksheet('Sales Report')
         worksheet.columns = [
             { header: 'Product Name', key: 'productName', width: 30 },
             { header: 'Order Date', key: 'orderDate', width: 15 },
@@ -629,12 +600,13 @@ const salesReportExcel = async (req, res) => {
 }
 
 
+//-----------------------Get Sales Data ---------------------------//
+
 
 const getSalesStats = async (req, res) => {
     try {
         const currentYear = new Date().getFullYear();
-
-        // 1️⃣ Aggregate Monthly Sales
+        console.log("current year:" + currentYear);
         const monthlySales = await Order.aggregate([
             {
                 $match: { createdAt: { $gte: new Date(`${currentYear}-01-01`), $lt: new Date(`${currentYear + 1}-01-01`) } }
@@ -647,8 +619,8 @@ const getSalesStats = async (req, res) => {
             },
             { $sort: { _id: 1 } }
         ]);
+        console.log("monthly sales" + monthlySales);
 
-        // 2️⃣ Aggregate Yearly Sales for Last 5 Years
         const yearlySales = await Order.aggregate([
             {
                 $group: {
@@ -658,16 +630,13 @@ const getSalesStats = async (req, res) => {
             },
             { $sort: { _id: 1 } }
         ]);
-
+        console.log("yearly sales" + yearlySales);
         res.json({ monthlySales, yearlySales });
     } catch (error) {
         console.error("Error fetching sales statistics:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 };
-
-
-
 
 
 module.exports = {
@@ -685,8 +654,8 @@ module.exports = {
     loadOfferManagementPage,
     categoryOffer,
     salesReport,
+    filterSales,
     salesReportPDF,
     salesReportExcel,
-    salesFilter,
     getSalesStats
 }
