@@ -11,12 +11,9 @@
     <meta property="og:type" content="">
     <meta property="og:url" content="">
     <meta property="og:image" content="">
-    <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="adminassets/imgs/theme/favicon.svg">
-    <!-- Template CSS -->
     <link href="adminassets/css/main.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/path-to-your-chart-script.js"></script>
 
     <style>
         .card {
@@ -77,8 +74,6 @@
             border: 1px solid #e0e0e0;
             transition: all 0.3s ease;
         }
-
-
 
         table td {
             background-color: #fff;
@@ -456,6 +451,7 @@
                                                 <tr>
                                                     <td colspan="2" class="text-center">No categories available.</td>
                                                 </tr>
+
                                                 <% } %>
                             </tbody>
                         </table>
@@ -478,20 +474,6 @@
             </div>
         </section>
 
-        <footer class="main-footer font-xs">
-            <div class="row pb-30 pt-15">
-                <div class="col-sm-6">
-                    <script>
-                        document.write(new Date().getFullYear())
-                    </script> ©, Evara - HTML Ecommerce Template.
-                </div>
-                <div class="col-sm-6">
-                    <div class="text-sm-end">
-                        All rights reserved
-                    </div>
-                </div>
-            </div>
-        </footer>
     </main>
 
     <script src="adminassets/js/vendors/jquery-3.6.0.min.js"></script>
@@ -504,169 +486,74 @@
     <script src="adminassets/js/custom-chart.js" type="text/javascript"></script>
 
     <script>
-        const logoutButton = document.getElementById('logoutButton');
 
+        const logoutButton = document.getElementById('logoutButton');
+        console.log("entering into dashboard");
         logoutButton.addEventListener('click', function () {
             window.location.href = '/admin/logout';
-        });
+        })
 
-        document.addEventListener("DOMContentLoaded", () => {
-            console.log("Page Loaded Successfully");
+        let yearlySalesData;
+        let monthlySalesData;
+        fetch('/admin/get-chart', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
 
-            console.log("Sales Order (raw data):", '<%= JSON.stringify(salesOrder) %>');
-            console.log("Total Sales (raw data):", '<%= JSON.stringify(totalSales) %>');
-            console.log("Order Dates (raw data):", '<%= JSON.stringify(orderDates) %>');
-            console.log("Overall Stats (raw data):", '<%= JSON.stringify(overallStats) %>');
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                monthlySalesData = data.monthlySales;
+                yearlySalesData = data.yearlySales;
 
-            const salesOrder = JSON.parse('<%= JSON.stringify(salesOrder) %>');
-            const totalSales = JSON.parse('<%= JSON.stringify(totalSales) %>');
-            const orderDates = JSON.parse('<%= JSON.stringify(orderDates) %>');
-            const overallStats = JSON.parse('<%= JSON.stringify(overallStats) %>');
 
-            console.log("salesOrder", salesOrder);
-            console.log("totalSales", totalSales);
-            console.log("orderDates", orderDates);
-            console.log("overallStats", overallStats);
 
-            const salesData = orderDates.map((date, index) => {
-                const revenue = totalSales.length > 0 ? totalSales.reduce((sum, sale) => sum + sale.totalSales, 0) / orderDates.length : 0;
-                return {
-                    orderDate: new Date(date),
-                    billTotal: revenue
-                };
-            });
+                console.log("monthlySalesData", monthlySalesData);
+                const monthlyLabels = monthlySalesData.map(item => `${item._id.month}-${item._id.year}`);
+                console.log("monthlyLabels", monthlyLabels)
+                const monthlyData = monthlySalesData.map(item => item.totalSales);
+                console.log("monthlyData", monthlyData);
 
-            document.querySelectorAll("tbody tr").forEach(row => {
-                const cells = row.querySelectorAll("td");
 
-                if (cells.length >= 6) {
-                    const orderDateStr = cells[1].textContent.trim();
-                    const billTotalStr = cells[5].textContent.trim();
-
-                    if (orderDateStr && billTotalStr) {
-                        const orderDate = new Date(orderDateStr);
-                        const billTotal = parseFloat(billTotalStr) || 0;
-
-                        salesData.push({ orderDate, billTotal });
+                new Chart(document.getElementById('monthlySalesChart'), {
+                    type: 'line',
+                    data: {
+                        labels: monthlyLabels,
+                        datasets: [{
+                            label: 'Monthly Sales',
+                            data: monthlyData,
+                            borderColor: '#FF5733',
+                            fill: false
+                        }]
                     }
-                }
-            });
+                });
 
-            console.log("Extracted Sales Data:", salesData);
+                const yearlyLabels = yearlySalesData.map(item => item._id);
+                const yearlyData = yearlySalesData.map(item => item.totalSales);
 
-            const { monthlySales, yearlySales } = processSalesData(salesData);
-
-            generateCharts(monthlySales, yearlySales);
-        });
-
-        function processSalesData(orders) {
-            const monthlySales = {};
-            const yearlySales = {};
-
-            orders.forEach(({ orderDate, billTotal }) => {
-                const year = orderDate.getFullYear();
-                const month = `${year}-${(orderDate.getMonth() + 1).toString().padStart(2, '0')}`;
-
-                if (!monthlySales[month]) {
-                    monthlySales[month] = 0;
-                }
-                monthlySales[month] += billTotal;
-
-                if (!yearlySales[year]) {
-                    yearlySales[year] = 0;
-                }
-                yearlySales[year] += billTotal;
-            });
-
-            return { monthlySales, yearlySales };
-        }
-
-        function generateCharts(monthlySales, yearlySales) {
-            const monthlyLabels = [
-                'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-            ];
-
-            const monthlyValues = monthlyLabels.map((label, index) => {
-                const monthKey = `2025-${(index + 1).toString().padStart(2, '0')}`;
-                return monthlySales[monthKey] || 0;
-            });
-
-            const yearlyLabels = ['2021', '2022', '2023', '2024', '2025'];
-            const yearlyValues = yearlyLabels.map(year => yearlySales[year] || 0);
-
-            const monthlyCtx = document.getElementById("monthlySalesChart").getContext("2d");
-            new Chart(monthlyCtx, {
-                type: "bar",
-                data: {
-                    labels: monthlyLabels,
-                    datasets: [{
-                        label: "Total Ordered Sales",
-                        data: monthlyValues,
-                        backgroundColor: "rgba(75, 192, 192, 0.7)",
-                        borderColor: "rgba(75, 192, 192, 1)",
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Month'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Total Ordered Sales'
-                            },
-                            min: 500,
-                            max: 10000,
-                            stepSize: 1000,
-                            beginAtZero: false
-                        }
+                new Chart(document.getElementById('yearlySalesChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: yearlyLabels,
+                        datasets: [{
+                            label: 'Yearly Sales',
+                            data: yearlyData,
+                            backgroundColor: '#1cc88a',
+                            borderColor: '#1cc88a',
+                            borderWidth: 1
+                        }]
                     }
-                }
-            });
+                });
 
-            const yearlyCtx = document.getElementById("yearlySalesChart").getContext("2d");
-            new Chart(yearlyCtx, {
-                type: "line",
-                data: {
-                    labels: yearlyLabels,
-                    datasets: [{
-                        label: "Total Ordered Sales",
-                        data: yearlyValues,
-                        backgroundColor: "rgba(255, 99, 132, 0.7)",
-                        borderColor: "rgba(255, 99, 132, 1)",
-                        borderWidth: 2,
-                        fill: false
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Year'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Total Ordered Sales'
-                            },
-                            min: 10000,
-                            max: 100000,
-                            stepSize: 10000,
-                            beginAtZero: false
-                        }
-                    }
-                }
-            });
-        }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
+
+
+
     </script>
 
 </body>

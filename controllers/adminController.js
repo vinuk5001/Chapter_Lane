@@ -28,13 +28,15 @@ const createToken = (user) => {
 }
 
 //----------Admin Authentication------//
-
 const isAdmin = async (req, res) => {
     try {
         const { email, password } = req.body;
+        console.log("requested", req.body);
         const admin = await User.findOne({ email: email, is_admin: 1 });
+        console.log("admin", admin);
         if (admin) {
             const passwordMatch = await bcrypt.compare(password, admin.password);
+            console.log("passwordMatch", passwordMatch);
             if (passwordMatch) {
                 const token = createToken({ id: admin._id });
                 res.cookie("admin", token, {
@@ -42,6 +44,7 @@ const isAdmin = async (req, res) => {
                     maxAge: 30 * 24 * 60 * 60 * 1000,
                     secure: process.env.NODE_ENV === 'production',
                 });
+                console.log("token", token);
                 return res.status(200).json({ message: "Login successful", token });
             } else {
                 res.status(400).json({ error: "Invalid email or password" })
@@ -68,6 +71,7 @@ const logout = async (req, res) => {
 }
 
 //-----------Admin Home-----------------//
+
 const loadHome = async (req, res) => {
     try {
         console.log("home");
@@ -88,6 +92,7 @@ const loadHome = async (req, res) => {
             { $sort: { totalQuantity: -1 } },
             { $limit: 5 }
         ]);
+
         console.log("products", products);
 
         const categories = await Order.aggregate([
@@ -115,6 +120,8 @@ const loadHome = async (req, res) => {
         const salesOrder = await Order.aggregate([
             { $project: { _id: 0, billTotal: 1, createdAt: 1 } }
         ]);
+        console.log("salesOrder", salesOrder);
+
         const totalSales = salesOrder.reduce((total, order) => {
             const billTotal = parseFloat(order.billTotal);
             if (!isNaN(billTotal)) return total + billTotal;
@@ -124,6 +131,38 @@ const loadHome = async (req, res) => {
         console.log("Total Sales:", totalSales);
 
         const orderDates = salesOrder.map(order => order.createdAt);
+        console.log("orderDates", orderDates);
+        //             billTotal: 1,
+        //             month: { $month: "$createdAt" },
+        //             year: { $year: "$createdAt" }
+        //         }
+        //     },
+        //     {
+        //         $group: {
+        //             _id: { month: "$month", year: "$year" },
+        //             totalSales: { $sum: "$billTotal" }
+        //         }
+        //     },
+        //     { $sort: { "_id.year": -1, "_id.month": -1 } }
+        // ]);
+        // console.log("monthlySales", monthlySales);
+
+        // const yearlySales = await Order.aggregate([
+        //     {
+        //         $project: {
+        //             billTotal: 1,
+        //             year: { $year: "$createdAt" }
+        //         }
+        //     },
+        //     {
+        //         $group: {
+        //             _id: "$year",
+        //             totalSales: { $sum: "$billTotal" }
+        //         }
+        //     },
+        //     { $sort: { "_id": -1 } }
+        // ])
+        // console.log("yearlySales", yearlySales);
 
         const overallStats = {
             totalSales: await Order.aggregate([
@@ -133,26 +172,24 @@ const loadHome = async (req, res) => {
             totalRevenue: await Order.aggregate([
                 { $group: { _id: null, totalRevenue: { $sum: "$billTotal" } } }
             ])
-        };
+        }
         console.log("overallStats", overallStats);
 
-        const totalSalesFromDb = overallStats.totalSales[0]?.totalSales || 0;
+        const totalSalesFromDb = overallStats.totalSales[0]?.totalSales || 0
         console.log("totalSalesFromDb", totalSalesFromDb);
 
-        const serializedSalesOrder = JSON.stringify(salesOrder);
-        const serializedTotalSales = JSON.stringify(totalSales);
-        const serializedOrderDates = JSON.stringify(orderDates);
-        const serializedOverallStats = JSON.stringify(overallStats);
+
 
         return res.render("home", {
             products,
             categories,
-            salesOrder: serializedSalesOrder,
-            totalSales: serializedTotalSales,
-            orderDates: serializedOrderDates,
-            overallStats: serializedOverallStats,
-            totalSales: totalSalesFromDb
-        });
+            salesOrder,
+            totalSales,
+            orderDates,
+            overallStats,
+            totalSales: totalSalesFromDb,
+
+        })
 
     } catch (error) {
         console.log(error.message);
@@ -348,31 +385,22 @@ const categoryOffer = async (req, res) => {
 
 const salesReport = async (req, res) => {
     try {
-        console.log("salesReport");
         const { startDate, endDate } = req.query;
-        console.log("req.query", req.query);
         const page = parseInt(req.query.page) || 1;
-        console.log("page", page);
         const limit = 5;
-        console.log("limit", limit);
         const skip = (page - 1) * limit;
-        console.log("skip", skip);
         const filterConditions = {};
         if (startDate) filterConditions.createdAt = { ...filterConditions.createdAt, $gte: new Date(startDate) };
         if (endDate) filterConditions.createdAt = { ...filterConditions.createdAt, $lte: new Date(endDate) };
 
         const totalOrders = await Order.countDocuments(filterConditions);
-        console.log("totalOrders");
         const salesOrder = await Order.find(filterConditions)
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
             .populate('items.product');
-        console.log("salesOrder", salesOrder);
         const totalAmount = salesOrder.reduce((acc, order) => acc + order.billTotal, 0);
-        console.log("totalAmount", totalAmount);
         const totalPages = Math.ceil(totalOrders / limit);
-        console.log("totalPages", totalPages);
 
         res.render("salesReport", {
             salesOrder,
@@ -396,33 +424,23 @@ const salesReport = async (req, res) => {
 
 const filterSales = async (req, res) => {
     try {
-
-        console.log("filterSales");
         const { startDate, endDate } = req.body;
-        console.log("req.body", req.body);
         const page = parseInt(req.query.page) || 1;
-        console.log("page", page);
         const limit = 5;
-        console.log("limit", limit);
         const skip = (page - 1) * limit;
-        console.log("skip", skip);
 
         const filterConditions = {};
         if (startDate) filterConditions.createdAt = { ...filterConditions.createdAt, $gte: new Date(startDate) };
         if (endDate) filterConditions.createdAt = { ...filterConditions.createdAt, $lte: new Date(endDate) };
 
         const totalOrders = await Order.countDocuments(filterConditions);
-        console.log("totalOrders", totalOrders);
         const salesOrder = await Order.find(filterConditions)
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
             .populate('items.product');
-        console.log("salesOrder", salesOrder);
         const totalAmount = salesOrder.reduce((acc, order) => acc + order.billTotal, 0);
-        console.log("totalAmount:", totalAmount);
         const totalPages = Math.ceil(totalOrders / limit);
-        console.log("totalPages", totalPages);
         res.render("salesReport", {
             salesOrder,
             totalAmount,
@@ -445,11 +463,7 @@ const filterSales = async (req, res) => {
 
 const salesReportPDF = async (req, res) => {
     try {
-        console.log("Query Params:", req.query);
         const { startDate, endDate } = req.query;
-        console.log("Received Query Parameters:", req.query);
-        console.log('Start Date:', startDate);
-        console.log('End Date:', endDate);
         if (!startDate || !endDate) {
             console.log("❌ Missing Date Values")
             return res.status(400).json({ error: "Start date and end date are required" });
@@ -478,7 +492,6 @@ const salesReportPDF = async (req, res) => {
             createdAt: { $gte: start, $lte: end }
         })
 
-        console.log(`Total Orders Found: ${totalOrders}`);
 
         const sales = await Order.find({
             createdAt: { $gte: start, $lte: end }
@@ -495,7 +508,6 @@ const salesReportPDF = async (req, res) => {
         }
 
         const totalAmount = sales.reduce((acc, order) => acc + order.billTotal, 0);
-        console.log(`Total Amount of Sales: ₹${totalAmount.toFixed(2)}`);
 
         const PDFDocument = require('pdfkit');
         const fs = require('fs');
@@ -638,6 +650,54 @@ const getSalesStats = async (req, res) => {
     }
 };
 
+//----------------------------getChartData-------------------------------//
+
+const getChartData = async (req, res) => {
+    try {
+        const monthlySales = await Order.aggregate([
+            {
+                $project: {
+                    billTotal: 1,
+                    month: { $month: "$createdAt" },
+                    year: { $year: "$createdAt" }
+                }
+            },
+            {
+                $group: {
+                    _id: { month: "$month", year: "$year" },
+                    totalSales: { $sum: "$billTotal" }
+                }
+            },
+            { $sort: { "_id.year": -1, "_id.month": -1 } }
+
+        ])
+        const yearlySales = await Order.aggregate([
+            {
+                $project: {
+                    billTotal: 1,
+                    year: { $year: "$createdAt" }
+                }
+            },
+            {
+                $group: {
+                    _id: "$year",
+                    totalSales: { $sum: "$billTotal" }
+                }
+            },
+            { $sort: { "_id": -1 } }
+        ]);
+        return res.status(200).json({
+            monthlySales,
+            yearlySales
+        })
+
+    } catch (error) {
+        console.log(error.message);
+        throw new Error("Error fetching chart data");
+
+    }
+}
+
 
 module.exports = {
     loadLogin,
@@ -657,5 +717,6 @@ module.exports = {
     filterSales,
     salesReportPDF,
     salesReportExcel,
-    getSalesStats
+    getSalesStats,
+    getChartData
 }

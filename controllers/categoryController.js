@@ -103,25 +103,34 @@ const renderEditCategory = async (req, res) => {
 
 const editCategory = async (req, res) => {
   try {
-    const { id, name, description, order } = req.body;
+    console.log("entering into editCategory");
+    const { categoryId, name, description } = req.body;
+    console.log(categoryId)
+    console.log(req.body);
 
+    let categories = await Category.find({ is_Listed: true });
     const existingCategory = await Category.findOne({
-      $and: [
-        { _id: { $ne: id } },
-        { $or: [{ name: name }, { description: description }] },
-      ],
+      name: name,
+      description: description
     });
+    console.log(existingCategory);
+
 
     if (existingCategory) {
+      console.log("exists");
+
       return res.render("categories", {
+        category: categories,
         message: "Category with the same name or description already exists",
       });
     }
 
-    const updateData = { name, description, order };
-    await Category.findByIdAndUpdate(id, updateData, { new: true });
+    const updateData = { name, description };
+    const newd = await Category.findByIdAndUpdate({ _id: categoryId }, updateData, { new: true });
+    console.log(newd)
+    categories = await Category.find({ is_Listed: true });
+    console.log(categories)
 
-    const categories = await Category.find({ is_Listed: true });
     res.render("categories", {
       category: categories,
       message: "Category updated successfully",

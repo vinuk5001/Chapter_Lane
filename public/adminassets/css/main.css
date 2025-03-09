@@ -94,7 +94,6 @@ input:focus::-moz-placeholder {
   transition: .4s;
 }
 
-/*--- Common Classes---------------------*/
 ::-webkit-input-placeholder {
   color: #838383;
 }

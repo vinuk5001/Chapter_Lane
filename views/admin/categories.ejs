@@ -209,7 +209,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3">
-                            <form action="/admin/categories" method="post">
+                            <form action="/admin/categories" method="POST">
                                 <div class="mb-4">
                                     <label for="category_name" class="form-label">Name</label>
                                     <input type="text" placeholder="Type here" class="form-control" name="name"
@@ -242,42 +242,45 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <% category.forEach(item=> { %>
-                                            <tr>
-                                                <td><b>
-                                                        <%= item.name %>
-                                                    </b></td>
-                                                <td>
-                                                    <%= item.description %>
-                                                </td>
+                                        <% if(category && category.length> 0) { %>
+                                            <% category.forEach(item=> { %>
+                                                <tr>
+                                                    <td><b>
+                                                            <%= item.name %>
+                                                        </b></td>
+                                                    <td>
+                                                        <%= item.description %>
+                                                    </td>
 
-                                                <td class="text-end">
-                                                    <div class="col-action">
-                                                        <a href="/admin/editCategory?id=<%= item._id %>"
-                                                            class="btn btn-sm font-sm rounded btn-brand">
-                                                            <i class="material-icons md-edit"></i> Edit
-                                                        </a>
-                                                        <% if (item.is_Listed) { %>
-                                                            <a href="/admin/unlistCategory?id=<%= item._id %>">
-                                                                <button type="submit"
+                                                    <td class="text-end">
+                                                        <div class="col-action">
+                                                            <a href="/admin/editCategory?id=<%= item._id %>"
+                                                                class="btn btn-sm font-sm rounded btn-brand">
+                                                                <i class="material-icons md-edit"></i> Edit
+                                                            </a>
+
+                                                            <% if (item.is_Listed) { %>
+                                                                <a href="/admin/unlistCategory?id=<%= item._id %>"
                                                                     class="btn btn-sm font-sm btn-light rounded">
                                                                     <i class="material-icons md-delete_forever"></i>
                                                                     Unlist
-                                                                </button>
-                                                            </a>
-                                                            <% } else { %>
-                                                                <a href="/admin/listCategory?id=<%= item._id %>">
-                                                                    <button type="submit"
+                                                                </a>
+                                                                <% } else { %>
+                                                                    <a href="/admin/listCategory?id=<%= item._id %>"
                                                                         class="btn btn-sm font-sm btn-light rounded">
                                                                         <i class="material-icons md-delete_forever"></i>
                                                                         List
-                                                                    </button>
-                                                                </a>
-                                                                <% } %>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <% }) %>
+                                                                    </a>
+                                                                    <% } %>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <% }); %>
+                                                    <% } else { %>
+                                                        <tr>
+                                                            <td colspan="3">No categories available.</td>
+                                                        </tr>
+                                                        <% } %>
                                     </tbody>
                                 </table>
                             </div>

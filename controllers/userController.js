@@ -145,7 +145,7 @@ const loadHome = async (req, res) => {
     console.log("Error fetching data:", error);
     res.status(500).send("An error occurred while loading the home page.");
   }
-};
+}
 
 
 
@@ -316,12 +316,10 @@ const resendOTP = async (req, res) => {
     if (!user) {
       return res.json({ success: false, message: "User not found." });
     }
-
     if (user.otp && user.otp_expiry > new Date()) {
       await sendOTP(user.email, user.otp);
       return res.json({ success: true, message: "The existing OTP has been resent.", otpExpiry: user.otp_expiry.getTime() });
     }
-
     const otp = generateOTP();
     const otpExpiry = otpExpiryTime();
 
@@ -335,7 +333,7 @@ const resendOTP = async (req, res) => {
     console.log(error.message);
     res.json({ success: false, message: "An error occurred while resending OTP." });
   }
-};
+}
 
 //----------------------------Login User------------------------------------//
 
@@ -348,23 +346,23 @@ const loginUser = async (req, res) => {
       if (passwordMatch) {
 
         if (user.is_blocked) {
-          return res.status(403).send({ message: "Your acoount is blocked:" });
+          return res.status(403).send({ success: false, message: "Your acoount is blocked:" });
         }
         const token = createToken({ id: user._id });
         res.cookie("jwt", token, {
           httpOnly: true,
           maxAge: 60 * 60 * 1000 * 24,
         });
-        return res.redirect("/home");
+        return res.json({ success: true, redirectTo: "/home" });
       } else {
-        return res.render('login', { message: "Invalid email or password" });
+        return res.status(401).json({ success: false, message: "Invalid email or password" });
       }
     } else {
-      return res.render('login', { message: "Invalid email or password" });
+      return res.status(401).json({ success: false, message: "Invalid email or password." });
     }
   } catch (error) {
-    console.log("Error during login:", error);
-    res.status(500).send("An error occurred during login");
+    console.log("Error during login:", error)
+    res.status(500).json({ success: false, message: "An error occurred during login" })
   }
 }
 
@@ -385,10 +383,10 @@ const singleProduct = async (req, res) => {
         path: 'userId',
         select: 'username'
       }
-    });
+    })
 
     if (!product) {
-      return res.status(404).send("Product not found");
+      return res.status(404).send("Product not found")
     }
 
     let userId = null;
@@ -396,11 +394,11 @@ const singleProduct = async (req, res) => {
     let isInWishlist = false;
     let isInCart = false;
 
-    const relatedProducts = await Product.find({ category: product.category });
+    const relatedProducts = await Product.find({ category: product.category })
     const token = req.cookies.jwt;
 
     if (token) {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET)
       userId = decoded.id;
       const order = await Order.findOne({
         userId: userId,

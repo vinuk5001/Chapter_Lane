@@ -10,20 +10,19 @@ const express = require("express");
 const app = express();
 
 app.use(express.json());
-app.use(express.urlencoded({extended:true})); 
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(nocache())
 app.use(express.static('public'))
 
 
-app.use('/',userRoute)
-app.use('/admin',adminRoute)
+app.use('/', userRoute)
+app.use('/admin', adminRoute)
 
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT,function(){
+app.listen(PORT, function () {
     console.log(`Server is running on port ${PORT}`);
 });
-
 
 

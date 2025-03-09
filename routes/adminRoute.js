@@ -17,6 +17,7 @@ admin_route.set("view engine", "ejs")
 admin_route.set("views", "./views/admin")
 admin_route.use(express.static("public"))
 
+
 admin_route.get('/', adminController.loadLogin)
 admin_route.post('/login', adminController.isAdmin)
 admin_route.get('/home', middleware.requireAuth, adminController.loadHome);
@@ -44,7 +45,6 @@ admin_route.get('/salesReportPDF/pdf', adminController.salesReportPDF);
 admin_route.get('/salesReportExcel', adminController.salesReportExcel);
 admin_route.delete('/coupons', couponController.deleteCoupon);
 
-
 admin_route.get('/listcategory', categoryController.listCategory);
 admin_route.get('/unlistcategory', categoryController.unlistCategory);
 admin_route.get('/showunlistedcategory', categoryController.showUnlistedCategory);
@@ -58,14 +58,9 @@ admin_route.get('/showunlisted', productController.showUnlisted);
 
 admin_route.get('/Userlist', adminController.userList);
 admin_route.post('/toggle-user/:id', middleware.requireAuth, adminController.toggleUserStatus);
-// admin_route.get('/category-offers', offerController.getCategoryOffers);
-// admin_route.post('/category-offers',offerController.addCategoryOffer);
-// admin_route.delete('/category-offers/:id',offerController.deleteCategoryOffer);
-// admin_route.get('/categories',offerController.getCategories);
-
-
-
+admin_route.get('/get-chart', middleware.requireAuth, adminController.getChartData);
 admin_route.get('/logout', adminController.logout);
+
 
 module.exports = admin_route;
 

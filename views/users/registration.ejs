@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html class="no-js" lang="en">
+
 <head>
     <meta charset="utf-8">
     <title>Registration Page</title>
@@ -15,6 +16,7 @@
             background-size: cover;
             margin: 0;
         }
+
         .form-container {
             background-color: rgba(255, 255, 255, 0.8);
             padding: 20px;
@@ -22,14 +24,17 @@
             max-width: 400px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         .heading_s1 {
             margin-bottom: 30px;
             text-align: center;
         }
+
         .form-group {
             position: relative;
             margin-bottom: 1rem;
         }
+
         .form-group .icon {
             position: absolute;
             top: 50%;
@@ -37,25 +42,29 @@
             transform: translateY(-50%);
             font-size: 1.2rem;
             color: #999;
-            pointer-events: none; /* Prevents the icon from blocking input field clicks */
+            pointer-events: none;
         }
+
         .form-group input {
             width: 100%;
-            padding-right: 2.5rem; /* Space for the icon */
-            padding-left: 1rem; /* Optional: add padding to the left for better spacing */
-            box-sizing: border-box; /* Ensures padding is included in the width */
-            height: 40px; /* Set a consistent height for the inputs */
+            padding-right: 2.5rem;
+            padding-left: 1rem;
+            box-sizing: border-box;
+            height: 40px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+
         .error {
             color: red;
-            font-size: 0.75rem; /* Smaller font size for error messages */
+            font-size: 0.75rem;
             margin-top: 0.25rem;
         }
+
         .password-container {
             position: relative;
         }
+
         .toggle-password {
             position: absolute;
             right: 10px;
@@ -67,6 +76,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="form-container">
         <div class="heading_s1">
@@ -91,7 +101,6 @@
             <div class="form-group password-container">
                 <label for="password"><i class="fi-rs-lock mr-10"></i>Enter Password:</label>
                 <input type="password" id="password" name="password" placeholder="Password">
-                <!-- <span id="togglePassword" class="toggle-password"><i class="fas fa-eye"></i></span> -->
                 <div id="passwordError" class="error"></div>
             </div>
             <div class="form-group">
@@ -103,20 +112,21 @@
                 <button type="submit" class="btn btn-fill-out btn-block hover-up">Submit & Register</button>
             </div>
             <div class="text-muted text-center">Already have an account? <a href="/login">Sign in now</a></div>
-            <% if (typeof message !== "undefined") { %>
-                <p style="color: red;"><%= message %></p>
-            <% } %>
+            <% if (typeof message !=="undefined" ) { %>
+                <p style="color: red;">
+                    <%= message %>
+                </p>
+                <% } %>
         </form>
-        
-        
-        
+
+
+
     </div>
 
     <script>
         document.getElementById('registerForm').addEventListener('submit', function (e) {
             let valid = true;
 
-            // Username validation
             const username = document.getElementById('username').value.trim();
             if (!username) {
                 valid = false;
@@ -125,7 +135,6 @@
                 document.getElementById('usernameError').innerText = '';
             }
 
-            // Email validation
             const email = document.getElementById('email').value.trim();
             const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
             if (!email || !emailPattern.test(email)) {
@@ -135,11 +144,9 @@
                 document.getElementById('emailError').innerText = '';
             }
 
-            // Mobile number validation
             const mobile = document.getElementById('mobile_number').value.trim();
             const mobilePattern = /^[0-9]{10}$/;
 
-            // Function to check if all characters in a string are the same
             const isAllSameDigits = (str) => {
                 return str.split('').every(char => char === str[0]);
             };
@@ -151,7 +158,6 @@
                 document.getElementById('mobileError').innerText = '';
             }
 
-            // Password validation
             const password = document.getElementById('password').value.trim();
             const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20}$/;
             if (!password || !passwordPattern.test(password)) {
@@ -161,9 +167,10 @@
                 document.getElementById('passwordError').innerText = '';
             }
 
-            // Confirm password validation
             const confirmPassword = document.getElementById('confirmpassword').value.trim();
-            if (password !== confirmPassword) {
+            const passwordCheck = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20}$/;
+
+            if (!password || !passwordCheck.test(password)) {
                 valid = false;
                 document.getElementById('confirmpasswordError').innerText = 'Passwords do not match';
             } else {
@@ -173,16 +180,11 @@
             if (!valid) {
                 e.preventDefault();
             }
-        });
+        })
 
-        // document.getElementById('togglePassword').addEventListener('click', function () {
-        //     const passwordField = document.getElementById('password');
-        //     const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-        //     passwordField.setAttribute('type', type);
-        //     this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
-        // });
     </script>
-    
+
     <script src="/assets/js/main.js?v=3.4"></script>
 </body>
+
 </html>

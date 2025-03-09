@@ -131,12 +131,14 @@
     <script>
 
         document.addEventListener('DOMContentLoaded', function () {
+            console.log("hello")
             const loginForm = document.querySelector('form');
             const errorModal = document.getElementById('errorModal');
             const closeModal = document.getElementById('closeModal');
             const closeModalBtn = document.getElementById('closeModalBtn');
             const modalMessage = document.getElementById('modalMessage');
 
+            console.log("loginform", loginForm);
 
             closeModal.addEventListener('click', () => {
                 errorModal.style.display = 'none';

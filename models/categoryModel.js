@@ -5,19 +5,18 @@ const categorySchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'Name is required'],
-        unique:true,
-        trim:true,
+        unique: true,
+        trim: true,
     },
-    offer:{
-        type:Number,
-        min:0,
-        max:100
+    offer: {
+        type: Number,
+        min: 0,
+        max: 100
     },
     description: {
         type: String,
         required: [true, 'Description is required'],
-        unique:true,
-        trim:true
+        trim: true
     },
     order: {
         type: String

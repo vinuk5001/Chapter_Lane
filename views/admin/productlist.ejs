@@ -245,9 +245,13 @@
                             </div>
 
                             <div class="col-lg-2 col-sm-2 col-4 col-category">
-                                <span>
-                                    <%= item.category.name %>
-                                </span>
+                                <% if (item.category && item.category.name){%>
+                                    <span>
+                                        <%= item.category.name %>
+                                    </span>
+                                    <%}else{%>
+                                        <span>No category assigned</span>
+                                        <%}%>
                             </div>
 
                             <div class="col-lg-2 col-sm-2 col-4 col-author">
