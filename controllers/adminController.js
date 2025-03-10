@@ -132,37 +132,6 @@ const loadHome = async (req, res) => {
 
         const orderDates = salesOrder.map(order => order.createdAt);
         console.log("orderDates", orderDates);
-        //             billTotal: 1,
-        //             month: { $month: "$createdAt" },
-        //             year: { $year: "$createdAt" }
-        //         }
-        //     },
-        //     {
-        //         $group: {
-        //             _id: { month: "$month", year: "$year" },
-        //             totalSales: { $sum: "$billTotal" }
-        //         }
-        //     },
-        //     { $sort: { "_id.year": -1, "_id.month": -1 } }
-        // ]);
-        // console.log("monthlySales", monthlySales);
-
-        // const yearlySales = await Order.aggregate([
-        //     {
-        //         $project: {
-        //             billTotal: 1,
-        //             year: { $year: "$createdAt" }
-        //         }
-        //     },
-        //     {
-        //         $group: {
-        //             _id: "$year",
-        //             totalSales: { $sum: "$billTotal" }
-        //         }
-        //     },
-        //     { $sort: { "_id": -1 } }
-        // ])
-        // console.log("yearlySales", yearlySales);
 
         const overallStats = {
             totalSales: await Order.aggregate([
@@ -253,6 +222,7 @@ const toggleUserStatus = async (req, res) => {
 
 
 //------------------OrderList in Admin --------------------//
+
 
 const orderlist = async (req, res) => {
     try {
@@ -363,7 +333,7 @@ const rejectReturn = async (req, res) => {
     }
 };
 
-
+//--------------------------loadOffer-----------------------------//
 
 const loadOfferManagementPage = async (req, res) => {
     try {
@@ -420,7 +390,7 @@ const salesReport = async (req, res) => {
 }
 
 
-
+//--------------------------------filterSales--------------------------------//
 
 const filterSales = async (req, res) => {
     try {

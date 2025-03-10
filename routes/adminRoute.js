@@ -3,7 +3,6 @@ const express = require("express");
 const admin_route = express();
 const PDFDocument = require('pdfkit');
 const { salesReport, salesReportPDF, salesReportExcel } = require('../controllers/adminController');
-const offerController = require("../controllers/offerController")
 const adminController = require("../controllers/adminController");
 const productController = require("../controllers/productController");
 const categoryController = require("../controllers/categoryController");
@@ -34,7 +33,6 @@ admin_route.post('/orderStatus', middleware.requireAuth, adminController.orderSt
 admin_route.post('/approveReturn', middleware.requireAuth, adminController.approveReturn);
 admin_route.post('/rejectReturn', adminController.rejectReturn);
 admin_route.get('/offerManagement', adminController.loadOfferManagementPage);
-admin_route.get('/categoryOffers', adminController.categoryOffer);
 admin_route.get('/addCoupon', couponController.loadAddCoupon);
 admin_route.post('/postCoupon', couponController.addCoupon);
 admin_route.post('/updateTotalAmount', couponController.updateTotalAmount);
@@ -60,7 +58,6 @@ admin_route.get('/Userlist', adminController.userList);
 admin_route.post('/toggle-user/:id', middleware.requireAuth, adminController.toggleUserStatus);
 admin_route.get('/get-chart', middleware.requireAuth, adminController.getChartData);
 admin_route.get('/logout', adminController.logout);
-
 
 module.exports = admin_route;
 
