@@ -14,6 +14,7 @@ const path = require('path');
 const fs = require('fs');
 const { parse } = require("path");
 
+
 //---------Admin Login ------------//
 
 const loadLogin = (req, res) => {
@@ -28,6 +29,7 @@ const createToken = (user) => {
 }
 
 //----------Admin Authentication------//
+
 const isAdmin = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -41,22 +43,24 @@ const isAdmin = async (req, res) => {
                 const token = createToken({ id: admin._id });
                 res.cookie("admin", token, {
                     httpOnly: true,
-                    maxAge: 30 * 24 * 60 * 60 * 1000,
-                    secure: process.env.NODE_ENV === 'production',
-                });
-                console.log("token", token);
+                    maxAge: 60 * 60 * 1000 * 24,
+
+                })
+                console.log("token", token)
                 return res.status(200).json({ message: "Login successful", token });
             } else {
                 res.status(400).json({ error: "Invalid email or password" })
             }
         } else {
-            res.status(400).json({ error: "Invalid email or password" });
+            res.status(400).json({ error: "Invalid email or password" })
         }
     } catch (error) {
-        console.log(error.message);
-        res.status(500).json({ error: "Something went wrong. Please try again later." });
+        console.log(error.message)
+        res.status(500).json({ error: "Something went wrong. Please try again later." })
     }
 }
+
+
 
 //------------Admin Logout-------------//
 
@@ -70,7 +74,10 @@ const logout = async (req, res) => {
     }
 }
 
+
 //-----------Admin Home-----------------//
+
+
 
 const loadHome = async (req, res) => {
     try {
@@ -171,6 +178,7 @@ const loadHome = async (req, res) => {
 
 
 //-----------User List-----------------//
+
 
 const userList = async (req, res) => {
     try {
@@ -355,6 +363,7 @@ const categoryOffer = async (req, res) => {
 
 const salesReport = async (req, res) => {
     try {
+
         const { startDate, endDate } = req.query;
         const page = parseInt(req.query.page) || 1;
         const limit = 5;

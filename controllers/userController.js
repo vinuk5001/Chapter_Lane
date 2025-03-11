@@ -1062,21 +1062,21 @@ const searchBook = async (req, res) => {
 
 const searchInShop = async (req, res) => {
   try {
-    const { search } = req.body;
-    const categoryId = req.query.category;
-    const categories = await Category.find();
+    const { search } = req.body
+    const categoryId = req.query.category
+    const categories = await Category.find()
 
-    const regex = new RegExp(search, 'i');
-    let filterCriteria = { name: { $regex: regex } };
+    const regex = new RegExp(search, 'i')
+    let filterCriteria = { name: { $regex: regex } }
     if (categoryId) {
-      filterCriteria.category = mongoose.Types.ObjectId(categoryId);
+      filterCriteria.category = mongoose.Types.ObjectId(categoryId)
     }
     const products = await Product.find(filterCriteria)
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-    const totalProducts = await Product.countDocuments(filterCriteria);
-    const totalPages = Math.ceil(totalProducts / limit);
+    const page = parseInt(req.query.page) || 1
+    const limit = parseInt(req.query.limit) || 10
+    const skip = (page - 1) * limit
+    const totalProducts = await Product.countDocuments(filterCriteria)
+    const totalPages = Math.ceil(totalProducts / limit)
 
     res.render('shop', {
       product: products,
@@ -1087,9 +1087,9 @@ const searchInShop = async (req, res) => {
       categories: categories,
       categoryId: categoryId,
       pageNumbers: Array.from({ length: totalPages }, (_, i) => i + 1)
-    });
+    })
   } catch (error) {
-    console.error('Error occurred while searching for products:', error);
+    console.error('Error occurred while searching for products:', error)
     res.status(500).send({ error: 'An error occurred while searching for products' })
   }
 }
@@ -1098,9 +1098,9 @@ const searchInShop = async (req, res) => {
 
 const showOrderDetails = async (req, res) => {
   try {
-    const orderId = req.query.orderid;
-    const { addressId } = req.body;
-    console.log(addressId);
+    const orderId = req.query.orderid
+    const { addressId } = req.body
+    console.log(addressId)
     const address = await Address.findById(addressId)
     if (!orderId) {
       return res.status(404).send('Order ID is required')
@@ -1123,10 +1123,10 @@ const filterByCategory = async (req, res) => {
   try {
     const categoryId = req.query.id
     const categories = await Category.find()
-    const selectedCategory = await Category.findById(categoryId);
+    const selectedCategory = await Category.findById(categoryId)
 
     if (!selectedCategory) {
-      return res.render("home", { categories, message: "Category not found", products: [] });
+      return res.render("home", { categories, message: "Category not found", products: [] })
     }
 
     const products = await Product.find({ category: categoryId, isListed: true, status: "Active" }).populate('category');
@@ -1146,24 +1146,23 @@ const googleAuth = Passport.authenticate("google", {
 
 
 const googleAuthCallback = async (req, res) => {
-  const user = req.user;
+  const user = req.user
   if (!user) {
     const errorMessage = "Authentication failed, user data is missing."
     return res.render("login", {
       errorMessage,
       pageTitle: "Login Page"
-    });
+    })
   }
 
 
-  const token = createToken({ id: user._id });
+  const token = createToken({ id: user._id })
   res.cookie("jwt", token, {
     httpOnly: true,
     maxAge: 60 * 60 * 1000 * 24,
-  });
-
-  return res.redirect("/home");
-};
+  })
+  return res.redirect("/home")
+}
 
 
 const googleAuthFailure = async (req, res) => {
@@ -1172,10 +1171,10 @@ const googleAuthFailure = async (req, res) => {
     res.render("login", {
       errorMessage,
       pageTitle: "Login Page"
-    });
+    })
   } catch (error) {
     const errorMessage = "An unexpected error occurred. Please try again later."
-    res.redirect(`/login?error=${errorMessage}`);
+    res.redirect(`/login?error=${errorMessage}`)
   }
 
 }

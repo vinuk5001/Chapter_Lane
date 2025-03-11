@@ -139,7 +139,6 @@
             const modalMessage = document.getElementById('modalMessage');
 
             console.log("loginform", loginForm);
-
             closeModal.addEventListener('click', () => {
                 errorModal.style.display = 'none';
             })
@@ -149,9 +148,12 @@
             })
 
             loginForm.addEventListener('submit', async function (e) {
+                console.log("loginForms")
                 e.preventDefault()
                 const email = document.querySelector('input[name="email"]').value
+                console.log("email", email);
                 const password = document.querySelector('input[name="password"]').value
+                console.log("password", password);
                 try {
                     const response = await axios.post('/admin/login', { email, password });
                     console.log("responseee", response)
@@ -162,12 +164,13 @@
                 } catch (error) {
                     console.log(error)
                     const errorMessage = error.response?.data?.error || 'An unknown error occured.please try again later'
+                    console.log("errorMessage", errorMessage);
                     modalMessage.textContent = errorMessage;
                     errorModal.style.display = 'block';
                 }
             })
-
         })
+
 
     </script>
 </body>

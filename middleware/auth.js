@@ -52,8 +52,6 @@ const requireAuth = (req, res, next) => {
     }
 }
 
-
-
 const requirelogin = (req, res, next) => {
     try {
         const tokens = req.cookies.admin;
