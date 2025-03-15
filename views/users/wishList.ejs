@@ -15,15 +15,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=3.4">
     <style>
-        /* Color Variables */
         :root {
-            --primary-color: #000000; /* Black */
-            --text-color: #ffffff; /* White */
-            --hover-color: #333333; /* Dark Gray for hover effects */
-            --button-color: #00bfae; /* Teal for buttons */
+            --primary-color: #000000;
+            --text-color: #ffffff;
+            --hover-color: #333333;
+            --button-color: #00bfae;
         }
 
-        /* Navbar Styles */
+
         .navbar {
             background-color: var(--primary-color);
             padding: 10px 20px;
@@ -151,7 +150,7 @@
             display: block;
         }
 
-        /* Footer Styles */
+
         .footer {
             background-color: var(--primary-color);
             color: var(--text-color);
@@ -185,7 +184,6 @@
             color: var(--hover-color);
         }
 
-        /* General Table Styling */
         .table {
             width: 100%;
             border-collapse: separate;
@@ -230,13 +228,12 @@
             text-decoration: underline;
         }
 
-        /* Price Styling */
         .price span {
             font-size: 14px;
             font-weight: bold;
         }
 
-        /* Stock Status Styling */
+
         .stock-status .status {
             font-weight: bold;
             padding: 6px 12px;
@@ -253,7 +250,7 @@
             background-color: #f8d7da;
         }
 
-        /* Button Styling */
+
         .btn-primary {
             background-color: var(--button-color);
             color: var(--text-color);
@@ -269,7 +266,7 @@
             background-color: var(--hover-color);
         }
 
-        /* Remove Link Styling */
+
         .action a {
             color: #dc3545;
             font-size: 14px;
@@ -337,50 +334,60 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <% if (wishlist.length === 0) { %>
+                                <% if (wishlist.length===0) { %>
                                     <tr>
                                         <td colspan="6" class="text-center">Your wishlist is empty.</td>
                                     </tr>
-                                <% } else { %>
-                                    <% wishlist.forEach(item => { %>
-                                        <tr>
-                                            <td class="image product-thumbnail">
-                                                <img src="/adminImages/<%= item.productImage %>" alt="<%= item.productName %>" class="img-fluid">
-                                            </td>
-                                            <td class="product-des product-name">
-                                                <h5 class="product-name">
-                                                    <a href="/product/<%= item.productId %>"><%= item.productName %></a>
-                                                </h5>
-                                            </td>
-                                            <td class="price" data-title="Price">
-                                                <span>$<%= item.productPrice %></span>
-                                            </td>
-                                            <td class="stock-status" data-title="Stock">
-                                                <span class="status <%= item.productStock > 0 ? 'in-stock' : 'out-of-stock' %>">
-                                                    <%= item.productStock > 0 ? 'In Stock' : 'Out of Stock' %>
-                                                </span>
-                                            </td>
-                            
-                                            <td class="text-right" data-title="Cart">
-                                                <a id="addToCart"
-                                                   href="<%= item.productStock > 0 ? '/addToCart?productId=' + item.productId : '#' %>"
-                                                   class="btn btn-primary"
-                                                   <% if (item.productStock <= 0) { %> disabled <% } %>
-                                                   <% if (wishlist.some(wishItem => wishItem.productId.toString() === item.productId.toString())) { %> disabled <% } %>>
-                                                   <%= item.productStock > 0 && !wishlist.some(wishItem => wishItem.productId.toString() === item.productId.toString()) ? "Add to Cart" : "Added to Cart" %>
-                                                </a>
-                                            </td>
-                            
-                                            <td class="action" data-title="Remove">
-                                                <a href="#" class="removeFromWishlist" data-product-id="<%= item.productId %>">
-                                                    <i class="fas fa-trash"></i> Remove
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    <% }) %>
-                                <% } %>
+                                    <% } else { %>
+                                        <% wishlist.forEach(item=> { %>
+                                            <tr>
+                                                <td class="image product-thumbnail">
+                                                    <img src="/adminImages/<%= item.productImage %>"
+                                                        alt="<%= item.productName %>" class="img-fluid">
+                                                </td>
+                                                <td class="product-des product-name">
+                                                    <h5 class="product-name">
+                                                        <a href="/product/<%= item.productId %>">
+                                                            <%= item.productName %>
+                                                        </a>
+                                                    </h5>
+                                                </td>
+                                                <td class="price" data-title="Price">
+                                                    <span>$<%= item.productPrice %></span>
+                                                </td>
+                                                <td class="stock-status" data-title="Stock">
+                                                    <span
+                                                        class="status <%= item.productStock > 0 ? 'in-stock' : 'out-of-stock' %>">
+                                                        <%= item.productStock> 0 ? 'In Stock' : 'Out of Stock' %>
+                                                    </span>
+                                                </td>
+
+                                                <td class="text-right" data-title="Cart">
+                                                    <a id="addToCart"
+                                                        href="<%= item.productStock > 0 ? '/addToCart?productId=' + item.productId : '#' %>"
+                                                        class="btn btn-primary" <% if (item.productStock <=0) { %>
+                                                        disabled <% } %>
+                                                            <% if (wishlist.some(wishItem=>
+                                                                wishItem.productId.toString() ===
+                                                                item.productId.toString())) { %> disabled <% } %>>
+                                                                    <%= item.productStock> 0 && !wishlist.some(wishItem
+                                                                        => wishItem.productId.toString() ===
+                                                                        item.productId.toString()) ? "Add to Cart" :
+                                                                        "Added to Cart" %>
+                                                    </a>
+                                                </td>
+
+                                                <td class="action" data-title="Remove">
+                                                    <a href="#" class="removeFromWishlist"
+                                                        data-product-id="<%= item.productId %>">
+                                                        <i class="fas fa-trash"></i> Remove
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+                                                <% } %>
                             </tbody>
-                            
+
                         </table>
                     </div>
                 </div>
@@ -397,8 +404,6 @@
             <a href="#"><i class="fab fa-instagram"></i></a>
         </div>
     </footer>
-
-    <!-- Preloader Start -->
     <div id="preloader-active">
         <div class="preloader d-flex align-items-center justify-content-center">
             <div class="preloader-inner position-relative">
@@ -413,7 +418,7 @@
             </div>
         </div>
     </div>
-    <!-- Vendor JS -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/plugins/slick.js"></script>
@@ -430,13 +435,13 @@
     <script src="assets/js/plugins/isotope.js"></script>
     <script src="assets/js/plugins/scrollup.js"></script>
     <script src="assets/js/plugins/jquery.vticker-min.js"></script>
-    <!-- Template JS -->
+
     <script src="assets/js/main.js?v=3.4"></script>
     <script src="assets/js/shop.js?v=3.4"></script>
 
     <script>
         document.querySelectorAll('.removeFromWishlist').forEach(button => {
-            button.addEventListener('click', async function(e) {
+            button.addEventListener('click', async function (e) {
                 e.preventDefault();
                 const productId = this.getAttribute('data-product-id');
                 try {
@@ -445,12 +450,12 @@
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ productId :productId})
+                        body: JSON.stringify({ productId: productId })
                     });
                     const result = await response.json();
                     if (result.success) {
                         alert('Product removed from wishlist successfully');
-                        location.reload();  
+                        location.reload();
                     } else {
                         alert(result.message);
                     }

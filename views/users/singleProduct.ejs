@@ -224,7 +224,7 @@
 </head>
 
 <body>
-    <!-- Quick view -->
+
     <div class="modal fade custom-modal" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -235,7 +235,7 @@
                         <div class="col-md-6 col-sm-12 col-xs-12">
                             <div class="detail-gallery">
                                 <span class="zoom-icon"><i class="fi-rs-search"></i></span>
-                                <!-- MAIN SLIDES -->
+
                                 <div class="product-image-slider">
                                     <figure class="border-radius-10">
                                         <img src="assets/imgs/shop/product-16-2.jpg" alt="product image">
@@ -259,14 +259,14 @@
                                         <img src="assets/imgs/shop/product-16-7.jpg" alt="product image">
                                     </figure>
                                 </div>
-                                <!-- THUMBNAILS -->
+
                                 <div class="slider-nav-thumbnails pl-15 pr-15">
                                     <img src="/adminImages/" alt="product image">
                                 </div>
 
                             </div>
                         </div>
-                        <!-- End Gallery -->
+
 
                     </div>
                 </div>
@@ -325,6 +325,11 @@
             </div>
         </div>
         <section class="mt-50 mb-50">
+
+            <div class="breadcrumb-wrap">
+
+            </div>
+
             <div class="container">
                 <div class="row">
                     <div class="col-lg-9">
@@ -333,8 +338,11 @@
                                 <div class="col-md-6 col-sm-12 col-xs-12">
                                     <div class="detail-gallery">
                                         <span class="zoom-icon"><i class="fi-rs-search"></i></span>
-                                        <!-- MAIN SLIDES -->
+
                                         <div class="product-image-slider">
+
+
+
                                             <% products.images.reverse().forEach(image=> { %>
                                                 <figure class="border-radius-12 shadow-sm">
                                                     <img src="/adminImages/<%=image%>" alt="product---image">
@@ -351,7 +359,7 @@
                                         </div>
 
                                     </div>
-                                    <!-- End Gallery -->
+
                                     <div class="social-icons single-share mt-20">
                                         <ul class="text-grey-5 d-inline-block">
                                             <li><strong class="mr-10">Share this:</strong></li>
@@ -418,7 +426,7 @@
                                             <div class="product-extra-link2 mt-3"
                                                 style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
 
-                                                <!-- Add to Cart Button -->
+
                                                 <% if(products.stock> 0 && products.status !== 'OutOfStock'){ %>
                                                     <a id="addToCart-<%= products._id %>" href="javascript:void(0);"
                                                         class="button button-add-to-cart"
@@ -435,7 +443,6 @@
                                                         </button>
                                                         <% } %>
 
-                                                            <!-- Add to Wishlist Button -->
                                                             <button class="button button-add-to-wishlist"
                                                                 aria-label="Add To Wishlist"
                                                                 onclick="addToWishlist('<%= products._id %>', this)"
@@ -455,7 +462,7 @@
                                                 </span></li>
                                         </ul>
                                     </div>
-                                    <!-- Detail Info -->
+
                                 </div>
                             </div>
                             <div class="tab-style3 mt-4">
@@ -499,8 +506,11 @@
                                                                             <p>
                                                                                 <%= review.comment%>
                                                                             </p>
-                                                                            <small>By <%= review.userId.username %> on
-                                                                                    <%= new
+                                                                            <small>By <%= review.userId
+                                                                                    ?review.userId.username
+                                                                                    : 'Unknown User' %>
+
+                                                                                    on <%= new
                                                                                         Date(review.createdAt).toLocaleDateString()
                                                                                         %></small>
                                                                         </div>
@@ -518,7 +528,7 @@
                                         <div class="review-form">
                                             <h4>Write a review</h4>
 
-                                            <!-- Only show the review form if the user has ordered the product -->
+
                                             <form id="review-form" <% if (!hasOrdered) { %> style="display: none;"
                                                 <% } %> >
                                                     <label for="rating">Rating:</label>
@@ -536,7 +546,6 @@
                                                     <button type="submit">Submit Review</button>
                                             </form>
 
-                                            <!-- Message displayed if the user has not ordered the product -->
                                             <div id="no-order-message" <% if (hasOrdered) { %> style="display:
                                                 none;" <% } %> >
                                                     <p>You need to purchase this product before leaving a review.
@@ -593,9 +602,7 @@
 
 
                     </div>
-                    <!-- Sidebar -->
                     <div class="col-lg-3 primary-sidebar sticky-sidebar">
-                        <!-- Add sidebar content here -->
                     </div>
                 </div>
             </div>
@@ -633,7 +640,6 @@
     <script src="assets/js/plugins/jquery.vticker-min.js"></script>
     <script src="assets/js/plugins/jquery.theia.sticky.js"></script>
     <script src="assets/js/plugins/jquery.elevatezoom.js"></script>
-    <!-- Template  JS -->
     <script src="./assets/js/main.js?v=3.4"></script>
     <script src="./assets/js/shop.js?v=3.4"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -661,7 +667,6 @@
                         }
                     })
 
-                    // Disable the "Add to Cart" button after adding
                     const button = document.getElementById(`addToCart-${productId}`);
                     if (button) {
                         button.innerText = "✔️ Already in Cart";
@@ -711,7 +716,7 @@
                 .then(data => {
                     if (data.success) {
                         element.innerHTML = '✔️ Already in Wishlist';
-                        element.disabled = true;  // Prevent multiple clicks
+                        element.disabled = true;
 
                         Swal.fire({
                             title: "Added to Wishlist!",
@@ -767,15 +772,15 @@
                         text: 'You need to purchase this product before leaving a review.',
                         showConfirmButton: true
                     });
-                    return; // Stop the function from continuing
+                    return;
                 }
 
-                // Step 2: If the user has ordered the product, proceed with adding the review
+
                 const response = await fetch(`/product/${productId}/review`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`, // Pass the JWT token
+                        'Authorization': `Bearer ${token}`,
                     },
                     body: JSON.stringify(reviewData),
                 });
@@ -791,8 +796,8 @@
                         timer: 1500
                     });
 
-                    addReviewToDOM(result.review); // Add the review to the DOM
-                    document.getElementById('review-form').reset(); // Reset the form after submission
+                    addReviewToDOM(result.review);
+                    document.getElementById('review-form').reset();
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -826,11 +831,9 @@
             </div>
         </div>
     `;
-
-            reviewsList.prepend(reviewElement); // Prepend the review to the top of the list
-            reviewsList.scrollIntoView({ behavior: 'smooth' }); // Scroll to the top of the reviews list
+            reviewsList.prepend(reviewElement);
+            reviewsList.scrollIntoView({ behavior: 'smooth' });
         }
-
     </script>
 
 

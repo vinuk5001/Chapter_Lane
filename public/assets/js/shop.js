@@ -44,7 +44,7 @@
             });
         });
         //Elevate Zoom
-        if ( $(".product-image-slider").length ) {
+        if ($(".product-image-slider").length) {
             $('.product-image-slider .slick-active img').elevateZoom({
                 zoomType: "inner",
                 cursor: "crosshair",

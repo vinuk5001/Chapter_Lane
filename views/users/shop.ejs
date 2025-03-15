@@ -12,14 +12,14 @@
     <meta property="og:url" content="">
     <meta property="og:image" content="">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
- 
-    <!-- Favicon -->
+
+
     <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favicon.svg">
-    <!-- Template CSS -->
+
     <link rel="stylesheet" href="assets/css/main.css?v=3.4">
 
     <style>
-         .navbar {
+        .navbar {
             background-color: #1a1a1a;
             padding: 15px 30px;
             display: flex;
@@ -80,18 +80,19 @@
             border: 1px solid #ccc;
             width: 200px;
         }
+
         .navbar .search-bar button {
             background: #007bff;
-             border: none;
-             color: white;
+            border: none;
+            color: white;
             padding: 5px 10px;
             border-radius: 5px;
             cursor: pointer;
-      }
+        }
 
-      .navbar .search-bar button i {
-           font-size: 16px;
-       } 
+        .navbar .search-bar button i {
+            font-size: 16px;
+        }
 
         .navbar .user-actions {
             display: flex;
@@ -147,6 +148,7 @@
         .navbar .dropdown:hover .dropdown-content {
             display: block;
         }
+
         .cta-button {
             display: inline-block;
             padding: 15px 30px;
@@ -163,14 +165,14 @@
             background-color: #0056b3;
         }
 
-        /* Main Content Styles */
+
         .main-content {
             padding: 40px 20px;
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        /* Products and Promotions Section */
+
         .products-promotions-section {
             padding: 40px 30px;
         }
@@ -200,14 +202,14 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            max-width: 250px; /* Ensure consistent width */
+            max-width: 250px;
             margin: auto;
-            overflow : hidden;
+            overflow: hidden;
         }
 
         .book-item img {
             width: 100%;
-            height: 300px; /* Ensure uniform height for all images */
+            height: 300px;
             object-fit: cover;
             border-radius: 5px;
             margin-bottom: 15px;
@@ -220,7 +222,7 @@
 
         .book-item h3 {
             font-size: 1rem;
-            margin:0;
+            margin: 0;
             color: #000;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -245,22 +247,23 @@
             border-radius: 5px;
             font-size: 0.9rem;
             transition: background-color 0.3s ease;
-            margin-top:10px;
+            margin-top: 10px;
         }
 
         .book-item button:hover {
             background-color: #0056b3;
         }
+
         .book-item .out-of-stock-button {
-              background-color: #f44336; /* Red background for out of stock */
+            background-color: #f44336;
         }
 
-         .book-item .out-of-stock-button:hover {
-               background-color: #c62828; /* Darker red on hover */
-  }
+        .book-item .out-of-stock-button:hover {
+            background-color: #c62828;
+        }
 
         .out-of-stock-btn {
-            background-color: #dc3545; /* Red color for "Out of Stock" */
+            background-color: #dc3545;
             border: none;
             color: white;
             font-weight: bold;
@@ -270,47 +273,48 @@
             border-radius: 4px;
             text-align: center;
         }
+
         .pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-}
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
 
-.pagination a {
-  margin: 0 5px;
-  padding: 10px 15px;
-  text-decoration: none;
-  color: #3b4959;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
+        .pagination a {
+            margin: 0 5px;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #3b4959;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
 
-.pagination a:hover {
-  background-color: #3b4959;
-  color: #fff;
-}
+        .pagination a:hover {
+            background-color: #3b4959;
+            color: #fff;
+        }
 
-.pagination a.active {
-  background-color: #3b4959;
-  color: #fff;
-  border-color: #3b4959;
-}
+        .pagination a.active {
+            background-color: #3b4959;
+            color: #fff;
+            border-color: #3b4959;
+        }
 
-.pagination a.prev,
-.pagination a.next {
-  font-weight: bold;
-}
+        .pagination a.prev,
+        .pagination a.next {
+            font-weight: bold;
+        }
 
-.pagination a.disabled {
-  pointer-events: none;
-  background-color: #f5f5f5;
-  color: #aaa;
-  border-color: #ddd;
-}
-  /* Footer Styles */
-  .footer {
+        .pagination a.disabled {
+            pointer-events: none;
+            background-color: #f5f5f5;
+            color: #aaa;
+            border-color: #ddd;
+        }
+
+        .footer {
             background-color: #1a1a1a;
             color: white;
             text-align: center;
@@ -332,8 +336,8 @@
 </head>
 
 <body>
-    
-   
+
+
     <nav class="navbar">
         <div class="logo">
             <i class="fas fa-book"></i>
@@ -345,16 +349,17 @@
             <li class="dropdown">
                 <a href="#">Browse Category</a>
                 <div class="dropdown-content">
-                    <% if (categories.length > 0) { %>
-                        <% categories.forEach(category => { %>
-                            <a href="/shop?category=<%= category._id %>&sort=<%= category._id%>&sort=nameAsc&page=1&limit=12">
-                            <%= category.name %>  <!-- Display category name -->
+                    <% if (categories.length> 0) { %>
+                        <% categories.forEach(category=> { %>
+                            <a
+                                href="/shop?category=<%= category._id %>&sort=<%= category._id%>&sort=nameAsc&page=1&limit=12">
+                                <%= category.name %>
                             </a>
-                        <% }); %>
-                    <% } %>
+                            <% }); %>
+                                <% } %>
                 </div>
             </li>
-            
+
         </ul>
         <div class="user-actions">
             <a href="/wishlist" class="wishlist-icon">
@@ -365,7 +370,7 @@
             </a>
         </div>
     </nav>
-    
+
     <main class="main">
         <div class="page-header breadcrumb-wrap">
             <div class="container">
@@ -382,111 +387,125 @@
                         <div class="shop-product-fillter">
                             <div class="total-product">
                             </div>
-                            <div class="search-sort-container" style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 15px;">
+                            <div class="search-sort-container"
+                                style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 15px;">
                                 <div class="search-bar" style="flex-grow: 1; max-width: 400px;">
                                     <form action="/searchInShop" method="POST" style="display: flex;">
-                                        <input type="text" name="search" placeholder="Search for items…" 
+                                        <input type="text" name="search" placeholder="Search for items…"
                                             style="flex-grow: 1; padding: 10px; border: 1px solid #ddd; border-radius: 5px 0 0 5px;">
-                                        <button type="submit" 
+                                        <button type="submit"
                                             style="padding: 10px 15px; border: 1px solid #ddd; border-left: none; background: #ff4500; color: white; border-radius: 0 5px 5px 0;">
                                             <i class="fi-rs-search"></i>
                                         </button>
-                                    </form>        
-                                </div>                            
-                               <div class="sort-by-product-area">
-                                <div class="sort-by-cover mr-10">
+                                    </form>
                                 </div>
-                                <div class="sort-by-cover">
-                                    <div class="sort-by-product-wrap">
-                                        <div class="sort-by">
-                                            <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
+                                <div class="sort-by-product-area">
+                                    <div class="sort-by-cover mr-10">
+                                    </div>
+                                    <div class="sort-by-cover">
+                                        <div class="sort-by-product-wrap">
+                                            <div class="sort-by">
+                                                <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
+                                            </div>
+                                            <div class="sort-by-dropdown-wrap">
+                                                <span id="sort-title">Featured <i
+                                                        class="fi-rs-angle-small-down"></i></span>
+                                            </div>
                                         </div>
-                                        <div class="sort-by-dropdown-wrap">
-                                            <span id="sort-title">Featured <i class="fi-rs-angle-small-down"></i></span>
+                                        <div class="sort-by-dropdown">
+                                            <ul id="sort-options">
+                                                <li><a href="/shop?sort=featured" data-sort="featured">Featured</a></li>
+                                                <li><a href="/shop?sort=priceAsc" data-sort="priceAsc">Price: Low to
+                                                        High</a></li>
+                                                <li><a href="/shop?sort=priceDesc" data-sort="priceDesc">Price: High to
+                                                        Low</a></li>
+                                                <li><a href="/shop?sort=newArrivals" data-sort="newArrivals">New
+                                                        Arrivals</a></li>
+                                                <li><a href="/shop?sort=nameAsc" data-sort="nameAsc">aA - zZ</a></li>
+                                                <li><a href="/shop?sort=nameDesc" data-sort="nameDesc">zZ - aA</a></li>
+                                            </ul>
                                         </div>
                                     </div>
-                                    <div class="sort-by-dropdown">
-                                        <ul id="sort-options">
-                                            <li><a href="/shop?sort=featured" data-sort="featured">Featured</a></li>
-                                            <li><a href="/shop?sort=priceAsc" data-sort="priceAsc">Price: Low to High</a></li>
-                                            <li><a href="/shop?sort=priceDesc" data-sort="priceDesc">Price: High to Low</a></li>
-                                            <li><a href="/shop?sort=newArrivals" data-sort="newArrivals">New Arrivals</a></li>
-                                            <li><a href="/shop?sort=nameAsc" data-sort="nameAsc">aA - zZ</a></li>
-                                            <li><a href="/shop?sort=nameDesc" data-sort="nameDesc">zZ - aA</a></li>
-                                        </ul>
-                                    </div>
+
                                 </div>
-                                
-                            </div>
                             </div>
                         </div>
                         <main class="main-content">
-                            <!-- Products and Promotions Section -->
+
                             <section class="products-promotions-section">
-                    
-                             <h2>Books Collection</h2>
+
+                                <h2>Books Collection</h2>
                                 <div class="tab-content wow fadeIn animated" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
+                                    <div class="tab-pane fade show active" id="tab-one" role="tabpanel"
+                                        aria-labelledby="tab-one">
                                         <div class="book-grid">
-                                            <% product.forEach(item => { %>
-                                                <% if (item.status === "Active") { %>
+                                            <% product.forEach(item=> { %>
+                                                <% if (item.status==="Active" ) { %>
                                                     <div class="book-item">
-                                                        <img src="/adminImages/<%= item.images[0] %>" alt="<%= item.name %>">
-                                                        <h3><a href="/singleProduct?id=<%= item._id %>"><%= item.name %></a></h3>
+                                                        <img src="/adminImages/<%= item.images[0] %>"
+                                                            alt="<%= item.name %>">
+                                                        <h3><a href="/singleProduct?id=<%= item._id %>">
+                                                                <%= item.name %>
+                                                            </a></h3>
                                                         <p>Price: <%= item.price %> Rs</p>
                                                         <div class="product-action-1 show">
-                                                            <a aria-label="Add To Cart" class="action-btn hover-up" href="/addToCart?productId=<%= item._id %>">
+                                                            <a aria-label="Add To Cart" class="action-btn hover-up"
+                                                                href="/addToCart?productId=<%= item._id %>">
                                                                 <i class="fi-rs-shopping-bag-add"></i>
                                                             </a>
-                                                        </div>   
-                                                       
-                                                        <% if (item.stock === 0) { %>
-                                                            <button class="btn btn-warning out-of-stock-button">Out of stock</button>
-                                                        <% } else { %>
-                                                            <a class="add-to-cart-btn" href="/addToCart?productId=<%= item._id %>">
-                                                                Add to Cart
-                                                            </a>
-                                                        <% } %>
+                                                        </div>
+
+                                                        <% if (item.stock===0) { %>
+                                                            <button class="btn btn-warning out-of-stock-button">Out of
+                                                                stock</button>
+                                                            <% } else { %>
+                                                                <a class="add-to-cart-btn"
+                                                                    href="/addToCart?productId=<%= item._id %>">
+                                                                    Add to Cart
+                                                                </a>
+                                                                <% } %>
                                                     </div>
-                                                <% } %>
-                                            <% }) %>
+                                                    <% } %>
+                                                        <% }) %>
                                         </div>
                                     </div>
-                                </div> 
+                                </div>
                             </section>
                         </main>
-                        <!--pagination-->
+
 
 
                         <div class="pagination">
-                            <!-- Previous Button -->
-                            <% if (currentPage > 1) { %>
-                              <a href="/shop?category=<%= categoryId || '' %>&sort=<%= sortOption %>&page=<%= currentPage - 1 %>&limit=<%= limit %>">Previous</a>
-                            <% } %>
-                          
-                            <!-- Page Numbers -->
-                            <% pageNumbers.forEach(function(pageNumber) { %>
-                              <a href="/shop?category=<%= categoryId || '' %>&sort=<%= sortOption %>&page=<%= pageNumber %>&limit=<%= limit %>"
-                                 class="<%= pageNumber === currentPage ? 'active' : '' %>">
-                                 <%= pageNumber %>
-                              </a>
-                            <% }); %>
-                          
-                            <!-- Next Button -->
-                            <% if (currentPage < totalPages) { %>
-                              <a href="/shop?category=<%= categoryId || '' %>&sort=<%= sortOption %>&page=<%= currentPage + 1 %>&limit=<%= limit %>">Next</a>
-                            <% } %>
-                       </div>
-                          
-                          <div class="col-lg-3 primary-sidebar sticky-sidebar">
-                        <div class="row">
-                            <div class="col-lg-12 col-mg-6"></div>
-                            <div class="col-lg-12 col-mg-6"></div>
-                        </div>  
-                        
+
+                            <% if (currentPage> 1) { %>
+                                <a
+                                    href="/shop?category=<%= categoryId || '' %>&sort=<%= sortOption %>&page=<%= currentPage - 1 %>&limit=<%= limit %>">Previous</a>
+                                <% } %>
+
+
+                                    <% pageNumbers.forEach(function(pageNumber) { %>
+                                        <a href="/shop?category=<%= categoryId || '' %>&sort=<%= sortOption %>&page=<%= pageNumber %>&limit=<%= limit %>"
+                                            class="<%= pageNumber === currentPage ? 'active' : '' %>">
+                                            <%= pageNumber %>
+                                        </a>
+                                        <% }); %>
+
+
+                                            <% if (currentPage < totalPages) { %>
+                                                <a
+                                                    href="/shop?category=<%= categoryId || '' %>&sort=<%= sortOption %>&page=<%= currentPage + 1 %>&limit=<%= limit %>">Next</a>
+                                                <% } %>
+                        </div>
+
+                        <div class="col-lg-3 primary-sidebar sticky-sidebar">
+                            <div class="row">
+                                <div class="col-lg-12 col-mg-6"></div>
+                                <div class="col-lg-12 col-mg-6"></div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-            </div>
         </section>
     </main>
 
@@ -497,7 +516,7 @@
             <a href="#">Facebook</a> | <a href="#">Twitter</a> | <a href="#">Instagram</a>
         </div>
     </footer>
-   
+
     <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
     <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
     <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
@@ -521,29 +540,29 @@
     <script src="./assets/js/main.js?v=3.4"></script>
     <script src="./assets/js/shop.js?v=3.4"></script>
 
-    
+
     <script>
-     window.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const sortParam = urlParams.get('sort');
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sortParam = urlParams.get('sort');
 
-    const sortOptions = document.querySelectorAll('#sort-options a');
+            const sortOptions = document.querySelectorAll('#sort-options a');
 
-    sortOptions.forEach(option => {
-        option.classList.remove('active');
-    });
+            sortOptions.forEach(option => {
+                option.classList.remove('active');
+            });
 
-    if (sortParam) {
-        const selectedOption = document.querySelector(`#sort-options a[data-sort="${sortParam}"]`);
-        if (selectedOption) {
-            selectedOption.classList.add('active');
-            document.getElementById('sort-title').textContent = selectedOption.textContent;
-        }
-    } else {
-        document.querySelector('#sort-options a[data-sort="featured"]').classList.add('active');
-        document.getElementById('sort-title').textContent = 'Featured';
-    }
-})
+            if (sortParam) {
+                const selectedOption = document.querySelector(`#sort-options a[data-sort="${sortParam}"]`);
+                if (selectedOption) {
+                    selectedOption.classList.add('active');
+                    document.getElementById('sort-title').textContent = selectedOption.textContent;
+                }
+            } else {
+                document.querySelector('#sort-options a[data-sort="featured"]').classList.add('active');
+                document.getElementById('sort-title').textContent = 'Featured';
+            }
+        })
 
     </script>
 </body>

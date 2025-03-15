@@ -7,12 +7,9 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favicon.svg">
-    <!-- Template CSS -->
     <link rel="stylesheet" href="assets/css/main.css?v=3.4">
     <style>
-        /* Global Styles */
         body {
             font-family: 'Roboto', sans-serif;
             line-height: 1.6;
@@ -34,7 +31,6 @@
             background-color: #0056b3;
         }
 
-        /* Header */
         .header-area {
             background-color: #ffffff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -46,7 +42,6 @@
             margin: 0;
         }
 
-        /* Breadcrumb */
         .breadcrumb-wrap {
             background-color: #f5f5f5;
             padding: 15px 0;
@@ -68,7 +63,6 @@
             color: #007bff;
         }
 
-        /* Main Content */
         .main {
             padding: 30px 0;
         }
@@ -168,7 +162,6 @@
             display: none;
         }
 
-        /* Responsive adjustments */
         @media (max-width: 992px) {
             .dashboard-menu {
                 padding: 15px;
@@ -390,7 +383,7 @@
                                                                                     name="address" class="form-control"
                                                                                     required>
                                                                                 <div class="invalid-feedback">Please
-                                                                                    enter an address.</div>
+                                                                                    enter an address</div>
 
                                                                             </div>
                                                                             <div class="form-group mb-3">
@@ -496,14 +489,13 @@
         </section>
     </main>
 
-    <!-- Vendor JS-->
     <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
     <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
     <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
     <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
-    <!-- Template JS -->
     <script src="assets/js/main.js?v=3.4"></script>
     <script>
+
         document.addEventListener("DOMContentLoaded", function () {
             const form = document.getElementById("addressForm");
             const pincodeInput = document.getElementById("pincode");
@@ -512,7 +504,6 @@
             form.addEventListener("submit", function (event) {
                 let valid = true;
 
-                // Custom pincode validation
                 const pincode = pincodeInput.value;
                 if (pincode.length !== 6 || isNaN(pincode) || /^(\d)\1*$/.test(pincode)) {
                     valid = false;

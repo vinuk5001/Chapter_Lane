@@ -184,9 +184,10 @@
                                                     <% if (order.orderStatus !=="Cancelled" && order.orderStatus
                                                         !=="Returned" && order.orderStatus !=="Delivered" ) { %>
                                                         <button class="btn-cancel"
-                                                            onclick="cancelOrder('<%= order._id %>')">Cancel
-                                                            Order</button>
+                                                            onclick="cancelOrder('<%= order._id %>')">
+                                                            Cancel Order</button>
                                                         <% } %>
+
                                                             <% } %>
 
             </div>
@@ -215,6 +216,9 @@
                                 <% } else { %>
                                     <p>Order details not available.</p>
                                     <% } %>
+                                        <div id="order-data" data-order="<%= order %>"></div>
+
+
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -222,8 +226,16 @@
 
 
     <script>
+        window.onload = function () {
+            console.log("Page fully loaded,script initialized");
+        }
+
+        const orderElement = document.getElementById("order-data");
+        const order = JSON.parse(orderElement.getAttribute("data-order"));
+        console.log("order", order);
 
         async function cancelOrder(orderId) {
+            console.log("hi hllooo");
             const { value: reason } = await Swal.fire({
                 title: 'Cancel Order',
                 input: 'textarea',
@@ -234,7 +246,6 @@
                 },
                 showCancelButton: true
             })
-
             if (reason) {
                 try {
                     const response = await fetch(`/cancelOrder`, {
@@ -244,7 +255,6 @@
                         },
                         body: JSON.stringify({ orderId: orderId, reason: reason })
                     })
-
                     if (response.ok) {
                         Swal.fire('Cancelled', 'Your order has been cancelled.', 'success').then(() => {
                             window.location.reload();
@@ -259,7 +269,10 @@
             }
         }
 
+        window.cancelOrder = cancelOrder;
+
         async function returnOrder(orderId) {
+            console.log("return order");
             const { value: reason } = await Swal.fire({
                 title: 'Return Order',
                 input: 'textarea',
@@ -295,13 +308,138 @@
             }
         }
 
-        const order = <%= JSON.stringify(order) %>
 
-            function downloadInvoice() {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                let y = 10;
 
+
+
+        // function downloadInvoice() {
+
+        //     console.log("Invoice is dowloading")
+
+        //     const orderString = document.getElementById("order-data").getAttribute("data-order")
+        //     console.log("orderString", orderString)
+
+        //     const order = JSON.parse(orderElement.getAttribute("data-order"));
+        //     console.log("order", order)
+        //     const { jsPDF } = window.jspdf
+        //     const doc = new jsPDF()
+        //     let y = 10;
+
+        //     doc.setFontSize(18)
+        //     doc.text("Invoice", 105, y, null, null, 'center')
+        //     y += 10;
+
+        //     doc.setFontSize(12)
+        //     doc.text("Order Information", 10, y)
+        //     y += 10
+
+
+        //     console.log("orderData", typeof order)
+        //     console.log("items gdfgdf,", order.items, order.billTotal)
+
+
+        //     doc.autoTable({
+        //         startY: y,
+        //         head: [["Label", "Value"]],
+        //         body: [order],
+        //         theme: 'grid',
+        //         columnStyles: {
+        //             0: { halign: 'left', cellWidth: 60 },
+        //             1: { halign: 'left' }
+        //         }
+        //     })
+
+        //     y = doc.lastAutoTable.finalY + 10
+
+        //     doc.text("Shipping Address", 10, y)
+        //     y += 10
+
+        //     const shippingData = [
+        //         ["Address", "<%= order.shippingAddress.address %>"],
+        //         ["City", "<%= order.shippingAddress.city %>"],
+        //         ["State", "<%= order.shippingAddress.state %>"],
+        //         ["Pincode", "<%= order.shippingAddress.pincode %>"],
+
+        //     ]
+        //     console.log("shipping Address", shippingData);
+
+        //     if (doc.autoTable) {
+        //         doc.autoTable({
+        //             startY: y,
+        //             head: [["Label", "Details"]],
+        //             body: order.shippingData,
+        //             theme: 'grid',
+        //             columnStyles: {
+        //                 0: { halign: 'left', cellWidth: 60 },
+        //                 1: { halign: 'left' }
+        //             }
+        //         })
+
+        //         y = doc.lastAutoTable.finalY + 10;
+        //     }
+        //     console.log("items ,", order.items);
+
+        //     if (order.items && order.items.length > 0) {
+        //         doc.text("Ordered Items", 10, y);
+        //         y += 10;
+
+        //         const itemData = order.items.map(item => {
+        //             console.log("item", item);
+        //             console.log("itemproduct", item.product);
+        //             return [
+        //                 item.product.name,
+        //                 item.quantity,
+        //                 item.subtotal
+        //             ]
+        //         })
+        //         console.log(itemData, "itemData");
+        //         console.log(JSON.stringify(order.items, null, 2));
+
+        //         doc.autoTable({
+        //             startY: y,
+        //             head: [["Product", "Quantity", "Subtotal"]],
+        //             body: itemData,
+        //             theme: 'grid',
+        //             columnStyles: {
+        //                 0: { halign: 'left' },
+        //                 1: { halign: 'center' },
+        //                 2: { halign: 'right' }
+        //             }
+        //         })
+
+        //     } else {
+        //         doc.text("No items found in this order.", 10, y);
+        //     }
+
+        //     doc.save('invoice.pdf');
+        // }
+
+        // window.downloadInvoice = downloadInvoice;
+
+
+        async function downloadInvoice() {
+            console.log("📥 Downloading Invoice...");
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            let y = 10;
+            try {
+                console.log("hiiii hloooo");
+                const urlParams = new URLSearchParams(window.location.search);
+                const orderId = urlParams.get("orderid");
+                console.log("orderId", orderId);
+                if (!orderId) {
+                    console.error("❌ Order ID is missing from URL");
+                    alert("Order ID is missing! Cannot fetch invoice.");
+                    return;
+                }
+                console.log("🛒 Fetching order with ID:", orderId);
+                const apiUrl = `${window.location.origin}/api/orders/${orderId}`;
+                const response = await fetch(apiUrl, { method: "GET" });
+                if (!response.ok) {
+                    throw new Error(`❌ HTTP Error: ${response.status} - ${response.statusText}`);
+                }
+                const order = await response.json();
+                console.log("Order Fetched Successfully:", order);
                 doc.setFontSize(18);
                 doc.text("Invoice", 105, y, null, null, 'center');
                 y += 10;
@@ -310,80 +448,79 @@
                 doc.text("Order Information", 10, y);
                 y += 10;
 
-                const orderData = [
-                    ["Order Date", "<%= new Date(order.orderDate).toLocaleDateString() %>"],
-                    ["Status", "<%= order.orderStatus %>"],
-                    ["Bill Total", "<%= order.billTotal %>"],
-                    ["Payment Method", "<%= order.paymentMethod %>"]
-                ];
+                const orderDetails = [
+                    ["Order Date", new Date(order.orderDate).toLocaleDateString()],
+                    ["Status", order.orderStatus],
+                    ["Bill Total", order.billTotal],
+                    ["Payment Method", order.paymentMethod]
+                ]
+                console.log("orderDetails", orderDetails)
 
                 doc.autoTable({
                     startY: y,
                     head: [["Label", "Value"]],
-                    body: orderData,
+                    body: orderDetails,
                     theme: 'grid',
-                    columnStyles: {
-                        0: { halign: 'left', cellWidth: 60 },
-                        1: { halign: 'left' }
-                    }
-                });
+                    columnStyles: { 0: { halign: 'left', cellWidth: 60 }, 1: { halign: 'left' } }
+                })
 
                 y = doc.lastAutoTable.finalY + 10;
-
                 doc.text("Shipping Address", 10, y);
                 y += 10;
 
-                const shippingData = [
-                    ["Address", "<%= order.shippingAddress.address %>"],
-                    ["City", "<%= order.shippingAddress.city %>"],
-                    ["State", "<%= order.shippingAddress.state %>"],
-                    ["Pincode", "<%= order.shippingAddress.pincode %>"]
-                ];
-
+                const shippingData = order.shippingAddress
+                    ? [
+                        ["Address", order.shippingAddress.address || "N/A"],
+                        ["City", order.shippingAddress.city || "N/A"],
+                        ["State", order.shippingAddress.state || "N/A"],
+                        ["Pincode", order.shippingAddress.pincode || "N/A"]
+                    ]
+                    : [["Address", "No shipping address found."]];
+                console.log("shippingData", shippingData);
                 doc.autoTable({
                     startY: y,
                     head: [["Label", "Details"]],
                     body: shippingData,
                     theme: 'grid',
-                    columnStyles: {
-                        0: { halign: 'left', cellWidth: 60 },
-                        1: { halign: 'left' }
-                    }
-                });
+                    columnStyles: { 0: { halign: 'left', cellWidth: 60 }, 1: { halign: 'left' } }
+                })
 
                 y = doc.lastAutoTable.finalY + 10;
-
                 if (order.items && order.items.length > 0) {
-                    doc.text("Ordered Items", 10, y);
+                    doc.text("Ordered Items", 10, y)
                     y += 10;
 
                     const itemData = order.items.map(item => [
-                        item.product.name,
+                        item.product?.name || "Unknown",
                         item.quantity,
                         item.subtotal
                     ]);
-
+                    console.log("itemData", itemData);
                     doc.autoTable({
                         startY: y,
                         head: [["Product", "Quantity", "Subtotal"]],
                         body: itemData,
                         theme: 'grid',
-                        columnStyles: {
-                            0: { halign: 'left' },
-                            1: { halign: 'center' },
-                            2: { halign: 'right' }
-                        }
+                        columnStyles: { 0: { halign: 'left' }, 1: { halign: 'center' }, 2: { halign: 'right' } }
                     });
                 } else {
-                    doc.text("No items found in this order.", 10, y);
+                    doc.text("No items found in this order.", 10, y)
                 }
+                doc.save(`Invoice_${orderId}.pdf`);
+                console.log("📄 Invoice Downloaded Successfully!")
 
-                doc.save('invoice.pdf');
+            } catch (error) {
+                console.error("❌ Error fetching order data:", error)
+                alert("Failed to fetch invoice. Please try again.")
             }
+        }
+
+        window.downloadInvoice = downloadInvoice;
+
 
 
         async function continuePayment(orderId, billTotal) {
-            console.log(billTotal);
+            console.log("billTotal", billTotal);
 
             $.ajax({
                 url: "/createOrder",

@@ -57,17 +57,19 @@ const addReview = async (req, res) => {
 
 const getReview = async (req, res) => {
   try {
+    console.log("getReview")
     const productId = req.params.productId;
-    const reviews = await Review.find({ productId }).populate('userId', 'username');
+    const reviews = await Review.find({ productId }).populate('userId', 'username').exec();
     if (!reviews.length === 0) {
       return res.status(404).json({ message: 'No reviews found for this product' });
     }
-    res.status(200).json(reviews);
+    res.status(200).json(reviews)
   } catch (error) {
-    console.error('Error fetching reviews:', error);
-    res.status(500).json({ error: error.message });
+    console.error('Error fetching reviews:', error)
+    res.status(500).json({ error: error.message })
   }
 }
+
 
 
 

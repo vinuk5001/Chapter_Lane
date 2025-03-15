@@ -7,9 +7,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favicon.svg">
-    <!-- Template CSS -->
     <link rel="stylesheet" href="assets/css/main.css?v=3.4">
     <style>
         .btn-small {
@@ -29,11 +27,9 @@
 
 <body>
     <header class="header-area header-style-5">
-        <!-- Header content here -->
     </header>
 
     <div class="mobile-header-active mobile-header-wrapper-style">
-        <!-- Mobile header content here -->
     </div>
 
     <main class="main">
@@ -56,26 +52,30 @@
                                         <h5>Account Details</h5>
                                     </div>
                                     <div class="card-body">
-                                        <form action="/editProfile" method="post" >
+                                        <form action="/editProfile" method="post">
                                             <div class="row">
                                                 <div class="form-group col-md-6">
                                                     <label>UserName <span class=""></span></label>
-                                                    <input class="form-control square" name="name" type="text" value="<%= user.username %>">
+                                                    <input class="form-control square" name="name" type="text"
+                                                        value="<%= user.username %>">
                                                 </div>
-                                               
-                                                <div class="form-group col-md-12">
-                                                    <label>Email  <span class=""></span></label>
-                                                    <input class="form-control square" name="email" type="email" value="<%= user.email %>">
-                                                </div> 
 
                                                 <div class="form-group col-md-12">
-                                                    <label>mobile_number  <span class=""></span></label>
-                                                    <input class="form-control square" name="mobile_number" type="mobile no" value="<%= user.mobile_number %>">
+                                                    <label>Email <span class=""></span></label>
+                                                    <input class="form-control square" name="email" type="email"
+                                                        value="<%= user.email %>">
+                                                </div>
+
+                                                <div class="form-group col-md-12">
+                                                    <label>mobile_number <span class=""></span></label>
+                                                    <input class="form-control square" name="mobile_number"
+                                                        type="mobile no" value="<%= user.mobile_number %>">
                                                     <input type="hidden" name="id" value="<%= user._id  %>">
                                                 </div>
-                                              
+
                                                 <div class="col-md-12">
-                                                    <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
+                                                    <button type="submit" class="btn btn-fill-out submit" name="submit"
+                                                        value="Submit">Save</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -89,59 +89,58 @@
         </section>
     </main>
 
-    <!-- Vendor JS-->
     <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
     <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
     <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
     <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
-    <!-- Template  JS -->
     <script src="./assets/js/main.js?v=3.4"></script>
     <script>
-     document.querySelector('form').addEventListener('submit', function (event) {
-    // Clear previous error messages
-    var errorMessages = document.querySelectorAll('.error-message');
-    errorMessages.forEach(function (message) {
-        message.remove();
-    });
 
-    var isValid = true;
+        document.querySelector('form').addEventListener('submit', function (event) {
+            console.log("hiiiiii");
+            var errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(function (message) {
+                message.remove();
+            });
 
-    var name = document.querySelector('input[name="name"]').value.trim();
-    var email = document.querySelector('input[name="email"]').value.trim();
-    var mobile = document.querySelector('input[name="mobile_number"]').value.trim();
+            var isValid = true;
 
-    // Username validation
-    if (name.length < 3) {
-        showError('input[name="name"]', 'Username must be at least 3 characters long and not empty.');
-        isValid = false;
-    }
+            var name = document.querySelector('input[name="name"]').value.trim();
+            console.log("name", name);
+            var email = document.querySelector('input[name="email"]').value.trim();
+            console.log("email", email)
+            var mobile = document.querySelector('input[name="mobile_number"]').value.trim();
+            console.log("mobile", mobile);
+            if (name.length < 3) {
+                showError('input[name="name"]', 'Username must be at least 3 characters long and not empty.');
+                isValid = false;
+            }
 
-    // Email validation
-    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(email)) {
-        showError('input[name="email"]', 'Please enter a valid email address.');
-        isValid = false;
-    }
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            console.log("emailPattern", emailPattern);
+            if (!emailPattern.test(email)) {
+                showError('input[name="email"]', 'Please enter a valid email address.');
+                isValid = false;
+            }
 
-    // Mobile number validation
-    if (mobile.length !== 10 || !/^[0-9]+$/.test(mobile)) {
-        showError('input[name="mobile_number"]', 'Please enter a valid 10-digit mobile number.');
-        isValid = false;
-    }
+            if (mobile.length !== 10 || !/^[0-9]+$/.test(mobile)) {
+                showError('input[name="mobile_number"]', 'Please enter a valid 10-digit mobile number.');
+                isValid = false;
+            }
 
-    if (!isValid) {
-        event.preventDefault();
-    }
-});
+            if (!isValid) {
+                event.preventDefault();
+            }
+        })
 
-function showError(selector, message) {
-    var inputElement = document.querySelector(selector);
-    var errorElement = document.createElement('div');
-    errorElement.className = 'error-message';
-    errorElement.style.color = 'red';
-    errorElement.textContent = message;
-    inputElement.parentNode.appendChild(errorElement);
-}
+        function showError(selector, message) {
+            var inputElement = document.querySelector(selector);
+            var errorElement = document.createElement('div');
+            errorElement.className = 'error-message';
+            errorElement.style.color = 'red';
+            errorElement.textContent = message;
+            inputElement.parentNode.appendChild(errorElement);
+        }
 
 
     </script>

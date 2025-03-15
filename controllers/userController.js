@@ -20,8 +20,8 @@ require("dotenv").config();
 //--------------------------create a token---------------------------//
 const createToken = (user) => {
   const JWT_SECRET = process.env.JWT_SECRET
+  console.log("jwt token", JWT_SECRET);
   return jwt.sign(user, JWT_SECRET, { expiresIn: "24h" })
-
 }
 
 //--------------------Function to calculate OTP expiry time-------------//
@@ -104,6 +104,7 @@ const loadLogin = async (req, res) => {
 }
 
 //......................Load Home Page..........................//
+
 const loadHome = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -238,6 +239,7 @@ const loadShop = async (req, res) => {
 
 //------------------------------Insert User ------------------------------//
 
+
 const insertUser = async (req, res) => {
   try {
     const { username, email, password, mobile_number, confirmpassword } = req.body;
@@ -274,6 +276,7 @@ const insertUser = async (req, res) => {
 
 //----------------------------verify OTP ----------------------------//
 
+
 const verifyOTP = async (req, res) => {
   try {
     const { userId, otp } = req.body;
@@ -308,6 +311,7 @@ const verifyOTP = async (req, res) => {
 
 //---------------------------Resend OTP-------------------------------//
 
+
 const resendOTP = async (req, res) => {
   try {
     const { userId } = req.body;
@@ -337,18 +341,24 @@ const resendOTP = async (req, res) => {
 
 //----------------------------Login User------------------------------------//
 
+
 const loginUser = async (req, res) => {
   try {
+    console.log("loginuser")
     const { email, password } = req.body;
+    console.log("requested", req.body);
     const user = await User.findOne({ email: email });
+    console.log("user", user);
     if (user) {
       const passwordMatch = await bcrypt.compare(password, user.password);
+      console.log("passwwordMatch", passwordMatch);
       if (passwordMatch) {
 
         if (user.is_blocked) {
           return res.status(403).send({ success: false, message: "Your acoount is blocked:" });
         }
         const token = createToken({ id: user._id });
+        console.log("token", token);
         res.cookie("jwt", token, {
           httpOnly: true,
           maxAge: 60 * 60 * 1000 * 24,
@@ -498,20 +508,22 @@ const editedProfile = async (req, res) => {
     }
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    console.log("emailpattern", emailPattern)
     if (!emailPattern.test(email)) {
       return res.status(400).send('Invalid email address.');
     }
 
+
     if (!mobile_number || !/^[0-9]{10}$/.test(mobile_number)) {
       return res.status(400).send('Invalid mobile number.');
     }
+
     const updateData = {
       username: name,
       email: email,
       mobile_number: mobile_number
     }
     const saveData = await User.findByIdAndUpdate(id, updateData, { new: true });
-
     res.redirect("/userProfile");
   } catch (error) {
     console.log(error.message);
@@ -525,9 +537,7 @@ const editedProfile = async (req, res) => {
 const addAddress = async (req, res) => {
   try {
     const { address, city, state, pincode } = req.body;
-    console.log("requested", req.body);
     const userId = req.user.id
-    console.log("userId", userId);
     const userAddress = new Address({
       userId: userId,
       address: address,
@@ -536,9 +546,7 @@ const addAddress = async (req, res) => {
       pincode: pincode,
       user: userId
     })
-    console.log("userAddress", userAddress);
     const saveAddress = await userAddress.save();
-    console.log("saveAddress", saveAddress);
     const user = await User.findById(userId);
     console.log("user", user);
     // user.addresses.push(saveAddress._id);
@@ -555,9 +563,7 @@ const addAddress = async (req, res) => {
 const renderEditAddress = async (req, res) => {
   try {
     const addressId = req.query.id;
-    console.log("addressId", addressId);
     const address = await Address.findById(addressId);
-    console.log("address", address);
     if (!address) {
       return res.status(404).send("Address not found");
     }
@@ -847,23 +853,28 @@ const removeItem = async (req, res) => {
 
 
 //-----------------------------------Reset Password-----------------------------------//
+
 const getResetPassword = (req, res) => {
+  console.log("resetPassword")
   const { token } = req.query;
-  res.render('resetPassword', { token, message: '' });
-};
+  res.render('resetPassword', { token, message: '' })
+}
 
 
 //-----------------------------------ForgotPassword------------------------------------//
 
 const forgotPassword = async (req, res) => {
   const { forgotEmail } = req.body;
+  console.log("requested", req.body);
   try {
     const user = await User.findOne({ email: forgotEmail });
+    console.log("user", user);
     if (!user) {
       return res.status(404).json({ message: 'No user with that email' });
     }
 
     const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    console.log("resetToken", resetToken);
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpires = Date.now() + 3600000;
     await user.save();
@@ -874,33 +885,39 @@ const forgotPassword = async (req, res) => {
         user: 'vinuk5001@gmail.com',
         pass: "kead dpcp dhmv pktv",
       },
-    });
-
-    const resetLink = `${process.env.BASE_URL}/reset-password?token=${resetToken}`;
+    })
+    console.log("transporter", transporter)
+    const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
+    const resetLink = `${BASE_URL}/reset-password?token=${resetToken}`;
+    console.log("resetLink", resetLink)
     const mailOptions = {
       from: 'vinuk5001@gmail.com',
       to: forgotEmail,
       subject: 'Password Reset',
-      text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n` +
-        `Please click on the following link, or paste this into your browser to complete the process:\n\n` +
-        `${resetLink}\n\n` +
-        `If you did not request this, please ignore this email and your password will remain unchanged.\n`,
-    };
+      html: `
+        <p>You requested a password reset.</p>
+        <p>Click the link below to reset your password:</p>
+        <p><a href="${resetLink}" style="color: blue; text-decoration: underline;">Reset Password</a></p>
+        <p>If you did not request this, please ignore this email.</p>
+      `,
+    }
+    console.log("mailOptions", mailOptions)
 
-    await transporter.sendMail(mailOptions);
-    res.status(200).json({ message: 'A password reset link has been sent to your email.' });
+    await transporter.sendMail(mailOptions)
+    res.status(200).json({ message: 'A password reset link has been sent to your email.' })
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'An error occurred while trying to reset the password.' });
+    res.status(500).json({ message: 'An error occurred while trying to reset the password.' })
   }
 }
 
 
 //---------------------------------Post Reset Password-------------------------------//
-
 const postResetPassword = async (req, res) => {
   const { token } = req.body;
+  console.log("requested", req.body);
   const { password, confirmPassword } = req.body;
+  console.log("req", req.body);
 
   if (password !== confirmPassword) {
     return res.status(400).render('resetPassword', { token, message: "Passwords do not match" });
@@ -908,13 +925,15 @@ const postResetPassword = async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("decoded", decoded);
     const user = await User.findOne({ _id: decoded.id, resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } });
-
+    console.log("user", user);
     if (!user) {
       return res.status(400).send('Password reset token is invalid or has expired');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("hashedPassword")
     user.password = hashedPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
@@ -925,11 +944,10 @@ const postResetPassword = async (req, res) => {
     res.status(500).send('An error occurred while resetting the password.');
   }
 };
-
-
 //---------------------------------change Password-----------------------------------//
 
 const changePassword = async (req, res) => {
+  console.log("HiHLOOO");
   try {
     res.render("checkCurrentPassword");
   } catch (error) {
@@ -942,16 +960,23 @@ const changePassword = async (req, res) => {
 //-----------------------------CheckCurrentPassword----------------------------//
 
 const checkCurrentPassword = async (req, res) => {
+  console.log("Hihlooo");
   try {
     const { password } = req.body
+    console.log("requested", req.body)
     const token = req.cookies.jwt;
+    console.log("token", token);
     if (!token) {
       throw new Error('JWT cookie not found');
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("decoded", decoded);
     const userId = decoded.id;
+    console.log("userId", userId);
     const user = await User.findById(userId);
+    console.log("user", user);
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log("isMatch", isMatch);
     if (!isMatch) {
       return res.render('checkCurrentPassword', { error: "Current password is incorrect" });
     }
@@ -961,6 +986,9 @@ const checkCurrentPassword = async (req, res) => {
     res.status(500).send("Internal server error");
   }
 }
+
+
+
 
 //-------------------------------Profile Forgot Password---------------------------//
 
@@ -977,21 +1005,27 @@ const profileForgotPassword = async (req, res) => {
 
 const updatePassword = async (req, res) => {
   try {
+    console.log("updatedPassword");
     const token = req.cookies.jwt;
     if (!token) {
       throw new Error('JWT cookie not found');
     }
+    console.log("token", token);
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.id;
+    console.log("userId", userId);
     const user = await User.findById(userId);
-
+    console.log("user", user);
     const newPassword = req.body.password;
+    console.log("newPassword", newPassword);
     const confirmPassword = req.body.confirmPassword;
+    console.log("confirmPassword", confirmPassword);
 
     if (newPassword !== confirmPassword) {
       return res.render('profileChangePassword', { message: "Error: Passwords do not match." });
     }
     const hashedPassword = await bcrypt.hash(newPassword, 10);
+    console.log("hashedPassword", hashedPassword);
     user.password = hashedPassword;
     await user.save();
     res.redirect('/userProfile');
@@ -1100,7 +1134,6 @@ const showOrderDetails = async (req, res) => {
   try {
     const orderId = req.query.orderid
     const { addressId } = req.body
-    console.log(addressId)
     const address = await Address.findById(addressId)
     if (!orderId) {
       return res.status(404).send('Order ID is required')
@@ -1109,13 +1142,14 @@ const showOrderDetails = async (req, res) => {
       .populate('items.product')
       .populate('shippingAddress')
     console.log("shippingAddress", order.shippingAddress)
-
     res.render("orderDetails", { order, address })
+    console.log("order", order);
   } catch (error) {
     console.error("Error in showOrderDetails:", error)
     res.status(500).send('Server Error')
   }
 }
+
 
 //---------------------------------Filtering Category --------------------------------//
 
@@ -1128,7 +1162,6 @@ const filterByCategory = async (req, res) => {
     if (!selectedCategory) {
       return res.render("home", { categories, message: "Category not found", products: [] })
     }
-
     const products = await Product.find({ category: categoryId, isListed: true, status: "Active" }).populate('category');
     res.render("home", { categories: categories, selectedCategory, product: products });
   } catch (error) {
@@ -1176,7 +1209,6 @@ const googleAuthFailure = async (req, res) => {
     const errorMessage = "An unexpected error occurred. Please try again later."
     res.redirect(`/login?error=${errorMessage}`)
   }
-
 }
 
 

@@ -44,7 +44,6 @@ const isAdmin = async (req, res) => {
                 res.cookie("admin", token, {
                     httpOnly: true,
                     maxAge: 60 * 60 * 1000 * 24,
-
                 })
                 console.log("token", token)
                 return res.status(200).json({ message: "Login successful", token });
@@ -65,6 +64,7 @@ const isAdmin = async (req, res) => {
 //------------Admin Logout-------------//
 
 const logout = async (req, res) => {
+    console.log("hiiii");
     try {
         res.clearCookie('token');
         res.redirect('/admin');

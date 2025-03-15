@@ -98,7 +98,7 @@ user_route.get('/wishlist', middleware.requirelogin, wishlistController.loadWish
 user_route.post('/wishlist/add', middleware.requirelogin, wishlistController.addToWishlist);
 user_route.post('/wishlist/remove', middleware.requirelogin, wishlistController.removeFromWishlist);
 user_route.get('/product/:productId')
-
+user_route.get('/api/orders/:orderId', middleware.requirelogin, orderController.downloadInvoice);
 user_route.get('/home', middleware.requirelogin, userController.loadHome);
 user_route.get('/singleProduct', middleware.requirelogin, userController.singleProduct);
 user_route.get('/shop', middleware.requirelogin, userController.loadShop);

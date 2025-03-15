@@ -343,13 +343,13 @@ const orderFailed = async (req, res) => {
 
 const cancelOrder = async (req, res) => {
     try {
-        const { orderId } = req.body;
-        const order = await Order.findById(orderId);
+        const { orderId } = req.body
+        const order = await Order.findById(orderId)
+        console.log("order", order)
         if (!order) {
-            return res.status(404).send('Order not found');
+            return res.status(404).send('Order not found')
         }
-        order.orderStatus = "Cancelled";
-        console.log("order.orderStatus", order.orderStatus);
+        order.orderStatus = "Cancelled"
         await order.save();
         let refundAmount = 0;
         if (order.paymentMethod === 'onlinePayment') {
@@ -360,7 +360,6 @@ const cancelOrder = async (req, res) => {
                 return res.status(400).send('Invalid refund amount');
             }
             const userId = order.user;
-
             const wallet = await Wallet.findOne({ user: userId });
             if (!wallet) {
                 return res.status(404).json({ error: "Wallet not found" });
@@ -423,9 +422,7 @@ const returnOrder = async (req, res) => {
         })
 
         await wallet.save();
-
         res.status(200).send('Order returned and refund processed');
-
     } catch (error) {
         console.error("Error returning order:", error);
         res.status(500).send("Server Error: Failed to return order");
@@ -454,7 +451,51 @@ const hasOrderedProduct = async (req, res) => {
 }
 
 
+//---------------------------Download Invoice---------------------------//
 
+const downloadInvoice = async (req, res) => {
+    try {
+        console.log("Hi Hlooo");
+        const { orderId } = req.params;
+        console.log("requested", req.params);
+        const order = await Order.findById(orderId)
+            .populate("items.product")
+            .populate("shippingAddress")
+        if (!order) {
+            return res.status(404).json({ error: "Order not found" });
+        }
+        console.log("order", order);
+        const formattedOrder = {
+            _id: order._id.toString(),
+            user: order.user.toString(),
+            orderStatus: order.orderStatus,
+            billTotal: order.billTotal,
+            paymentMethod: order.paymentMethod,
+            orderDate: order.orderDate,
+            items: order.items.map(item => ({
+                product: {
+                    _id: item.product._id.toString(),
+                    name: item.product.name,
+                    price: item.product.price
+                },
+                quantity: item.quantity,
+                subtotal: item.subtotal
+            })),
+            shippingAddress: {
+                _id: order.shippingAddress._id.toString(),
+                address: order.shippingAddress.address,
+                city: order.shippingAddress.city,
+                state: order.shippingAddress.state,
+                pincode: order.shippingAddress.pincode
+            }
+        }
+        console.log("formatted order", formattedOrder);
+        res.json(formattedOrder);
+    } catch (error) {
+        console.log("Error fetching order:", error);
+        res.status(500).json({ error: "Internal server error" })
+    }
+}
 
 
 module.exports = {
@@ -466,6 +507,7 @@ module.exports = {
     orderFailed,
     payonlineFailed,
     hasOrderedProduct,
+    downloadInvoice,
 }
 
 
