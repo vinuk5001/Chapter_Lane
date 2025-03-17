@@ -154,8 +154,6 @@ const loadHome = async (req, res) => {
         const totalSalesFromDb = overallStats.totalSales[0]?.totalSales || 0
         console.log("totalSalesFromDb", totalSalesFromDb);
 
-
-
         return res.render("home", {
             products,
             categories,
@@ -676,6 +674,7 @@ const getChartData = async (req, res) => {
 
     }
 }
+
 
 
 module.exports = {

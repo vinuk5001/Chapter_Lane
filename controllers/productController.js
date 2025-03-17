@@ -72,6 +72,9 @@ const renderEditProductPage = async (req, res) => {
             throw new Error("Product not found");
         }
         const categories = await categoryModel.find();
+        if (!product.category) {
+            product.category = null;
+        }
         res.render("editProduct", { product: product, categories: categories });
     } catch (error) {
         console.log(error.message);

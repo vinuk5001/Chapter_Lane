@@ -246,13 +246,19 @@
 
         document.getElementById('submit-btn').addEventListener("click", function (event) {
             event.preventDefault();
-            const name = document.getElementById("name").value.trim();
+            const name = document.getElementById("name").value.replace(/^\s+|\s+$/g, "");
+            const author = document.getElementById("author").value.replace(/^\s+|\s+$/g, "");
             const price = document.getElementById("price").value.trim();
+            const description = document.getElementById("description").value.trim();
+            const discount = document.getElementById("discount").value.trim();
             const stock = document.getElementById("stock").value.trim();
             let isValid = true;
 
             const nameError = document.getElementById("nameError");
+            const authorError = document.getElementById("authorError");
+            const descriptionError = document.getElementById("descriptionError")
             const priceError = document.getElementById("priceError");
+            const discountError = document.getElementById("discountError");
             const stockError = document.getElementById("stockError");
             const imageError = document.getElementById("image-error");
 
@@ -264,6 +270,15 @@
                 isValid = false;
             }
 
+            if (author === '') {
+                authorError.textContent = 'Author is required';
+                isValid = false;
+            } else if (/\d|-/.test(author)) {
+                authorError.textContent = 'Author cannot contain digits or hyphens';
+                isValid = false;
+            }
+
+
             if (!/^\d+$/.test(price) || parseInt(price) <= 0) {
                 priceError.textContent = 'Please enter a valid positive integer for price';
                 isValid = false;
@@ -272,6 +287,12 @@
             if (!/^\d+$/.test(stock) || parseInt(stock) < 0) {
                 stockError.textContent = 'Please enter a valid positive integer for stock';
                 isValid = false;
+            }
+            if (discount !== '' && (!/^\d+$/.test(discount) || parseInt(discount) < 0 || parseInt(discount) > 100)) {
+                discountError.textContent = 'Please enter a valid discount between 0 and 100';
+                isValid = false;
+            } else {
+                discountError.textContent = "";
             }
 
             const files = filesInput.files;
@@ -289,9 +310,9 @@
             }
 
             if (isValid) {
-                document.getElementById("productForm").submit();
+                document.getElementById("productForm").submit()
             }
-        });
+        })
 
         function updateStatusColor() {
             const statusSelect = document.getElementById('status');
