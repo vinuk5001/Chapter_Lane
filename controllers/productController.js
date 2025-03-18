@@ -148,6 +148,7 @@ const loadAddProducts = async (req, res) => {
 
 const addProduct = async (req, res) => {
     try {
+
         const { name, author, price, discount, description, category, stock, status, ratings, highlights, reviews } = req.body;
         const uploadedImages = req.files.map(file => file.filename);
         if (!mongoose.Types.ObjectId.isValid(category)) {
@@ -174,7 +175,7 @@ const addProduct = async (req, res) => {
         res.status(500).send("Server Error");
         console.log(error);
     }
-};
+}
 
 
 //---------------------------List Products -------------------------------//

@@ -365,11 +365,16 @@
                                                 <td class="text-right" data-title="Cart">
                                                     <a id="addToCart"
                                                         href="<%= item.productStock > 0 ? '/addToCart?productId=' + item.productId : '#' %>"
-                                                        class="btn btn-primary" <% if (item.productStock <=0) { %>
+                                                        class="btn btn-primary" <% if (item.productStock <=0 ) { %>
                                                         disabled <% } %>
+
                                                             <% if (wishlist.some(wishItem=>
                                                                 wishItem.productId.toString() ===
-                                                                item.productId.toString())) { %> disabled <% } %>>
+                                                                item.productId.toString())) { %>
+                                                                disabled
+                                                                <% } %>
+                                                                    >
+
                                                                     <%= item.productStock> 0 && !wishlist.some(wishItem
                                                                         => wishItem.productId.toString() ===
                                                                         item.productId.toString()) ? "Add to Cart" :

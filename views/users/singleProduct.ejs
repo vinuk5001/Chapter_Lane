@@ -280,7 +280,7 @@
             <span>ChapterLane</span>
         </div>
         <ul>
-            <li><a href="home">Home</a></li>
+            <li><a href="/">Home</a></li>
             <li><a href="shop">Shop</a></li>
         </ul>
         <div class="search-bar">
@@ -490,13 +490,15 @@
                                                                             <p>
                                                                                 <%= review.comment%>
                                                                             </p>
-                                                                            <small>By <%= review.userId
+                                                                            <small>
+                                                                                By <%= review.userId
                                                                                     ?review.userId.username
                                                                                     : 'Unknown User' %>
 
                                                                                     on <%= new
                                                                                         Date(review.createdAt).toLocaleDateString()
-                                                                                        %></small>
+                                                                                        %>
+                                                                            </small>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -507,6 +509,8 @@
 
                                             </div>
                                         </div>
+
+
 
 
                                         <div class="review-form">

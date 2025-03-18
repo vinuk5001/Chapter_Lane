@@ -28,24 +28,26 @@ const createToken = (user) => {
 
 const otpExpiryTime = () => {
   const now = new Date();
-  now.setMinutes(now.getMinutes() + 10);
+  now.setMinutes(now.getMinutes() + 1);
   return now;
 };
 
+const expiry = otpExpiryTime()
+console.log("expiry", expiry);
 
 //---------------------- Generate OTP------------------------------//
 const generateOTP = () => {
-  return Math.floor(100000 + Math.random() * 900000).toString();
-};
+  return Math.floor(100000 + Math.random() * 900000).toString()
+}
 
 const securePassword = async (password) => {
   try {
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash = await bcrypt.hash(password, 10)
     return passwordHash;
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message)
   }
-};
+}
 
 //----------------------------Send OTP to Mail-------------------------------//
 
@@ -71,14 +73,14 @@ const sendOTP = async (email, otp) => {
       },
       to: email,
       subject: "OTP Verification",
-      html: `<p>Your OTP for email verification is <strong>${otp}</strong>. This OTP is valid for 10 minutes.</p>`,
+      html: `<p>Your OTP for email verification is <strong>${otp}</strong>. This OTP is valid for 1 minutes.</p>`,
     };
 
     await transporter.sendMail(mailOptions);
   } catch (error) {
     console.log(error.message);
   }
-};
+}
 
 
 
@@ -91,7 +93,7 @@ const loadRegister = async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
-};
+}
 
 //----------------------------Load Login Page-----------------------------//
 
@@ -99,7 +101,7 @@ const loadLogin = async (req, res) => {
   try {
     res.render("login");
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message)
   }
 }
 
@@ -363,7 +365,7 @@ const loginUser = async (req, res) => {
           httpOnly: true,
           maxAge: 60 * 60 * 1000 * 24,
         });
-        return res.json({ success: true, redirectTo: "/home" });
+        return res.json({ success: true, redirectTo: "/" });
       } else {
         return res.status(401).json({ success: false, message: "Invalid email or password" });
       }
@@ -684,8 +686,10 @@ const loadCart = async (req, res) => {
 
 //-------------------------------AddTOCart--------------------------------//
 
+
 const addToCart = async (req, res) => {
   try {
+
     const token = req.cookies.jwt;
     if (!token) {
       throw new Error('JWT cookie not found');
@@ -741,33 +745,42 @@ const addToCart = async (req, res) => {
   }
 }
 
+
 //---------------------------------------updateCartQuantity----------------------------------//
 
 
 const updateCartQuantity = async (req, res) => {
   try {
+    console.log("updateQuantity");
     const token = req.cookies.jwt;
+    console.log("token", token);
     if (!token) {
       return res.status(401).json({ success: false, message: 'JWT cookie not found' });
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("decoded", decoded);
     const userId = decoded.id;
+    console.log("userId", userId);
     const { productId, quantity } = req.body;
+    console.log("request", req.body);
     if (quantity <= 0 || !Number.isInteger(quantity)) {
       return res.status(400).json({ success: false, message: 'Invalid quantity value' });
     }
-    const product = await Product.findById(productId);
+    const product = await Product.findById(productId)
+    console.log("product", product)
     if (!product) {
       return res.status(404).json({ success: false, message: 'Product not found' });
     }
     if (product.stock < quantity) {
       return res.status(400).json({ success: false, message: 'Not enough stock available' });
     }
-    const cart = await Cart.findOne({ userId: userId });
+    const cart = await Cart.findOne({ userId: userId })
+    console.log("cart", cart)
     if (!cart) {
       return res.status(404).json({ success: false, message: 'Cart not found' });
     }
     const cartItemIndex = cart.Product.findIndex(item => item.productId.toString() === productId);
+    console.log("cartItemIndex", cartItemIndex);
     if (cartItemIndex === -1) {
       return res.status(404).json({ success: false, message: 'Product not found in cart' });
     }
@@ -778,11 +791,13 @@ const updateCartQuantity = async (req, res) => {
       const itemProduct = item.productId;
       if (itemProduct) {
         const discountedPrice = itemProduct.price - (itemProduct.price * (itemProduct.discount / 100));
+        console.log("discountedPrice", discountedPrice);
         if (isNaN(discountedPrice)) {
           console.log(`Invalid discounted price for product ${itemProduct._id}`);
           return;
         }
         const itemSubtotal = discountedPrice * item.quantity;
+        console.log("itemSubtotal", itemSubtotal);
         if (isNaN(itemSubtotal)) {
           console.log(`Invalid subtotal for product ${itemProduct._id}`);
           return;
@@ -804,6 +819,7 @@ const updateCartQuantity = async (req, res) => {
       totalAmount: totalAmount,
       subtotal: cart.Product[cartItemIndex].subtotal
     });
+    console.log("Response sent:", { totalAmount, subtotal: cart.Product[cartItemIndex].subtotal });
   } catch (error) {
     console.error("Error updating cart quantity:", error);
     return res.status(500).json({ success: false, message: 'Internal server error' });
@@ -872,7 +888,6 @@ const forgotPassword = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'No user with that email' });
     }
-
     const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     console.log("resetToken", resetToken);
     user.resetPasswordToken = resetToken;
@@ -1194,7 +1209,7 @@ const googleAuthCallback = async (req, res) => {
     httpOnly: true,
     maxAge: 60 * 60 * 1000 * 24,
   })
-  return res.redirect("/home")
+  return res.redirect("/")
 }
 
 
@@ -1253,5 +1268,4 @@ module.exports = {
   googleAuthCallback,
   googleAuthFailure,
   googleAuth,
-
 };

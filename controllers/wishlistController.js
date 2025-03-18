@@ -51,10 +51,10 @@ const loadWishlist = async (req, res) => {
         ]);
 
         if (!wishlist || wishlist.length === 0) {
-            return res.render('wishlist', { wishlist: [], message: "Your wishlist is empty" });
+            return res.render('wishList', { wishlist: [], message: "Your wishlist is empty" });
         }
 
-        res.render('wishlist', { wishlist, message: null, userId });
+        res.render('wishList', { wishlist, message: null, userId });
 
     } catch (error) {
         console.error('Error loading wishlist:', error);

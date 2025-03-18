@@ -162,7 +162,7 @@
             const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20}$/;
             if (!password || !passwordPattern.test(password)) {
                 valid = false;
-                document.getElementById('passwordError').innerText = 'Password should contain at least one special character, capital letter, and one small letter';
+                document.getElementById('passwordError').innerText = 'Password should contain at least 8 characters';
             } else {
                 document.getElementById('passwordError').innerText = '';
             }

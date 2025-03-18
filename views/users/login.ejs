@@ -403,7 +403,7 @@
                 const password = document.querySelector('input[name="password"]').value;
                 try {
                     const response = await axios.post('/login', { email, password });
-                    window.location.href = '/home';
+                    window.location.href = '/';
                 } catch (error) {
                     const errorMessage = error.response?.data?.message || 'An unknown error occured.Please try again later.';
                     modalMessage.textContent = errorMessage;

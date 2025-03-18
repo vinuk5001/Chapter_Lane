@@ -23,10 +23,10 @@ user_route.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
-}));
+}))
 
 
-user_route.use(passport.initialize());
+user_route.use(passport.initialize())
 user_route.use(passport.session());
 user_route.set('view engine', 'ejs');
 user_route.set('views', './views/users');
@@ -48,6 +48,7 @@ user_route.post('/register', userController.insertUser)
 user_route.get('/login', middleware.isLoggedin, userController.loadLogin)
 user_route.get('/logout', userController.logout)
 
+
 user_route.get('/userProfile', middleware.requirelogin, userController.userProfile);
 user_route.get('/editProfile', middleware.requirelogin, userController.editProfile);
 user_route.post('/editProfile', middleware.requirelogin, userController.editedProfile);
@@ -60,12 +61,14 @@ user_route.post('/update', middleware.requirelogin, userController.updatePasswor
 user_route.get('/profileLogout', middleware.requirelogin, userController.profileLogout);
 user_route.get('/payOnlineContinue', middleware.requirelogin, payOnlineContinueController.payOnlineContinue)
 
+
 user_route.get('/cart', middleware.requirelogin, userController.loadCart);
 user_route.get('/addToCart', middleware.requirelogin, userController.addToCart);
 user_route.get('/cartRemove', middleware.requirelogin, userController.removeItem);
 user_route.get('/checkOut', middleware.requirelogin, checkOutController.checkOut);
 user_route.post('/checkOut', middleware.requirelogin, checkOutController.checkOut);
 user_route.post('/updateCartQuantity', middleware.requirelogin, userController.updateCartQuantity)
+
 
 user_route.get("/payonlineFailed", middleware.requirelogin, orderController.payonlineFailed);
 user_route.get('/order-confirmation', middleware.requirelogin, orderController.orderConfirmation);
@@ -75,6 +78,7 @@ user_route.get('/payonline', middleware.requirelogin, orderController.payonline)
 user_route.get('/fetchCoupons', couponController.fetchCoupons);
 user_route.post('/applyCoupons', couponController.applyCoupons);
 user_route.post('/createOrder', paymentController.createOrder);
+
 
 user_route.post('/forgot-password', userController.forgotPassword);
 user_route.get('/reset-password', userController.getResetPassword);
@@ -90,6 +94,7 @@ user_route.get('/categorySearch', userController.categorySelect);
 user_route.post('/search', middleware.requirelogin, userController.searchBook);
 user_route.post('/searchInShop', middleware.requirelogin, userController.searchInShop);
 
+
 user_route.get('/orderDetails', middleware.requirelogin, userController.showOrderDetails)
 user_route.post('/cancelOrder', middleware.requirelogin, orderController.cancelOrder);
 user_route.post('/returnOrder', middleware.requirelogin, orderController.returnOrder);
@@ -99,7 +104,7 @@ user_route.post('/wishlist/add', middleware.requirelogin, wishlistController.add
 user_route.post('/wishlist/remove', middleware.requirelogin, wishlistController.removeFromWishlist);
 user_route.get('/product/:productId')
 user_route.get('/api/orders/:orderId', middleware.requirelogin, orderController.downloadInvoice);
-user_route.get('/home', middleware.requirelogin, userController.loadHome);
+user_route.get('/', middleware.requirelogin, userController.loadHome);
 user_route.get('/singleProduct', middleware.requirelogin, userController.singleProduct);
 user_route.get('/shop', middleware.requirelogin, userController.loadShop);
 user_route.post('/login', userController.loginUser);
@@ -117,3 +122,4 @@ user_route.get('/otp-verification', (req, res) => {
 });
 
 module.exports = user_route;
+
