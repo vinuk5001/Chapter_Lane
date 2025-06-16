@@ -1,0 +1,561 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>ChapterLane</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <link rel="shortcut icon" type="image/x-icon" href="adminassets/imgs/theme/favicon.svg">
+    <link href="adminassets/css/main.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .card {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-title {
+            font-size: 20px;
+            color: #333;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .insight-box {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .insight-box h4 {
+            color: #333;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .insight-box h3,
+        .insight-box h4 {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        table th,
+        table td {
+            padding: 12px 20px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        table td {
+            background-color: #fff;
+            color: #666;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+            transform: scale(1.02);
+        }
+
+        table td.text-center {
+            text-align: center;
+        }
+
+        #monthlySalesChart {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #yearlySalesChart {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .pagination .page-item:hover .page-link {
+            background-color: #0056b3;
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .col-xl-4,
+        .col-xl-8 {
+            flex: 1;
+        }
+
+        .col-xl-4 {
+            max-width: 48%;
+        }
+
+        .col-xl-8 {
+            max-width: 48%;
+        }
+
+        .card-body {
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            color: #007bff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .dashboard-stats h4 {
+            background-color: #91b793;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .chart-legend {
+            font-size: 14px;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .insight-box table th,
+        .insight-box table td {
+            padding: 12px 20px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+
+            .col-xl-4,
+            .col-xl-8 {
+                max-width: 100%;
+            }
+
+            .row {
+                flex-direction: column;
+            }
+
+            .insight-box {
+                padding: 15px;
+            }
+        }
+
+        .card,
+        .insight-box {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .content-title h2 {
+            font-size: 2rem;
+            color: #333;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+
+        .dashboard-stats {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .dashboard-stats h4 {
+            margin: 5px 0;
+            font-size: 1.2rem;
+            color: #333;
+            font-weight: normal;
+        }
+
+        .dashboard-stats h4:first-child {
+            margin-top: 0;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <h4>CHAPTERLANE</h4>
+            </a>
+            <button class="btn btn-icon btn-aside-minimize">
+                <i class="material-icons md-menu_open"></i>
+            </button>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item active">
+                    <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="users"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Users</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/userlist">Users List</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="products"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/productList">Product List</a>
+                        <a href="/admin/addProduct">Add Product</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="categories"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Categories</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/categories/">Categories</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="orders"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/orderlist" class="active">Order List</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="offers"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text">Offer Management</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/offerManagement">Category Offers</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="coupons"> <i class="icon material-icons md-card_giftcard"></i>
+                        <span class="text">Coupon Management</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/addCoupon">Create Coupon</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="SalesReport"> <i class="icon material-icons md-card_giftcard"></i>
+                        <span class="text">Sales</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/salesReport">sales report</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+
+            </div>
+            <datalist id="search_terms">
+
+            </datalist>
+            </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                        class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i>
+                        </a>
+                    </li>
+                    <button id="logoutButton" class="btn btn-danger">Logout</button>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="content-header">
+                <div class="content-title">
+                    <h2>Dashboard</h2>
+                </div>
+                <div class="dashboard-stats">
+                    <h4>Total Orders: <%= overallStats.totalOrders %>
+                    </h4>
+                    <h4>Total Revenue: ₹ <%= overallStats.totalRevenue && overallStats.totalRevenue[0] ?
+                            overallStats.totalRevenue[0].totalRevenue : 0 %>
+                    </h4>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-xl-8">
+                    <div class="card mb-4">
+                        <article class="card-body">
+                            <h5 class="card-title">Monthly Sales Statistics</h5>
+                            <canvas id="monthlySalesChart" height="120"></canvas>
+                        </article>
+                    </div>
+
+                    <div class="card mb-4">
+                        <article class="card-body">
+                            <h5 class="card-title">Yearly Sales Statistics</h5>
+                            <canvas id="yearlySalesChart" height="120"></canvas>
+                        </article>
+                    </div>
+                </div>
+
+
+                <div class="col-xl-4">
+                    <div class="insight-box">
+                        <h4>Top 10 Products</h4>
+                        <table id="bestProductsTable">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Price</th>
+                                    <th>Ordered Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (products && products.length) { %>
+                                    <% products.forEach(product=> { %>
+                                        <tr>
+                                            <td>
+                                                <%= product._id.name %>
+                                            </td>
+                                            <td>
+                                                <%= product._id.price %>
+                                            </td>
+                                            <td>
+                                                <%= product.totalQuantity %>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="3">No products available.</td>
+                                                </tr>
+                                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="insight-box">
+                        <h4>Top 10 Categories</h4>
+                        <table id="bestCategoriesTable" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Category Name</th>
+                                    <th>Total Ordered Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (categories && categories.length) { %>
+                                    <% categories.forEach(category=> { %>
+                                        <tr>
+                                            <td>
+                                                <%= category._id %>
+                                            </td>
+                                            <td>
+                                                <%= category.totalQuantity %>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="2" class="text-center">No categories available.</td>
+                                                </tr>
+
+                                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pagination-area mt-30 mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                        <li class="page-item"><a class="page-link" href="#">02</a></li>
+                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">16</a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i
+                                    class="material-icons md-chevron_right"></i></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="adminassets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="adminassets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="adminassets/js/vendors/select2.min.js"></script>
+    <script src="adminassets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="adminassets/js/vendors/jquery.fullscreen.min.js"></script>
+    <script src="adminassets/js/vendors/chart.js"></script>
+    <script src="adminassets/js/main.js" type="text/javascript"></script>
+    <script src="adminassets/js/custom-chart.js" type="text/javascript"></script>
+
+    <script>
+
+        const logoutButton = document.getElementById('logoutButton');
+        console.log("entering into dashboard");
+        logoutButton.addEventListener('click', function () {
+            window.location.href = '/admin/logout';
+        })
+
+        let yearlySalesData;
+        let monthlySalesData;
+        fetch('/admin/get-chart', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                monthlySalesData = data.monthlySales;
+                yearlySalesData = data.yearlySales;
+
+
+
+                console.log("monthlySalesData", monthlySalesData);
+                const monthlyLabels = monthlySalesData.map(item => `${item._id.month}-${item._id.year}`);
+                console.log("monthlyLabels", monthlyLabels)
+                const monthlyData = monthlySalesData.map(item => item.totalSales);
+                console.log("monthlyData", monthlyData);
+
+
+                new Chart(document.getElementById('monthlySalesChart'), {
+                    type: 'line',
+                    data: {
+                        labels: monthlyLabels,
+                        datasets: [{
+                            label: 'Monthly Sales',
+                            data: monthlyData,
+                            borderColor: '#FF5733',
+                            fill: false
+                        }]
+                    }
+                });
+
+                const yearlyLabels = yearlySalesData.map(item => item._id);
+                const yearlyData = yearlySalesData.map(item => item.totalSales);
+
+                new Chart(document.getElementById('yearlySalesChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: yearlyLabels,
+                        datasets: [{
+                            label: 'Yearly Sales',
+                            data: yearlyData,
+                            backgroundColor: '#1cc88a',
+                            borderColor: '#1cc88a',
+                            borderWidth: 1
+                        }]
+                    }
+                });
+
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
+
+
+
+    </script>
+
+</body>
+
+</html>

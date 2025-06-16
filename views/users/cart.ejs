@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Evara - eCommerce HTML Template</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="assets/css/main.css?v=3.4">
+</head>
+<style>
+    /* Navbar Styles */
+    .navbar {
+        background-color: #1a1a1a;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar .logo {
+        display: flex;
+        align-items: center;
+    }
+
+    .navbar .logo i {
+        font-size: 24px;
+        margin-right: 10px;
+    }
+
+    .navbar .logo span {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .navbar ul {
+        list-style: none;
+        display: flex;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar ul li {
+        margin-left: 30px;
+    }
+
+    .navbar ul li a {
+        color: white;
+        text-decoration: none;
+        font-size: 16px;
+        transition: color 0.3s ease;
+    }
+
+    .navbar ul li a:hover {
+        color: #007bff;
+    }
+
+    .navbar .search-bar {
+        margin-left: 30px;
+    }
+
+    .navbar .search-bar input {
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        width: 200px;
+    }
+
+    .navbar .user-actions {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+    }
+
+    .navbar .user-actions a {
+        color: white;
+        text-decoration: none;
+        margin-left: 20px;
+        font-size: 18px;
+        transition: color 0.3s ease;
+    }
+
+    .navbar .user-actions a:hover {
+        color: #007bff;
+    }
+
+    .navbar .wishlist-icon i,
+    .navbar .cart-icon i {
+        font-size: 20px;
+        margin-right: 5px;
+    }
+
+    .navbar .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .navbar .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #1a1a1a;
+        min-width: 200px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    .navbar .dropdown-content a {
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .navbar .dropdown-content a:hover {
+        background-color: #007bff;
+    }
+
+    .navbar .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .black-border {
+        border-color: black;
+    }
+
+    .font-xs {
+        font-size: 12px;
+    }
+
+    .text-danger {
+        color: red;
+    }
+
+    .text-info {
+        color: blue;
+    }
+
+    .cart-product-quantity {
+        width: 80px;
+        margin: auto;
+    }
+
+    .cart-totals {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        padding: 15px;
+    }
+
+    .cart_total_label {
+        font-weight: bold;
+    }
+
+    .cart_total_amount {
+        text-align: right;
+    }
+
+    .btn-outline-primary {
+        border-color: #007bff;
+        color: #007bff;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: white;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+
+    .fw-bold {
+        font-weight: bold;
+    }
+
+    .text-muted {
+        color: #6c757d;
+    }
+
+    .text-end {
+        text-align: end;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .mt-50 {
+        margin-top: 50px;
+    }
+
+    .mb-50 {
+        margin-bottom: 50px;
+    }
+
+    .p-md-4 {
+        padding: 1.5rem;
+    }
+
+    .p-30 {
+        padding: 30px;
+    }
+
+    .border-radius {
+        border-radius: 5px;
+    }
+
+    .heading_s1 {
+        margin-bottom: 15px;
+    }
+
+    .divider {
+        border-top: 1px solid #ddd;
+        margin: 20px 0;
+    }
+
+    .center_icon {
+        text-align: center;
+    }
+
+    .loader {
+        display: inline-block;
+        width: 80px;
+        height: 80px;
+        position: relative;
+        border: 4px solid #f3f3f3;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    .bar {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 4px solid transparent;
+        border-top-color: #3498db;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .cart-container {
+        background: #f8f9fa;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .cart-title {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .total-amount {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .total-text {
+        font-size: 22px;
+        font-weight: 700;
+    }
+
+    .table {
+        border: 1px solid #dee2e6;
+    }
+
+    .table thead {
+        background-color: #343a40;
+        color: white;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    /* Footer Styles */
+    .footer {
+        background-color: #1a1a1a;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        position: relative;
+        bottom: 0;
+        width: 100%;
+    }
+
+    .footer a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .footer a:hover {
+        text-decoration: underline;
+    }
+
+
+    .main {
+        padding: 20px;
+    }
+
+
+    .page-header {
+        background-color: #f8f9fa;
+        padding: 20px 0;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .breadcrumb-wrap {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .breadcrumb a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+
+    .breadcrumb span {
+        margin: 0 5px;
+        color: #333;
+    }
+
+    .table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .table th,
+    .table td {
+        padding: 15px;
+        border: 1px solid #dee2e6;
+    }
+
+    .table th {
+        background-color: #343a40;
+        color: white;
+    }
+
+    .table td {
+        background-color: #ffffff;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f9f9f9;
+    }
+
+    .quantity-selector {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .quantity-btn {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        width: 30px;
+        height: 30px;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    .quantity-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .form-control {
+        text-align: center;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        height: 30px;
+        margin: 0 5px;
+    }
+
+    .cart-totals {
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .cart-total-label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .cart-total-value {
+        text-align: right;
+        color: #007bff;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .stock-status .text-danger {
+        color: #dc3545;
+    }
+
+    .stock-status .text-success {
+        color: #28a745;
+    }
+
+    .btn.disabled {
+        pointer-events: none;
+        opacity: 0.5;
+    }
+</style>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-book"></i>
+            <span>ChapterLane</span>
+        </div>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="shop">Shop</a></li>
+
+        </ul>
+
+        <div class="search-bar">
+            <form action="/searchInShop" method="POST">
+                <input type="text" name="search" placeholder="Search for items…">
+                <button type="submit"><i class="fi-rs-search"></i></button>
+            </form>
+        </div>
+        <div class="user-actions">
+            <a href="/wishlist" class="wishlist-icon">
+                <i class="fas fa-heart"></i> Wishlist
+            </a>
+            <a href="/cart" class="cart-icon">
+                <i class="fas fa-shopping-cart"></i> Cart
+            </a>
+        </div>
+    </nav>
+
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="index.html" rel="nofollow">Home</a>
+                    <span>&gt;</span> Shop
+                    <span>&gt;</span> Your Cart
+                </div>
+            </div>
+        </div>
+        <section class="mt-50 mb-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table shopping-summery text-center clean">
+                                <thead>
+                                    <tr class="main-heading">
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Quantity (Max-Limit: 5)</th>
+                                        <th scope="col">Total Amount</th>
+                                        <th scope="col">Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (cartItems.length===0) { %>
+                                        <tr>
+                                            <td colspan="7">Your cart is empty.</td>
+                                        </tr>
+                                        <% } else { %>
+                                            <% cartItems.forEach(item=> { %>
+                                                <tr>
+                                                    <td class="image product-thumbnail">
+                                                        <img src="/adminImages/<%= item.product.images[0] %>"
+                                                            alt="<%= item.product.name %>">
+                                                    </td>
+                                                    <td class="product-des product-name">
+                                                        <h5 class="product-name">
+                                                            <a href="#">
+                                                                <%= item.product.name %>
+                                                            </a>
+                                                        </h5>
+                                                        <!-- <p class="font-xs"><%= item.product.categoryId %></p> -->
+                                                        <% if (item.product.countInStock <=10) { %>
+                                                            <p class="font-xs text-danger"
+                                                                id="countInStock-<%= item.product._id %>">Only <%=
+                                                                    item.product.countInStock %> stocks are remaining,
+                                                                    hurry up</p>
+                                                            <% } else if (item.product.status==='out-of-stock' ) { %>
+                                                                <p class="text-danger">
+                                                                    <%= item.product.status %>
+                                                                </p>
+                                                                <% } else if (item.product.countInStock> 10) { %>
+                                                                    <p class="font-xs text-info"
+                                                                        id="countInStock-<%= item.product._id %>">Stocks
+                                                                        available</p>
+                                                                    <% } %>
+                                                    </td>
+                                                    <td class="price" data-title="Price">
+                                                        <% if (item.product.discount> 0) { %>
+                                                            <!-- <span class="original-price"
+                                                                style="text-decoration: line-through; color:red;">
+                                                                Rs.<%= item.product.price.toFixed(2) %>/-
+                                                            </span> -->
+                                                            <span class="discounted-price">
+                                                                Rs.<%= (item.product.price - (item.product.price *
+                                                                    (item.product.discount / 100))).toFixed(2) %>/-
+                                                            </span>
+                                                            <% } else { %>
+                                                                <span>Rs.<%= item.product.price.toFixed(2) %>/-</span>
+                                                                <% } %>
+                                                    </td>
+                                                    <td class="text-center" data-title="Stock">
+                                                        <div class="quantity quantity--2">
+                                                            <form id="updateCartForm-<%= item.product._id %>"
+                                                                action="/updateCartQuantity" method="post">
+                                                                <input type="hidden" name="productId"
+                                                                    value="<%= item.product._id %>">
+                                                                <input type="hidden" name="quantity"
+                                                                    id="qty-input-<%= item.product._id %>"
+                                                                    value="<%= item.quantity %>">
+                                                                <div class="input-group" style="width: 100px;">
+                                                                    <button type="button"
+                                                                        class="btn btn-sm btn-outline-secondary"
+                                                                        style="width: 30px; height: 30px; padding: 0;"
+                                                                        onclick="updateQuantity('<%= item.product._id %>', 'decrement')">-</button>
+                                                                    <input type="text" class="form-control text-center"
+                                                                        id="quantity-display-<%= item.product._id %>"
+                                                                        value="<%= item.quantity %>" readonly
+                                                                        style="height: 30px; padding: 0; font-size: 14px;">
+                                                                    <button type="button"
+                                                                        class="btn btn-sm btn-outline-secondary"
+                                                                        style="width: 30px; height: 30px; padding: 0;"
+                                                                        onclick="updateQuantity('<%= item.product._id %>', 'increment')">+</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-right subtotal" data-title="Subtotal"
+                                                        id="price-<%= item.product._id %>">
+                                                        <% let discountedPrice=item.product.price - (item.product.price
+                                                            * (item.product.discount / 100)); let
+                                                            subtotal=discountedPrice * item.quantity; %>
+                                                            <span>Rs.<%= subtotal.toFixed(2) %>/-</span>
+                                                    </td>
+                                                    <td class="action" data-title="Remove">
+                                                        <a href="/cartRemove?productId=<%= item.product._id %>"
+                                                            class="text-muted">
+                                                            <i class="fi-rs-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>
+                                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="cart-action text-end">
+                            <a href="/shop" class="btn "><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
+                        </div>
+                        <div class="row mb-50">
+                            <div class="col-lg-6 col-md-12">
+                                <div class="border p-md-4 p-30 border-radius cart-totals">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tbody>
+
+                                                <tr>
+                                                    <td class="cart-total-label">Subtotal</td>
+                                                    <td class="cart-total-value">Rs.<%= totalAmount.toFixed(2) %>/-</td>
+                                                </tr>
+
+
+                                                <tr>
+                                                    <td class="cart-total-label">Total</td>
+                                                    <td class="cart-total-value" id="totalAmount">
+                                                        <% let totalDiscountedAmount=0; cartItems.forEach(item=> {
+                                                            let discountedPrice = item.product.price -
+                                                            (item.product.price * (item.product.discount / 100));
+                                                            totalDiscountedAmount += discountedPrice * item.quantity;
+                                                            });
+                                                            %>
+                                                            Rs.<%= totalDiscountedAmount.toFixed(2) %>/-
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <a href="/checkout" class="btn <%= cartItems.length === 0 ? 'disabled' : '' %>"
+                                        <%=cartItems.length===0 ? 'aria-disabled="true"' : '' %> >
+                                        <i class="fi-rs-box-alt mr-10"></i> Proceed To Checkout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 ChapterLane. All rights reserved.</p>
+        <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="#">Contact Us</a></p>
+        <div>
+            <a href="#">Facebook</a> | <a href="#">Twitter</a> | <a href="#">Instagram</a>
+        </div>
+    </footer>
+
+
+    <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/plugins/slick.js"></script>
+    <script src="assets/js/plugins/jquery.syotimer.min.js"></script>
+    <script src="assets/js/plugins/wow.js"></script>
+    <script src="assets/js/plugins/jquery-ui.js"></script>
+    <script src="assets/js/plugins/perfect-scrollbar.js"></script>
+    <script src="assets/js/plugins/magnific-popup.js"></script>
+    <script src="assets/js/plugins/select2.min.js"></script>
+    <script src="assets/js/plugins/waypoints.js"></script>
+    <script src="assets/js/plugins/counterup.js"></script>
+    <script src="assets/js/plugins/jquery.countdown.min.js"></script>
+    <script src="assets/js/plugins/images-loaded.js"></script>
+    <script src="assets/js/plugins/isotope.js"></script>
+    <script src="assets/js/plugins/scrollup.js"></script>
+    <script src="assets/js/plugins/jquery.vticker-min.js"></script>
+
+    <script src="./assets/js/main.js?v=3.4"></script>
+    <script src="./assets/js/shop.js?v=3.4"></script>
+    <script>
+
+
+        function updateQuantity(productId, action) {
+            const qtyInput = document.getElementById(`qty-input-${productId}`);
+            const qtyDisplay = document.getElementById(`quantity-display-${productId}`);
+            const stockElement = document.getElementById(`countInStock-${productId}`);
+
+            let currentQuantity = parseInt(qtyInput.value);
+            if (action === 'increment' && currentQuantity < 5) {
+                currentQuantity++;
+            } else if (action === 'decrement' && currentQuantity > 1) {
+                currentQuantity = Math.max(1, currentQuantity - 1);
+            }
+
+            qtyInput.value = currentQuantity;
+            qtyDisplay.value = currentQuantity;
+
+            const formData = {
+                productId: productId,
+                quantity: currentQuantity
+            };
+
+            fetch('/updateCartQuantity', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log("data", data);
+                        document.getElementById('totalAmount').textContent = `Rs.${data.totalAmount.toFixed(2)}/-`;
+
+                        document.getElementById(`price-${productId}`).textContent = `Rs.${data.subtotal.toFixed(2)}/-`;
+                    } else {
+                        alert('Error updating cart: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                })
+
+        }
+
+
+
+
+    </script>
+
+</body>
+
+</html>

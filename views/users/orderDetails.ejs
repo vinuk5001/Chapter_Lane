@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details - ChapterLane</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/main.css?v=3.4">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 1000px;
+            width: 100%;
+            margin: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #007bff;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 0.5rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        h2,
+        h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #343a40;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        .order-card {
+            background: #e9ecef;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .order-card:hover {
+            transform: scale(1.02);
+        }
+
+        .order-card p {
+            margin: 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        .order-card span {
+            font-weight: bold;
+        }
+
+        .btn-small,
+        .btn-cancel,
+        .btn-download {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.75rem 1.25rem;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            font-size: 1.2rem;
+        }
+
+        .btn-small {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-small:hover {
+            background-color: #218838;
+        }
+
+        .btn-cancel {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background-color: #c82333;
+        }
+
+        .btn-download {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-download:hover {
+            background-color: #0056b3;
+        }
+
+        .website-name {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-decoration: underline;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+    <div class="website-name">ChapterLane</div>
+    <div class="container">
+        <h1>Order Details</h1>
+        <% if (order) { %>
+            <div class="order-card">
+                <h2>Order Information</h2>
+                <p><span>Order Date:</span>
+                    <%= new Date(order.orderDate).toLocaleDateString() %>
+                </p>
+                <p><span>Status:</span>
+                    <%= order.orderStatus %>
+                </p>
+                <p><span>Bill Total:</span>
+                    <%= order.billTotal %>
+                </p>
+                <p><span>Payment Method:</span>
+                    <%= order.paymentMethod %>
+                </p>
+
+                <h3>Shipping Address</h3>
+                <p>
+                    <%= order.shippingAddress.address %><br>
+                        <%= order.shippingAddress.city %>,
+                            <%= order.shippingAddress.state %>,
+                                <%= order.shippingAddress.pincode %>
+                </p>
+                <h3>Coupon Details</h3>
+                <% if (order.couponAmount) { %>
+                    <p><span>Coupon Applied:</span>
+                        <%= order.couponAmount %>
+                    </p>
+                    <p><span>Discounted Amount:</span>
+                        <%= order.couponDiscount %>
+                    </p>
+                    <% } else { %>
+                        <p>No coupon applied.</p>
+                        <% } %>
+
+
+                            <% if (order.orderStatus==="Delivered" ) { %>
+                                <button class="return-order-btn" onclick="returnOrder('<%= order._id %>')">Return
+                                    Order</button>
+                                <% } else if (order.orderStatus==="Returned" ) { %>
+                                    <p>Return success</p>
+                                    <% } %>
+
+                                        <% if (order.paymentFailed===true && order.orderStatus==="Pending" ) { %>
+                                            <button class="btn-small"
+                                                onclick="continuePayment('<%= order._id %>','<%= order.billTotal%>')">Continue
+                                                Payment</button>
+                                            <% } %>
+
+                                                <% if (!(order.paymentFailed===true && order.orderStatus==="Pending" ))
+                                                    { %>
+
+                                                    <% if (order.orderStatus !=="Cancelled" && order.orderStatus
+                                                        !=="Returned" && order.orderStatus !=="Delivered" ) { %>
+                                                        <button class="btn-cancel"
+                                                            onclick="cancelOrder('<%= order._id %>')">
+                                                            Cancel Order</button>
+                                                        <% } %>
+
+                                                            <% } %>
+
+            </div>
+
+            <% if (order.items && order.items.length> 0) { %>
+                <% order.items.forEach(item=> { %>
+                    <div class="order-card">
+                        <h2>Product Information</h2>
+                        <p><span>Product Name:</span>
+                            <%= item.product.name %>
+                        </p>
+                        <p><span>Quantity:</span>
+                            <%= item.quantity %>
+                        </p>
+                        <p><span>Subtotal:</span>
+                            <%= item.subtotal %>
+                        </p>
+                    </div>
+                    <% }) %>
+                        <% } else { %>
+                            <p>No items found in this order.</p>
+                            <% } %>
+
+                                <button class="btn-download" onclick="downloadInvoice()">Download Invoice</button>
+
+                                <% } else { %>
+                                    <p>Order details not available.</p>
+                                    <% } %>
+                                        <div id="order-data" data-order="<%= order %>"></div>
+
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+
+    <script>
+        window.onload = function () {
+            console.log("Page fully loaded,script initialized");
+        }
+
+        const orderElement = document.getElementById("order-data");
+        const order = JSON.parse(orderElement.getAttribute("data-order"));
+        console.log("order", order);
+
+        async function cancelOrder(orderId) {
+            console.log("hi hllooo");
+            const { value: reason } = await Swal.fire({
+                title: 'Cancel Order',
+                input: 'textarea',
+                inputLabel: 'Cancellation Reason',
+                inputPlaceholder: 'Type your reason here...',
+                inputAttributes: {
+                    'aria-label': 'Type your reason here'
+                },
+                showCancelButton: true
+            })
+            if (reason) {
+                try {
+                    const response = await fetch(`/cancelOrder`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ orderId: orderId, reason: reason })
+                    })
+                    if (response.ok) {
+                        Swal.fire('Cancelled', 'Your order has been cancelled.', 'success').then(() => {
+                            window.location.reload();
+                        })
+                    } else {
+                        Swal.fire('Error', 'Failed to cancel order.', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    Swal.fire('Error', 'Error cancelling order.', 'error');
+                }
+            }
+        }
+
+        window.cancelOrder = cancelOrder;
+
+        async function returnOrder(orderId) {
+            console.log("return order");
+            const { value: reason } = await Swal.fire({
+                title: 'Return Order',
+                input: 'textarea',
+                inputLabel: 'Return Reason',
+                inputPlaceholder: 'Type your reason here...',
+                inputAttributes: {
+                    'aria-label': 'Type your reason here'
+                },
+                showCancelButton: true
+            })
+
+            if (reason) {
+                try {
+                    const response = await fetch(`/returnOrder`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ orderId: orderId, reason: reason })
+                    })
+
+                    if (response.ok) {
+                        Swal.fire('Returned', 'Your return request has been submitted.', 'success').then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire('Error', 'Failed to submit return request.', 'error')
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    Swal.fire('Error', 'Error submitting return request.', 'error')
+                }
+            }
+        }
+
+
+
+
+
+        // function downloadInvoice() {
+
+        //     console.log("Invoice is dowloading")
+
+        //     const orderString = document.getElementById("order-data").getAttribute("data-order")
+        //     console.log("orderString", orderString)
+
+        //     const order = JSON.parse(orderElement.getAttribute("data-order"));
+        //     console.log("order", order)
+        //     const { jsPDF } = window.jspdf
+        //     const doc = new jsPDF()
+        //     let y = 10;
+
+        //     doc.setFontSize(18)
+        //     doc.text("Invoice", 105, y, null, null, 'center')
+        //     y += 10;
+
+        //     doc.setFontSize(12)
+        //     doc.text("Order Information", 10, y)
+        //     y += 10
+
+
+        //     console.log("orderData", typeof order)
+        //     console.log("items gdfgdf,", order.items, order.billTotal)
+
+
+        //     doc.autoTable({
+        //         startY: y,
+        //         head: [["Label", "Value"]],
+        //         body: [order],
+        //         theme: 'grid',
+        //         columnStyles: {
+        //             0: { halign: 'left', cellWidth: 60 },
+        //             1: { halign: 'left' }
+        //         }
+        //     })
+
+        //     y = doc.lastAutoTable.finalY + 10
+
+        //     doc.text("Shipping Address", 10, y)
+        //     y += 10
+
+        //     const shippingData = [
+        //         ["Address", "<%= order.shippingAddress.address %>"],
+        //         ["City", "<%= order.shippingAddress.city %>"],
+        //         ["State", "<%= order.shippingAddress.state %>"],
+        //         ["Pincode", "<%= order.shippingAddress.pincode %>"],
+
+        //     ]
+        //     console.log("shipping Address", shippingData);
+
+        //     if (doc.autoTable) {
+        //         doc.autoTable({
+        //             startY: y,
+        //             head: [["Label", "Details"]],
+        //             body: order.shippingData,
+        //             theme: 'grid',
+        //             columnStyles: {
+        //                 0: { halign: 'left', cellWidth: 60 },
+        //                 1: { halign: 'left' }
+        //             }
+        //         })
+
+        //         y = doc.lastAutoTable.finalY + 10;
+        //     }
+        //     console.log("items ,", order.items);
+
+        //     if (order.items && order.items.length > 0) {
+        //         doc.text("Ordered Items", 10, y);
+        //         y += 10;
+
+        //         const itemData = order.items.map(item => {
+        //             console.log("item", item);
+        //             console.log("itemproduct", item.product);
+        //             return [
+        //                 item.product.name,
+        //                 item.quantity,
+        //                 item.subtotal
+        //             ]
+        //         })
+        //         console.log(itemData, "itemData");
+        //         console.log(JSON.stringify(order.items, null, 2));
+
+        //         doc.autoTable({
+        //             startY: y,
+        //             head: [["Product", "Quantity", "Subtotal"]],
+        //             body: itemData,
+        //             theme: 'grid',
+        //             columnStyles: {
+        //                 0: { halign: 'left' },
+        //                 1: { halign: 'center' },
+        //                 2: { halign: 'right' }
+        //             }
+        //         })
+
+        //     } else {
+        //         doc.text("No items found in this order.", 10, y);
+        //     }
+
+        //     doc.save('invoice.pdf');
+        // }
+
+        // window.downloadInvoice = downloadInvoice;
+
+
+        async function downloadInvoice() {
+            console.log("📥 Downloading Invoice...");
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            let y = 10;
+            try {
+                console.log("hiiii hloooo");
+                const urlParams = new URLSearchParams(window.location.search);
+                const orderId = urlParams.get("orderid");
+                console.log("orderId", orderId);
+                if (!orderId) {
+                    console.error("❌ Order ID is missing from URL");
+                    alert("Order ID is missing! Cannot fetch invoice.");
+                    return;
+                }
+                console.log("🛒 Fetching order with ID:", orderId);
+                const apiUrl = `${window.location.origin}/api/orders/${orderId}`;
+                const response = await fetch(apiUrl, { method: "GET" });
+                if (!response.ok) {
+                    throw new Error(`❌ HTTP Error: ${response.status} - ${response.statusText}`);
+                }
+                const order = await response.json();
+                console.log("Order Fetched Successfully:", order);
+                doc.setFontSize(18);
+                doc.text("Invoice", 105, y, null, null, 'center');
+                y += 10;
+
+                doc.setFontSize(12);
+                doc.text("Order Information", 10, y);
+                y += 10;
+
+                const orderDetails = [
+                    ["Order Date", new Date(order.orderDate).toLocaleDateString()],
+                    ["Status", order.orderStatus],
+                    ["Bill Total", order.billTotal],
+                    ["Payment Method", order.paymentMethod]
+                ]
+                console.log("orderDetails", orderDetails)
+
+                doc.autoTable({
+                    startY: y,
+                    head: [["Label", "Value"]],
+                    body: orderDetails,
+                    theme: 'grid',
+                    columnStyles: { 0: { halign: 'left', cellWidth: 60 }, 1: { halign: 'left' } }
+                })
+
+                y = doc.lastAutoTable.finalY + 10;
+                doc.text("Shipping Address", 10, y);
+                y += 10;
+
+                const shippingData = order.shippingAddress
+                    ? [
+                        ["Address", order.shippingAddress.address || "N/A"],
+                        ["City", order.shippingAddress.city || "N/A"],
+                        ["State", order.shippingAddress.state || "N/A"],
+                        ["Pincode", order.shippingAddress.pincode || "N/A"]
+                    ]
+                    : [["Address", "No shipping address found."]];
+                console.log("shippingData", shippingData);
+                doc.autoTable({
+                    startY: y,
+                    head: [["Label", "Details"]],
+                    body: shippingData,
+                    theme: 'grid',
+                    columnStyles: { 0: { halign: 'left', cellWidth: 60 }, 1: { halign: 'left' } }
+                })
+
+                y = doc.lastAutoTable.finalY + 10;
+                if (order.items && order.items.length > 0) {
+                    doc.text("Ordered Items", 10, y)
+                    y += 10;
+
+                    const itemData = order.items.map(item => [
+                        item.product?.name || "Unknown",
+                        item.quantity,
+                        item.subtotal
+                    ]);
+                    console.log("itemData", itemData);
+                    doc.autoTable({
+                        startY: y,
+                        head: [["Product", "Quantity", "Subtotal"]],
+                        body: itemData,
+                        theme: 'grid',
+                        columnStyles: { 0: { halign: 'left' }, 1: { halign: 'center' }, 2: { halign: 'right' } }
+                    });
+                } else {
+                    doc.text("No items found in this order.", 10, y)
+                }
+                doc.save(`Invoice_${orderId}.pdf`);
+                console.log("📄 Invoice Downloaded Successfully!")
+
+            } catch (error) {
+                console.error("❌ Error fetching order data:", error)
+                alert("Failed to fetch invoice. Please try again.")
+            }
+        }
+
+        window.downloadInvoice = downloadInvoice;
+
+
+
+        async function continuePayment(orderId, billTotal) {
+            console.log("billTotal", billTotal);
+
+            $.ajax({
+                url: "/createOrder",
+                type: "POST",
+                data: {
+                    totalAmount: billTotal,
+                },
+
+                success: function (res) {
+                    if (res.success) {
+                        var options = {
+                            "key": "" + res.key_id + "",
+                            "amount": "" + res.totalAmount + "",
+                            "currency": "INR",
+                            "name": "" + res.product_name + "",
+                            "description": "" + res.description + "",
+                            "image": "https://dummyimage.com/600x400/000/fff",
+                            "order_id": "" + res.order_id + "",
+                            "handler": function (response) {
+                                window.location.href = "/payOnlineContinue?orderId=" + orderId;
+
+                            },
+                            "prefill": {
+                                "contact": "" + res.contact + "",
+                                "name": "" + res.name + "",
+                                "email": "" + res.email + ""
+                            },
+                            "notes": {
+                                "description": "" + res.description + ""
+                            },
+                            "theme": {
+                                "color": "#2300a3"
+                            }
+                        };
+                        var razorpayObject = new Razorpay(options);
+                        razorpayObject.on('payment.failed', function (response) {
+
+                            window.location.href = "/payonlineFailed?order_id=" + res.order_id +
+                                "&payment_id=" + response.razorpay_payment_id +
+                                "&address_id=" + selectedAddressId +
+                                "&selectedCoupons=" + encodeURIComponent(JSON.stringify(selectedCoupons)) +
+                                "&subtotal=" + originalTotalAmount +
+                                "&paymentMethod=" + selectedPaymentMethod;
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Payment Failed',
+                                text: 'Your payment could not be processed. Please try again.',
+                                confirmButtonText: 'OK'
+                            })
+
+                        });
+                        razorpayObject.open();
+                    } else {
+                        alert(res.msg);
+                    }
+                }
+            })
+        }
+
+
+
+    </script>
+
+</body>
+
+</html>

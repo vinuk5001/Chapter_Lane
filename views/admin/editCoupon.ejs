@@ -1,0 +1,398 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>BOOKHUB</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <link href="/assets-admin/css/main.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <style>
+        div .error-message {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <div class="logo logo-width-1">
+                <a href="/admin/home">
+                    <h3>BOOKHUB</h3>
+                </a>
+            </div>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+                </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item active">
+                    <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/profile"> <i class="icon material-icons md-person"></i>
+                        <span class="text">My Profile</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/category/"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Manage Category</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/dashboard"> <i class="icon material-icons md-person"></i>
+                        <span class="text">User Account</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Manage Product</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/product/add">Add product</a>
+                        <a href="/admin/product/lists">View Product</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Manage Orders</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/order/lists">Order </a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Manage Coupon</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/coupon">Add Coupon</a>
+                        <a href="/admin/view/coupons">View Coupon</a>
+                    </div>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Reviews</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <ul class="menu-aside">
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/sales/report"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text"> Sales Report </span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
+                        <span class="text">Settings</span>
+                    </a>
+                </li>
+            </ul>
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    <div class="input-group">
+                    </div>
+
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                        class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon" href="#">
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="requestfullscreen nav-link btn-icon"><i
+                                class="material-icons md-cast"></i></a>
+                    </li>
+                    <li class="dropdown nav-item">
+                    </li>
+                    <li class="dropdown nav-item">
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit
+                                Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account
+                                Settings</a>
+                            <a class="dropdown-item" href="#"><i
+                                    class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help
+                                center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="#"><i
+                                    class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <form action="/admin/update/coupon" method="POST" id="submit">
+
+                <div class="row">
+                    <div class="col-9">
+                        <div class="content-header">
+                            <h2 class="content-title" style="font-family: 'Times New Roman', Times, serif;">UPDATE
+                                COUPON DETAILS</h2>
+                            <div>
+                                <button class="btn btn-md rounded font-sm hover-up">UPDATE</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <% if(typeof successMessage !=='undefined' ) { %>
+                                    <p
+                                        style="color:green; font-size: 15px;  font-family: 'Times New Roman', Times, serif;">
+                                        <%= successMessage %>
+                                    </p>
+                                    <% } else if (typeof errorMessage !=='undefined' ) { %>
+                                        <p
+                                            style="color: red; font-size: 15px;  font-family: 'Times New Roman', Times, serif;">
+                                            <%= errorMessage %>
+                                        </p>
+                                        <% } %>
+                                            <div class="mb-4">
+                                                <label for="name" class="form-label">Coupon Name</label>
+                                                <input type="text" placeholder="Coupon Name" class="form-control"
+                                                    id="name" name="couponName" value="<%= coupon.name %>" required>
+                                                <div class="error-message" id="nameError"></div>
+                                            </div>
+                                            <div class="row gx-3">
+                                                <div class="col-md-4  mb-3 mr-30">
+                                                    Start Date: <%= new
+                                                        Date(coupon.startDate).toLocaleDateString('en-GB') %>
+                                                        <input type="date" class="form-control" name="startDate"
+                                                            id="startDate" value="<%= coupon.startDate %>">
+                                                        <div class="error-message" id="startDateError"></div>
+                                                </div>
+                                                <div class="col-md-4  mb-3">
+                                                    End Date: <%= new Date(coupon.endDate).toLocaleDateString('en-GB')
+                                                        %>
+                                                        <input type="date" class="form-control" name="endDate"
+                                                            id="endDate" value="<%= coupon.endDate %>">
+                                                        <div class="error-message" id="endDateError"></div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label for="minimumAmount" class="form-label">Minimum Amount</label>
+                                                <input type="number" placeholder="Minimum Amount" name="minimumAmount"
+                                                    class="form-control" id="minimumAmount"
+                                                    value="<%= coupon.minimumAmount %>" required min="0">
+                                                <div class="error-message" id="minimumAmountError"></div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label for="maximumAmount" class="form-label">Maximum Amount</label>
+                                                <input type="number" placeholder="Maximum Amount" name="maximumAmount"
+                                                    class="form-control" id="maximumAmount"
+                                                    value="<%= coupon.maximumAmount %>" required min="0">
+                                                <div class="error-message" id="maximumAmountError"></div>
+                                            </div>
+                            </div>
+                        </div> <!-- card end// -->
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="mb-4">
+                                    <label for="discount" class="form-label">Discount (%)</label>
+                                    <input type="number" placeholder="Discount" class="form-control" name="discount"
+                                        id="discount" value="<%= coupon.discount %>" required min="1" max="100">
+                                    <div class="error-message" id="discountError"></div>
+                                </div>
+                                <h5 class="mb-3">Coupon Status</h5>
+                                <div class="mb-3">
+                                    <input type="radio" name="verify" value="1" <% if(coupon.isActive==1){%> checked <%}
+                                        %>>
+                                        <label class="form-label">Unblock</label>
+                                        <br>
+                                        <input type="radio" name="verify" value="0" <% if(coupon.isActive==0){%> checked
+                                        <%} %>>
+                                            <label class="form-label">block</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="coupon_id" value="<%= coupon.id %>">
+                </div>
+            </form>
+        </section>
+    </main>
+    <script src="/assets-admin/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/assets-admin/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/assets-admin/js/vendors/select2.min.js"></script>
+    <script src="/assets-admin/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/assets-admin/js/vendors/jquery.fullscreen.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="/assets-admin/js/main.js" type="text/javascript"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const nameInput = document.getElementById('name');
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            const minAmountInput = document.getElementById('minimumAmount');
+            const maxAmountInput = document.getElementById('maximumAmount');
+            const discountInput = document.getElementById('discount');
+
+            nameInput.addEventListener('blur', validateCouponName);
+            nameInput.addEventListener('focus', clearErrorMessage.bind(null, 'nameError'));
+
+            startDateInput.addEventListener('blur', validateStartDate);
+            startDateInput.addEventListener('focus', clearErrorMessage.bind(null, 'startDateError'));
+
+            endDateInput.addEventListener('blur', validateEndDate);
+            endDateInput.addEventListener('focus', clearErrorMessage.bind(null, 'endDateError'));
+            minAmountInput.addEventListener('blur', validateMinimumAmount);
+            minAmountInput.addEventListener('focus', clearErrorMessage.bind(null, 'minimumAmountError'));
+
+            maxAmountInput.addEventListener('blur', validateMaximumAmount);
+            maxAmountInput.addEventListener('focus', clearErrorMessage.bind(null, 'maximumAmountError'));
+
+            discountInput.addEventListener('blur', validateDiscount);
+            discountInput.addEventListener('focus', clearErrorMessage.bind(null, 'discountError'));
+
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function (event) {
+
+                if (!validateCouponName() || !validateStartDate() || !validateEndDate() || !validateMinimumAmount() || !validateMaximumAmount() || !validateDiscount()) {
+                    event.preventDefault();
+                }
+            });
+
+            const startDateValue = new Date(startDateInput.value);
+            const endDateValue = new Date(endDateInput.value);
+
+            function validateCouponName() {
+                const nameInput = document.getElementById('name');
+                const nameError = document.getElementById('nameError');
+                if (!nameInput.value.trim()) {
+                    displayErrorMessage(nameError, 'Coupon name is required');
+                    return false;
+                } else {
+                    clearErrorMessage(nameError);
+                    return true;
+                }
+            }
+
+            function validateStartDate() {
+                const startDateInput = document.getElementById('startDate');
+                const startDateError = document.getElementById('startDateError');
+                if (!startDateInput.value) {
+                    displayErrorMessage(startDateError, 'Starting date is required');
+                    return false;
+                } else {
+                    clearErrorMessage(startDateError);
+                    return true;
+                }
+            }
+
+            function validateEndDate() {
+                const endDateInput = document.getElementById('endDate');
+                const endDateError = document.getElementById('endDateError');
+                if (!endDateInput.value) {
+                    displayErrorMessage(endDateError, 'Ending date is required');
+                    return false;
+                } else if (endDateValue <= startDateValue) {
+                    clearErrorMessage(endDateError, 'End date must be greater than start date');
+                    return false;
+                } else {
+                    clearErrorMessage(endDateError);
+                    return true;
+                }
+            }
+
+            function validateMinimumAmount() {
+                const minAmountInput = document.getElementById('minimumAmount');
+                const minAmountError = document.getElementById('minimumAmountError');
+                const minAmountValue = parseFloat(minAmountInput.value);
+                if (!minAmountInput.value) {
+                    displayErrorMessage(minAmountError, 'Minimum amount is required');
+                    return false;
+                } else if (minAmountValue < 0) {
+                    displayErrorMessage(minAmountError, 'Minimum amount cannot be negative');
+                    return false;
+                } else {
+                    clearErrorMessage(minAmountError);
+                    return true;
+                }
+            }
+
+            function validateMaximumAmount() {
+                const maxAmountInput = document.getElementById('maximumAmount');
+                const maxAmountError = document.getElementById('maximumAmountError');
+                const maxAmountValue = parseFloat(maxAmountInput.value);
+                const minAmountValue = parseFloat(document.getElementById('minimumAmount').value);
+                if (!maxAmountInput.value) {
+                    displayErrorMessage(maxAmountError, 'Maximum amount is required');
+                    return false;
+                } else if (maxAmountValue < 0) {
+                    displayErrorMessage(maxAmountError, 'Maximum amount cannot be negative');
+                    return false;
+                } else if (minAmountValue >= maxAmountValue) {
+                    displayErrorMessage(maxAmountError, 'Maximum amount must be greater than minimum amount');
+                    return false;
+                } else {
+                    clearErrorMessage(maxAmountError);
+                    return true;
+                }
+            }
+
+            function validateDiscount() {
+                const discountInput = document.getElementById('discount');
+                const discountError = document.getElementById('discountError');
+                const discountValue = parseFloat(discountInput.value);
+                if (!discountInput.value) {
+                    displayErrorMessage(discountError, 'Discount is required');
+                    return false;
+                } else if (discountValue < 0) {
+                    displayErrorMessage(discountError, 'Discount cannot be negative');
+                    return false;
+                } else if (discountValue < 1 || discountValue > 100) {
+                    displayErrorMessage(discountError, 'Discount must be between 1 and 100');
+                    return false;
+                } else {
+                    clearErrorMessage(discountError);
+                    return true;
+                }
+            }
+
+            function displayErrorMessage(errorElement, message) {
+                errorElement.textContent = message;
+            }
+
+            function clearErrorMessage(errorElementId) {
+                const errorElement = document.getElementById(errorElementId);
+                errorElement.textContent = '';
+            }
+        })
+
+    </script>
+</body>
+
+</html>

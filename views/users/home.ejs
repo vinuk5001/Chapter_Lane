@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>ChapterLane - Bookstore</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description"
+        content="Welcome to ChapterLane - Your one-stop online bookstore for all genres and tastes.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="ChapterLane - Bookstore">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourwebsite.com">
+    <meta property="og:image" content="assets/imgs/theme/og-image.jpg">
+
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favicon.svg">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="stylesheet" href="assets/css/main.css?v=3.4">
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+
+        .navbar {
+            background-color: #1a1a1a;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .logo i {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .navbar .logo span {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar ul li {
+            margin-left: 30px;
+        }
+
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar ul li a:hover {
+            color: #007bff;
+        }
+
+        .navbar .search-bar {
+            margin-left: 30px;
+        }
+
+        .navbar .search-bar input {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 200px;
+        }
+
+        .navbar .search-bar input {
+            color: black;
+            background-color: white;
+            border: 1px solid #ccc;
+        }
+
+        .navbar .search-bar input::placeholder {
+            color: #888;
+        }
+
+
+        .navbar .user-actions {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .navbar .user-actions a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar .user-actions a:hover {
+            color: #007bff;
+        }
+
+        .navbar .wishlist-icon i,
+        .navbar .cart-icon i {
+            font-size: 20px;
+            margin-right: 5px;
+        }
+
+        .navbar .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .navbar .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #1a1a1a;
+            min-width: 200px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+            z-index: 1;
+        }
+
+        .navbar .dropdown-content a {
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .navbar .dropdown-content a:hover {
+            background-color: #007bff;
+        }
+
+        .navbar .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+
+        .header {
+            background-image: url('assets/images/bookBanner.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 150px 20px;
+            margin-top: 70px;
+        }
+
+
+        .header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: white;
+        }
+
+        .header p {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+
+        }
+
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px 0;
+            background: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            transition: background 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #0056b3;
+        }
+
+        .main-content {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .products-promotions-section {
+            padding: 40px 30px;
+        }
+
+        .products-promotions-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-align: center;
+            text-transform: uppercase;
+            color: #333;
+        }
+
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .book-item {
+            background-color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 250px;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        .book-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .book-item img:hover {
+            transform: scale(1.05);
+        }
+
+        .book-item h3 {
+            font-size: 1rem;
+            margin: 0;
+            color: #000;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .book-item h3 {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        .book-item p {
+            font-size: 0.9rem;
+            color: #000;
+            margin-bottom: 10px 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .book-item button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .book-item button:hover {
+            background-color: #0056b3;
+        }
+
+        .book-item .out-of-stock-button {
+            background-color: #f44336;
+        }
+
+        .book-item .out-of-stock-button:hover {
+            background-color: #c62828;
+        }
+
+        .book-item h3 a {
+            color: black !important;
+            text-decoration: none !important;
+            font-weight: bold !important;
+        }
+
+        .promotions-section {
+            text-align: center;
+            margin-top: 40px;
+
+        }
+
+        .promotions-section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .promotions-section p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .footer {
+            background-color: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .add-to-cart-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            .navbar ul {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .navbar ul li {
+                margin-left: 0;
+                margin-bottom: 10px;
+            }
+
+            .navbar .search-bar {
+                margin-top: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .header p {
+                font-size: 1.2rem;
+            }
+        }
+
+        .pagination {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            padding: 8px 12px;
+            text-decoration: none;
+            background: #000;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .pagination a.active {
+            background: #333;
+            font-weight: bold;
+        }
+
+        .pagination a:hover {
+            background: #444;
+        }
+
+
+        /* .wishlist-icon {
+    display: block !important;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 22px;
+    color: black;
+    z-index: 1000;
+    background: white;
+} */
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-book"></i>
+            <span>ChapterLane</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="shop">Shop</a></li>
+
+        </ul>
+        <div class="search-bar">
+            <form action="/search" method="POST">
+                <input type="text" name="search" placeholder="Search for items…">
+                <button type="submit"><i class="fi-rs-search"></i></button>
+            </form>
+        </div>
+        <div class="user-actions">
+            <a href="/wishlist" class="wishlist-icon">
+                <i class="fas fa-heart"></i> Wishlist
+            </a>
+            <a href="/cart" class="cart-icon">
+                <i class="fas fa-shopping-cart"></i> Cart
+            </a>
+        </div>
+        <div class="header-info">
+            <ul>
+                <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                <li><a href="/userProfile"><i class="fas fa-user"></i> My Profile</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="header">
+        <h1>Welcome to ChapterLane</h1>
+        <p>Your one-stop shop for all kinds of books</p>
+        <a href="/shop" class="cta-button">Shop Now</a>
+    </header>
+
+    <main class="main-content">
+        <section class="products-promotions-section">
+
+            <h2>Books Collection</h2>
+            <div class="tab-content wow fadeIn animated" id="myTabContent">
+                <ul class="nav nav-tabs" id="bookTabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tab-one" data-bs-toggle="tab" href="#tab-normal" role="tab">All
+                            Books</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab-two" data-bs-toggle="tab" href="#tab-newArrivals" role="tab">New
+                            Arrivals</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab-three" data-bs-toggle="tab" href="#tab-topSelling" role="tab">Top
+                            Selling</a>
+                    </li>
+                </ul>
+
+
+                <div class="tab-pane fade show active" id="tab-normal" role="tabpanel">
+                    <div class="book-grid">
+                        <% products.forEach(item=> { %>
+                            <% if (item.status==="Active" || item.status==="Out-of-stock" ) { %>
+                                <div class="book-item">
+                                    <img src="/adminImages/<%= item.images[0] %>" alt="<%= item.name %>">
+                                    <i class="fa fa-heart wishlist-icon"
+                                        onclick="addToWishlist('<%= item._id %>', this)"
+                                        style="color: black; position: absolute; top: 10px; right: 10px; cursor: pointer; font-size: 22px;z-index:10;">
+                                    </i>
+
+                                    <h3><a href="/singleProduct?id=<%= item._id %>">
+                                            <%= item.name %>
+                                        </a></h3>
+
+                                    <p class="author">By <%= item.author %>
+                                    </p>
+
+                                    <p>
+                                        <% if (item.discount> 0) { %>
+                                            <span class="original-price"
+                                                style="text-decoration: line-through; color: red;">
+                                                <%= item.price %>Rs
+                                            </span>
+                                            <span class="discounted-price">
+                                                <strong>₹<%= (item.price-(item.price * (item.discount/100))).toFixed(2)
+                                                        %></strong>
+                                            </span>
+                                            <% } else { %>
+                                                <span class="discounted-price">
+                                                    <strong>₹<%= item.price %></strong>
+                                                </span>
+                                                <% } %>
+                                    </p>
+
+                                    <div class="book-actions">
+
+
+                                        <% if (item.stock===0) { %>
+                                            <button class="out-of-stock-button"
+                                                style="background-color: red; color: white;" disabled>
+                                                Out of Stock
+                                            </button>
+                                            <% } else { %>
+                                                <a class="add-to-cart-btn" href="javascript:void(0);"
+                                                    onclick="handleAddToCart('<%= item._id %>', this)">
+                                                    🛒 Add to Cart
+                                                </a>
+                                                <% } %>
+                                    </div>
+                                </div>
+
+                                <% } %>
+                                    <% }) %>
+                    </div>
+
+                </div>
+
+                <div class="tab-pane fade" id="tab-newArrivals" role="tabpanel">
+                    <div class="book-grid">
+                        <%if (newArrivals && newArrivals.length> 0){%>
+                            <% newArrivals.forEach(item=> { %>
+                                <% if (item.status==="Active" || item.status==="OutOfStock" ) { %>
+                                    <div class="book-item">
+                                        <img src="/adminImages/<%= item.images[0] %>" alt="<%= item.name %>">
+
+                                        <i class="fa fa-heart wishlist-icon"
+                                            onclick="addToWishlist('<%= item._id %>', this)"
+                                            style="color: black; position: absolute; top: 10px; right: 10px; cursor: pointer; font-size: 22px;">
+                                        </i>
+
+                                        <h3><a href="/singleProduct?id=<%= item._id %>">
+                                                <%= item.name %>
+                                            </a></h3>
+                                        <p class="author">By <%= item.author %>
+                                        </p>
+
+                                        <p>
+                                            <% if (item.discount> 0) { %>
+                                                <span class="original-price"
+                                                    style="text-decoration: line-through; color: red;">
+                                                    ₹<%= item.price %>Rs
+                                                </span>
+                                                <span class="discounted-price">
+                                                    <strong>₹<%= (item.price - (item.price * (item.discount /
+                                                            100))).toFixed(2) %></strong>
+                                                </span>
+                                                <% } else { %>
+                                                    <span class="discounted-price">
+                                                        <strong>₹<%= item.price %></strong>
+                                                    </span>
+                                                    <% } %>
+                                        </p>
+
+                                        <div class="book-actions">
+                                            <% if (item.stock===0) { %>
+                                                <button class="out-of-stock-button"
+                                                    style="background-color: red; color: white;" disabled>
+                                                    Out of Stock
+                                                </button>
+                                                <% } else { %>
+                                                    <a class="add-to-cart-btn" href="javascript:void(0);"
+                                                        onclick="handleAddToCart('<%= item._id %>', this)">
+                                                        🛒 Add to Cart
+                                                    </a>
+                                                    <% } %>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                        <% }) %>
+                                            <%}else{%>
+                                                <p>No new arrivals available</p>
+                                                <%}%>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="tab-topSelling" role="tabpanel">
+                    <div class="book-grid">
+                        <%if (topSelling && topSelling.length> 0) {%>
+                            <% topSelling.forEach(item=> { %>
+                                <% if (item.status==="Active" || item.status==="Out-of-stock" ){ %>
+                                    <div class="book-item">
+                                        <img src="/adminImages/<%= item.images[0] %>" alt="<%= item.name %>">
+
+                                        <i class="fa fa-heart wishlist-icon"
+                                            onclick="addToWishlist('<%= item._id %>', this)"
+                                            style="color: black; position: absolute; top: 10px; right: 10px; cursor: pointer; font-size: 22px;">
+                                        </i>
+
+                                        <h3><a href="/singleProduct?id=<%= item._id %>">
+                                                <%= item.name %>
+                                            </a></h3>
+                                        <p class="author">By <%= item.author %>
+                                        </p>
+
+                                        <p>
+                                            <% if (item.discount> 0) { %>
+                                                <span class="original-price"
+                                                    style="text-decoration: line-through; color: red;">
+                                                    <%= item.price %>Rs
+                                                </span>
+                                                <span class="discounted-price">
+                                                    <strong>₹<%= (item.price - (item.price * (item.discount /
+                                                            100))).toFixed(2) %></strong>
+                                                </span>
+                                                <% } else { %>
+                                                    <span class="discounted-price">
+                                                        <strong>₹<%= item.price %></strong>
+                                                    </span>
+                                                    <% } %>
+                                        </p>
+
+                                        <div class="book-actions">
+                                            <% if (item.stock===0) { %>
+                                                <button class="out-of-stock-button"
+                                                    style="background-color: red; color: white;" disabled>
+                                                    Out of Stock
+                                                </button>
+                                                <% } else { %>
+                                                    <a class="add-to-cart-btn" href="javascript:void(0);"
+                                                        onclick="handleAddToCart('<%= item._id %>', this)">
+                                                        🛒 Add to Cart
+                                                    </a>
+                                                    <% } %>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                        <% }) %>
+                                            <% }else{%>
+                                                <p>No top-selling products available.</p>
+                                                <%}%>
+                    </div>
+                </div>
+
+            </div>
+
+            </div>
+            <div class="pagination">
+                <% if (currentPage> 1) { %>
+                    <a href="?page=<%= currentPage - 1 %>">Previous</a>
+                    <% } %>
+
+                        <% for (let i=1; i <=totalPages; i++) { %>
+                            <a href="?page=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>">
+                                <%= i %>
+                            </a>
+                            <% } %>
+
+                                <% if (currentPage < totalPages) { %>
+                                    <a href="?page=<%= currentPage + 1 %>&limit=5">Next</a>
+                                    <% } %>
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 ChapterLane. All rights reserved.</p>
+        <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="#">Contact Us</a></p>
+        <div>
+            <a href="#">Facebook</a> | <a href="#">Twitter</a> | <a href="#">Instagram</a>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+
+        function addToWishlist(productId, element) {
+            fetch('/wishlist/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productId: productId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        element.style.color = 'red';
+                        element.style.pointerEvents = 'none';
+
+                        Swal.fire({
+
+                            title: "Added to Wishlist!",
+                            text: "This book has been successfully added to your wishlist.",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+
+                    } else {
+                        Swal.fire({
+
+                            title: "Oops!",
+                            text: data.message || "Failed to add to wishlist.",
+                            icon: "error"
+
+                        });
+                    }
+                })
+                .catch(error => {
+
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Something went wrong. Try again!",
+                        icon: "error"
+
+                    });
+                });
+        }
+
+
+
+
+        async function handleAddToCart(productId, buttonElement) {
+            try {
+                const response = await fetch(`/addToCart?productId=${productId}`, {
+                    method: 'GET',
+                    credentials: 'same-origin'
+                });
+
+                if (response.ok) {
+                    window.location.href = '/cart';
+                } else {
+                    const result = await response.json();
+
+                    if (result.message === 'Out of stock') {
+                        buttonElement.innerText = 'Out of stock';
+                        buttonElement.classList.add('out-of-stock');
+                        buttonElement.disabled = true;
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+
+    </script>
+
+</body>
+
+</html>

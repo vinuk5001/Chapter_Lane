@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Evara - eCommerce HTML Template</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/main.css?v=3.4">
+
+    <style>
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .button-add-to-cart {}
+
+        :root {
+            --primary-color: #000000;
+            --text-color: #ffffff;
+            --hover-color: #333333;
+            --button-color: #00bfae;
+        }
+
+
+        .navbar {
+            background-color: var(--primary-color);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-color);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .logo i {
+            font-size: 24px;
+            margin-right: 5px;
+        }
+
+        .navbar .logo span {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar ul li {
+            margin-left: 15px;
+        }
+
+        .navbar ul li a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar ul li a:hover {
+            color: var(--hover-color);
+        }
+
+        .navbar .search-bar {
+            position: relative;
+        }
+
+        .navbar .search-bar input {
+            padding: 6px 10px;
+            border-radius: 20px;
+            border: none;
+            width: 150px;
+            font-size: 14px;
+        }
+
+        .navbar .search-bar button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            border: none;
+            background: transparent;
+            padding: 6px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .navbar .user-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .user-actions a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin-left: 15px;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar .user-actions a:hover {
+            color: var(--hover-color);
+        }
+
+        .navbar .wishlist-icon i,
+        .navbar .cart-icon i {
+            font-size: 18px;
+            margin-right: 3px;
+        }
+
+        .navbar .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .navbar .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--primary-color);
+            min-width: 150px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .navbar .dropdown-content a {
+            color: var(--text-color);
+            padding: 8px 12px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .navbar .dropdown-content a:hover {
+            background-color: var(--hover-color);
+        }
+
+        .navbar .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .footer {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            text-align: center;
+            padding: 15px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer a {
+            color: var(--button-color);
+            text-decoration: none;
+            margin: 0 8px;
+            transition: text-decoration 0.3s ease;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer .social-links a {
+            margin: 0 8px;
+            font-size: 16px;
+            color: var(--button-color);
+            transition: color 0.3s ease;
+        }
+
+        .footer .social-links a:hover {
+            color: var(--hover-color);
+        }
+
+        .out-of-stock {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: not-allowed;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .out-of-stock:disabled {
+            background-color: red;
+            color: white;
+            cursor: not-allowed;
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+    <div class="modal fade custom-modal" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <div class="detail-gallery">
+                                <span class="zoom-icon"><i class="fi-rs-search"></i></span>
+
+                                <div class="product-image-slider">
+                                    <figure class="border-radius-10">
+                                        <img src="assets/imgs/shop/product-16-2.jpg" alt="product image">
+                                    </figure>
+                                    <figure class="border-radius-10">
+                                        <img src="assets/imgs/shop/product-16-1.jpg" alt="product image">
+                                    </figure>
+                                    <figure class="border-radius-10">
+                                        <img src="assets/imgs/shop/product-16-3.jpg" alt="product image">
+                                    </figure>
+                                    <figure class="border-radius-10">
+                                        <img src="assets/imgs/shop/product-16-4.jpg" alt="product image">
+                                    </figure>
+                                    <figure class="border-radius-10">
+                                        <img src="assets/imgs/shop/product-16-5.jpg" alt="product image">
+                                    </figure>
+                                    <figure class="border-radius-10">
+                                        <img src="assets/imgs/shop/product-16-6.jpg" alt="product image">
+                                    </figure>
+                                    <figure class="border-radius-10">
+                                        <img src="assets/imgs/shop/product-16-7.jpg" alt="product image">
+                                    </figure>
+                                </div>
+
+                                <div class="slider-nav-thumbnails pl-15 pr-15">
+                                    <img src="/adminImages/" alt="product image">
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-book"></i>
+            <span>ChapterLane</span>
+        </div>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="shop">Shop</a></li>
+        </ul>
+        <div class="search-bar">
+            <form action="/searchInShop" method="POST">
+                <input type="text" name="search" placeholder="Search…">
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+        <div class="user-actions">
+            <a href="/wishlist" class="wishlist-icon">
+                <i class="fas fa-heart"></i> Wishlist
+            </a>
+            <a href="/cart" class="cart-icon">
+                <i class="fas fa-shopping-cart"></i> Cart
+            </a>
+        </div>
+    </nav>
+    <div class="mobile-header-active mobile-header-wrapper-style">
+        <div class="mobile-header-wrapper-inner">
+            <div class="mobile-header-top">
+                <div class="mobile-header-logo">
+                    <a href="index.html"><img src="assets/imgs/theme/logo.svg" alt="logo"></a>
+                </div>
+                <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
+                    <button class="close-style search-close">
+                        <i class="icon-top"></i>
+                        <i class="icon-bottom"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="index.html" rel="nofollow">Home</a>
+                    <span></span> Product Details
+                    <span></span> Abstract Print Patchwork Dress
+                </div>
+            </div>
+        </div>
+        <section class="mt-50 mb-50">
+
+            <div class="breadcrumb-wrap">
+
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="product-detail accordion-detail">
+                            <div class="row mb-50">
+                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                    <div class="detail-gallery">
+                                        <span class="zoom-icon"><i class="fi-rs-search"></i></span>
+
+                                        <div class="product-image-slider">
+
+
+
+                                            <% products.images.reverse().forEach(image=> { %>
+                                                <figure class="border-radius-12 shadow-sm">
+                                                    <img src="/adminImages/<%=image%>" alt="product---image">
+                                                </figure>
+                                                <%})%>
+                                        </div>
+                                        <div class="slider-nav-thumbnails pl-15 pr-15">
+                                            <%products.images.forEach(image=> {%>
+                                                <div class="thumb-item">
+
+                                                    <img src="/adminImages/<%= image  %>" alt="product image">
+                                                </div>
+                                                <% }) %>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                    <div class="detail-info">
+                                        <h2 class="title-detail text-uppercase font-weight-bold mb-3">
+                                            <%= products.name %>
+                                        </h2>
+                                        <div class="product-detail-rating mb-3">
+
+                                            <div class="product-rate-cover text-end">
+                                                <div class="product-rate d-inline-block">
+                                                    <div class="product-rating" style="width:90%">
+                                                    </div>
+                                                </div>
+                                                <span class="font-small ml-5 text-muted">
+                                                    <%= products.ratings %>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix product-price-cover mb-4">
+                                            <div class="product-price primary-color float-left">
+                                                <ins><span class="text-brand">
+                                                        <%= products.price %>Rs
+                                                    </span></ins>
+                                                <ins><span class="old-price font-md ml-15">200.00Rs</span></ins>
+                                                <span class="save-price  font-md color3 ml-15">
+                                                    <%= products.discount %>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="bt-1 border-color-1 mt-15 mb-15"></div>
+                                        <div class="short-desc mb-4">
+                                            <p>
+                                                <%= products.description %>
+                                            </p>
+                                        </div>
+                                        <div class="product_sort_info font-xs mb-4">
+                                            <ul>
+
+                                                <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery available
+                                                </li>
+                                            </ul>
+                                        </div>
+
+
+                                        <div class="bt-1 border-color-1 mt-4"></div>
+                                        <div class="detail-extralink">
+                                            <div class="product-extra-link2 mt-3"
+                                                style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+
+
+                                                <% if(products.stock> 0 && products.status !== 'OutOfStock'){ %>
+                                                    <a id="addToCart-<%= products._id %>" href="javascript:void(0);"
+                                                        class="button button-add-to-cart"
+                                                        style="width: 200px; padding: 10px; background: #ff4500; color: white; text-align: center; border-radius: 5px;"
+                                                        onclick="addToCart('<%= products._id %>')">
+                                                        🛒 Add to Cart
+                                                    </a>
+
+                                                    <% } else { %>
+                                                        <button class="button button-add-to-cart out-of-stock"
+                                                            style="width: 200px; padding: 10px; background: gray; color: white; text-align: center; border-radius: 5px;"
+                                                            disabled>
+                                                            ❌ Out of Stock
+                                                        </button>
+                                                        <% } %>
+
+                                                            <button class="button button-add-to-wishlist"
+                                                                aria-label="Add To Wishlist"
+                                                                onclick="addToWishlist('<%= products._id %>', this)"
+                                                                style="width: 200px; padding: 10px; background: <%= isInWishlist ? 'green' : '#ff9900' %>; 
+                                                           color: white; text-align: center; border-radius: 5px; cursor: pointer;"
+                                                                <% if (isInWishlist) { %> disabled <% } %>>
+                                                                    <%= isInWishlist ? '✔️ Already in Wishlist'
+                                                                        : '❤️ Add to Wishlist' %>
+                                                            </button>
+
+                                            </div>
+                                        </div>
+                                        <ul class="product-meta font-xs color-grey mt-4">
+
+                                            <li>Availability:<span class="in-stock text-success ml-5">
+                                                    <%= products.stock%>
+                                                </span></li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="tab-style3 mt-4">
+                                <ul class="nav nav-tabs text-uppercase">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="Description-tab" data-bs-toggle="tab"
+                                            href="#Description">Description</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="Reviews-tab" data-bs-toggle="tab"
+                                            href="#Reviews">Reviews</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content shop_info_tab entry-main-content">
+                                    <div class="tab-pane fade show active" id="Description">
+                                        <div class="">
+                                            <p>
+                                                <%= products.description%>
+                                            </p>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="Reviews">
+                                        <div class="comments-area">
+                                            <div class="row">
+                                                <div class="col-lg-8">
+                                                    <h4 class="mb-30">Customer questions & answers</h4>
+                                                    <div class="comment-list" id="reviews-list">
+                                                        <%if(reviews && reviews.length> 0){%>
+                                                            <%reviews.forEach(review=> {%>
+                                                                <div
+                                                                    class="single-comment justify-content-between d-flex">
+                                                                    <div class="user justify-content-between d-flex">
+                                                                        <div class="desc">
+                                                                            <div class="product-rate d-inline-block">
+                                                                                <div class="product-rating"
+                                                                                    style="width:<%= review.rating * 20%>%">
+                                                                                </div>
+                                                                            </div>
+                                                                            <p>
+                                                                                <%= review.comment%>
+                                                                            </p>
+                                                                            <small>
+                                                                                By <%= review.userId
+                                                                                    ?review.userId.username
+                                                                                    : 'Unknown User' %>
+
+                                                                                    on <%= new
+                                                                                        Date(review.createdAt).toLocaleDateString()
+                                                                                        %>
+                                                                            </small>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <%});%>
+                                                                    <%}%>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+
+
+                                        <div class="review-form">
+                                            <h4>Write a review</h4>
+
+
+                                            <form id="review-form" <% if (!hasOrdered) { %> style="display: none;"
+                                                <% } %> >
+                                                    <label for="rating">Rating:</label>
+                                                    <select id="rating" name="rating" required>
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                    </select>
+
+                                                    <label for="comment">Comment:</label>
+                                                    <textarea id="comment" name="comment" required></textarea>
+
+                                                    <button type="submit">Submit Review</button>
+                                            </form>
+
+                                            <div id="no-order-message" <% if (hasOrdered) { %> style="display:
+                                                none;" <% } %> >
+                                                    <p>You need to purchase this product before leaving a review.
+                                                    </p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-60">
+                                <div class="col-12">
+                                    <h3 class="section-title style-1 mb-30">Related Products</h3>
+                                </div>
+                                <div class="col-12">
+                                    <div class="row related-products">
+                                        <% relatedProducts.forEach(item=> { %>
+                                            <div class="col-lg-3 col-md-4 col-12 col-sm-6 mb-4">
+                                                <div
+                                                    class="product-cart-wrap small hover-up border-radius-12 shadow-sm">
+                                                    <div class="product-img-action-wrap">
+                                                        <div class="product-img product-img-zoom">
+                                                            <a href="/singleProduct?id=<%= item._id %>" tabindex="0">
+                                                                <img class="default-img"
+                                                                    src="/adminImages/<%= item.images[0] %>"
+                                                                    alt="product image">
+                                                                <img class="hover-img"
+                                                                    src="/adminImages/<%= item.images[0] %>"
+                                                                    alt="product image">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="product-content-wrap text-center p-3">
+                                                        <h2><a href="/singleProduct?id=<%= item._id %>">
+                                                                <%= item.name %>
+                                                            </a></h2>
+                                                        <div class="rating-result" title="90%">
+                                                            <span></span>
+                                                        </div>
+                                                        <div class="product-price">
+                                                            <span>
+                                                                <%= item.price %>Rs
+                                                            </span>
+                                                            <span class="old-price">Rs245.8</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% }) %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-lg-3 primary-sidebar sticky-sidebar">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <p>&copy; 2024 ChapterLane. All rights reserved.</p>
+        <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="#">Contact Us</a></p>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/plugins/slick.js"></script>
+    <script src="assets/js/plugins/jquery.syotimer.min.js"></script>
+    <script src="assets/js/plugins/wow.js"></script>
+    <script src="assets/js/plugins/jquery-ui.js"></script>
+    <script src="assets/js/plugins/perfect-scrollbar.js"></script>
+    <script src="assets/js/plugins/magnific-popup.js"></script>
+    <script src="assets/js/plugins/select2.min.js"></script>
+    <script src="assets/js/plugins/waypoints.js"></script>
+    <script src="assets/js/plugins/counterup.js"></script>
+    <script src="assets/js/plugins/jquery.countdown.min.js"></script>
+    <script src="assets/js/plugins/images-loaded.js"></script>
+    <script src="assets/js/plugins/isotope.js"></script>
+    <script src="assets/js/plugins/scrollup.js"></script>
+    <script src="assets/js/plugins/jquery.vticker-min.js"></script>
+    <script src="assets/js/plugins/jquery.theia.sticky.js"></script>
+    <script src="assets/js/plugins/jquery.elevatezoom.js"></script>
+    <script src="./assets/js/main.js?v=3.4"></script>
+    <script src="./assets/js/shop.js?v=3.4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+
+        async function addToCart(productId) {
+            try {
+                const response = await fetch(`/addToCart?productId=${productId}`, {
+                    method: 'GET',
+                    credentials: 'same-origin'
+                });
+
+                if (response.ok) {
+                    Swal.fire({
+                        title: "Added to Cart!",
+                        text: "Product has been added successfully.",
+                        icon: "success",
+                        showCancelButton: true,
+                        confirmButtonText: "Go to Cart",
+                        cancelButtonText: "Continue Shopping"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/cart';
+                        }
+                    })
+
+                    const button = document.getElementById(`addToCart-${productId}`);
+                    if (button) {
+                        button.innerText = "✔️ Already in Cart";
+                        button.style.background = "gray";
+                        button.style.pointerEvents = "none";
+                    }
+
+                } else {
+                    const result = await response.json();
+                    if (result.message === 'Out of stock') {
+                        const button = document.getElementById(`addToCart-${productId}`);
+                        if (button) {
+                            button.innerText = "Out of stock";
+                            button.href = "#";
+                            button.style.background = "gray";
+                        }
+
+                        Swal.fire({
+                            title: "Out of Stock!",
+                            text: "This product is currently unavailable.",
+                            icon: "error",
+                            confirmButtonText: "OK"
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire({
+                    title: "Error!",
+                    text: "Something went wrong. Please try again.",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                });
+            }
+        }
+
+
+        function addToWishlist(productId, element) {
+            fetch('/wishlist/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productId: productId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        element.innerHTML = '✔️ Already in Wishlist';
+                        element.disabled = true;
+
+                        Swal.fire({
+                            title: "Added to Wishlist!",
+                            text: "This book has been added to your wishlist.",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    } else if (data.message === 'Product already in wishlist') {
+                element.innerHTML = '✔️ Already in Wishlist';
+                element.disabled = true;
+
+                Swal.fire({
+                    title: "Already Added",
+                    text: "This product is already in your wishlist.",
+                    icon: "info",
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            } else {
+                Swal.fire({
+                    title: "Oops!",
+                    text: data.message || "Failed to add to wishlist.",
+                    icon: "error"
+                });
+            }
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Something went wrong. Try again!",
+                        icon: "error"
+                    });
+                })
+        }
+
+
+        document.getElementById('review-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            const rating = document.getElementById('rating').value;
+            const comment = document.getElementById('comment').value;
+
+            const reviewData = { rating, comment };
+            const token = localStorage.getItem('userToken');
+
+            try {
+                const orderCheckResponse = await fetch(`/product/${productId}/has-ordered`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+
+                const orderCheckResult = await orderCheckResponse.json();
+
+                if (!orderCheckResult.ordered) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'You need to purchase this product before leaving a review.',
+                        showConfirmButton: true
+                    });
+                    return;
+                }
+
+
+                const response = await fetch(`/product/${productId}/review`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(reviewData),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Review Added',
+                        text: 'Your review has been added successfully!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                    addReviewToDOM(result.review);
+                    document.getElementById('review-form').reset();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: result.error || 'Something went wrong. Please try again later.',
+                        showConfirmButton: true
+                    });
+                }
+            } catch (error) {
+                console.error('Error adding review:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while submitting your review.',
+                    showConfirmButton: true
+                });
+            }
+        });
+        function addReviewToDOM(review) {
+            const reviewsList = document.getElementById('reviews-list');
+            const reviewElement = document.createElement('div');
+            reviewElement.classList.add('single-comment', 'justify-content-between', 'd-flex');
+            reviewElement.innerHTML = `
+        <div class="user justify-content-between d-flex">
+            <div class="desc">
+                <div class="product-rate d-inline-block">
+                    <div class="product-rating" style="width: ${review.rating * 20}%"></div>
+                </div>
+                <p>${review.comment}</p>
+                <small>By ${review.userId.username} on ${new Date(review.createdAt).toLocaleDateString()}</small>
+            </div>
+        </div>
+    `;
+            reviewsList.prepend(reviewElement);
+            reviewsList.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+
+
+</body>
+
+</html>
