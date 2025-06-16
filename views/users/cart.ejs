@@ -561,7 +561,7 @@
                                                                     <% } %>
                                                     </td>
                                                     <td class="price" data-title="Price">
-                                                        <% if (item.product.discount> 0) { %>
+                                                            <% if (item.product.discount> 0) { %>
                                                             <!-- <span class="original-price"
                                                                 style="text-decoration: line-through; color:red;">
                                                                 Rs.<%= item.product.price.toFixed(2) %>/-
@@ -573,7 +573,7 @@
                                                             <% } else { %>
                                                                 <span>Rs.<%= item.product.price.toFixed(2) %>/-</span>
                                                                 <% } %>
-                                                    </td>
+                                                    </td>                                                       
                                                     <td class="text-center" data-title="Stock">
                                                         <div class="quantity quantity--2">
                                                             <form id="updateCartForm-<%= item.product._id %>"

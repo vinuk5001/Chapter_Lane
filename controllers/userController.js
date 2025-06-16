@@ -20,6 +20,7 @@ require("dotenv").config();
 //--------------------------create a token---------------------------//
 const createToken = (user) => {
   const JWT_SECRET = process.env.JWT_SECRET
+  console.log("jwt token", JWT_SECRET);
   return jwt.sign(user, JWT_SECRET, { expiresIn: "24h" })
 }
 
@@ -32,6 +33,7 @@ const otpExpiryTime = () => {
 };
 
 const expiry = otpExpiryTime()
+console.log("expiry", expiry);
 
 //---------------------- Generate OTP------------------------------//
 const generateOTP = () => {
@@ -60,7 +62,7 @@ const sendOTP = async (email, otp) => {
       requireTLS: true,
       auth: {
         user: "vinuk5001@gmail.com",
-        pass: "anll jqye iuwz wghe"
+        pass: "kead dpcp dhmv pktv"
       },
 
     });
@@ -344,16 +346,21 @@ const resendOTP = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
+    console.log("loginuser")
     const { email, password } = req.body;
+    console.log("requested", req.body);
     const user = await User.findOne({ email: email });
+    console.log("user", user);
     if (user) {
       const passwordMatch = await bcrypt.compare(password, user.password);
+      console.log("passwwordMatch", passwordMatch);
       if (passwordMatch) {
 
         if (user.is_blocked) {
           return res.status(403).send({ success: false, message: "Your acoount is blocked:" });
         }
         const token = createToken({ id: user._id });
+        console.log("token", token);
         res.cookie("jwt", token, {
           httpOnly: true,
           maxAge: 60 * 60 * 1000 * 24,
@@ -376,7 +383,6 @@ const loginUser = async (req, res) => {
 
 const singleProduct = async (req, res) => {
   try {
-  
     const { id } = req.query;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -544,6 +550,7 @@ const addAddress = async (req, res) => {
     })
     const saveAddress = await userAddress.save();
     const user = await User.findById(userId);
+    console.log("user", user);
     // user.addresses.push(saveAddress._id);
     await user.save();
     res.redirect("/userProfile")
@@ -620,7 +627,6 @@ const deleteAddress = async (req, res) => {
 
 
 const loadCart = async (req, res) => {
-  console.log("Cart loaded")
   try {
     const token = req.cookies.jwt;
     if (!token) {
@@ -628,7 +634,7 @@ const loadCart = async (req, res) => {
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.id;
-    console.log("userId",userId);
+
     const cartItems = await Cart.aggregate([
       {
         $match: { userId: userId }
@@ -668,13 +674,10 @@ const loadCart = async (req, res) => {
         }
       }
     ]);
-    console.log("cartITems",cartItems);
     const categories = await Category.find();
     const totalAmount = cartItems.reduce((acc, item) => acc + item.subtotal, 0);
-    console.log("totalAmount",totalAmount)
     res.render('cart', { cartItems: cartItems, totalAmount, categories });
   } catch (error) {
-
     console.error(error.message);
     res.status(500).send("An error occurred while loading the cart.");
   }
@@ -686,27 +689,24 @@ const loadCart = async (req, res) => {
 
 const addToCart = async (req, res) => {
   try {
-      console.log("addded to Cart")
+
     const token = req.cookies.jwt;
     if (!token) {
       throw new Error('JWT cookie not found');
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.id;
-    console.log("userId",userId)
     const productId = req.query.productId;
-    console.log("productId",productId);
     if (!mongoose.Types.ObjectId.isValid(productId)) {
       return res.status(400).json({ message: "Invalid product ID" });
     }
     const objectIdProductId = new mongoose.Types.ObjectId(productId);
     const product = await Product.findById(objectIdProductId);
-    console.log("product",product);
     if (!product) {
       throw new Error('Product not found');
     }
     const discountedPrice = product.discount ? product.price * (1 - product.discount / 100) : product.price;
-     console.log("discountedPrice",discountedPrice);
+
     let cart = await Cart.findOne({ userId: userId });
     let isProductIncart = false;
     if (!cart) {
@@ -747,6 +747,7 @@ const addToCart = async (req, res) => {
 
 
 //---------------------------------------updateCartQuantity----------------------------------//
+
 
 
 const updateCartQuantity = async (req, res) => {
@@ -824,7 +825,6 @@ const updateCartQuantity = async (req, res) => {
   }
 }
 
-
 //------------------------------------Remove Item--------------------------------//
 
 const removeItem = async (req, res) => {
@@ -869,6 +869,7 @@ const removeItem = async (req, res) => {
 //-----------------------------------Reset Password-----------------------------------//
 
 const getResetPassword = (req, res) => {
+  console.log("resetPassword")
   const { token } = req.query;
   res.render('resetPassword', { token, message: '' })
 }
@@ -878,6 +879,7 @@ const getResetPassword = (req, res) => {
 
 const forgotPassword = async (req, res) => {
   const { forgotEmail } = req.body;
+  console.log("requested", req.body);
   try {
     const user = await User.findOne({ email: forgotEmail });
     console.log("user", user);
@@ -885,6 +887,7 @@ const forgotPassword = async (req, res) => {
       return res.status(404).json({ message: 'No user with that email' });
     }
     const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    console.log("resetToken", resetToken);
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpires = Date.now() + 3600000;
     await user.save();
@@ -925,7 +928,9 @@ const forgotPassword = async (req, res) => {
 //---------------------------------Post Reset Password-------------------------------//
 const postResetPassword = async (req, res) => {
   const { token } = req.body;
+  console.log("requested", req.body);
   const { password, confirmPassword } = req.body;
+  console.log("req", req.body);
 
   if (password !== confirmPassword) {
     return res.status(400).render('resetPassword', { token, message: "Passwords do not match" });
@@ -933,12 +938,15 @@ const postResetPassword = async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("decoded", decoded);
     const user = await User.findOne({ _id: decoded.id, resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } });
+    console.log("user", user);
     if (!user) {
       return res.status(400).send('Password reset token is invalid or has expired');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("hashedPassword")
     user.password = hashedPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
@@ -952,6 +960,7 @@ const postResetPassword = async (req, res) => {
 //---------------------------------change Password-----------------------------------//
 
 const changePassword = async (req, res) => {
+  console.log("HiHLOOO");
   try {
     res.render("checkCurrentPassword");
   } catch (error) {
@@ -964,16 +973,23 @@ const changePassword = async (req, res) => {
 //-----------------------------CheckCurrentPassword----------------------------//
 
 const checkCurrentPassword = async (req, res) => {
+  console.log("Hihlooo");
   try {
     const { password } = req.body
+    console.log("requested", req.body)
     const token = req.cookies.jwt;
+    console.log("token", token);
     if (!token) {
       throw new Error('JWT cookie not found');
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("decoded", decoded);
     const userId = decoded.id;
+    console.log("userId", userId);
     const user = await User.findById(userId);
+    console.log("user", user);
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log("isMatch", isMatch);
     if (!isMatch) {
       return res.render('checkCurrentPassword', { error: "Current password is incorrect" });
     }
@@ -1002,20 +1018,27 @@ const profileForgotPassword = async (req, res) => {
 
 const updatePassword = async (req, res) => {
   try {
+    console.log("updatedPassword");
     const token = req.cookies.jwt;
     if (!token) {
       throw new Error('JWT cookie not found');
     }
+    console.log("token", token);
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.id;
+    console.log("userId", userId);
     const user = await User.findById(userId);
+    console.log("user", user);
     const newPassword = req.body.password;
+    console.log("newPassword", newPassword);
     const confirmPassword = req.body.confirmPassword;
+    console.log("confirmPassword", confirmPassword);
 
     if (newPassword !== confirmPassword) {
       return res.render('profileChangePassword', { message: "Error: Passwords do not match." });
     }
     const hashedPassword = await bcrypt.hash(newPassword, 10);
+    console.log("hashedPassword", hashedPassword);
     user.password = hashedPassword;
     await user.save();
     res.redirect('/userProfile');
